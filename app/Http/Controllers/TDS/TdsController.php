@@ -454,7 +454,7 @@ class TdsController extends Controller
 
 		return $this->post($storePrograms, '/store-program', TdsEnum::STORE_PROGRAM);
 
-		'test';
+		'ini adalah production';
 	}
 
 	public function storeTarget()
@@ -462,6 +462,8 @@ class TdsController extends Controller
 		$storeTargets = DB::connection('192.168.11.24')->table('tds_storetarget')->get();
 
 		return $this->post($storeTargets, '/store-target', TdsEnum::STORE_TARGET);
+
+		'ini adalah production';
 	}
 
 	public function voucher()
