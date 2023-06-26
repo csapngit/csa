@@ -453,8 +453,6 @@ class TdsController extends Controller
 		$storePrograms = DB::connection('192.168.11.24')->table('tds_storeprogram')->get();
 
 		return $this->post($storePrograms, '/store-program', TdsEnum::STORE_PROGRAM);
-
-		'ini adalah main';
 	}
 
 	public function storeTarget()
