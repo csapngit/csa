@@ -454,7 +454,7 @@ class TdsController extends Controller
 
 		return $this->post($storePrograms, '/store-program', TdsEnum::STORE_PROGRAM);
 
-		'test';
+		'ini adalah main';
 	}
 
 	public function storeTarget()
