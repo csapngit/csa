@@ -308,17 +308,17 @@ class TdsController extends Controller
 	{
 		$routePlanDetails = DB::connection('192.168.11.24')->table('tds_route')->get();
 
-		return Storage::disk('public')->put('routePlanDetail.json', json_encode($routePlanDetails));
+		// return Storage::disk('public')->put('routePlanDetail.json', json_encode($routePlanDetails));
 
-		// $routePlanDetails = $routePlanDetails->chunk(5000)->toArray();
+		$routePlanDetails = $routePlanDetails->chunk(5000)->toArray();
 
-		// $routeData = [];
+		$routeData = [];
 
-		// foreach ($routePlanDetails as $routePlanDetail) {
-		// 	$routeData[] = $this->post($routePlanDetail, '/route-plan-details', TdsEnum::ROUTE_PLAN_DETAIL);
-		// }
+		foreach ($routePlanDetails as $routePlanDetail) {
+			$routeData[] = $this->post($routePlanDetail, '/route-plan-details', TdsEnum::ROUTE_PLAN_DETAIL);
+		}
 
-		// return $routeData;
+		return $routeData;
 	}
 
 	public function weekMapping()
