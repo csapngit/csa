@@ -34,7 +34,11 @@ class TdsController extends Controller
 			'page' => 1,
 			'take' => 0,
 			'date' => $date,
+			'startTime' => '12:00:00',
+			'endTime' => '17:00:00',
 		]);
+
+		dd($response->json('data'));
 
 		$pagecount = $response['data']['meta']['pageCount'];
 
@@ -43,6 +47,8 @@ class TdsController extends Controller
 				'page' => $i++,
 				'take' => 0,
 				'date' => $date,
+				'startTime' => '12:00:00',
+				'endTime' => '17:00:00',
 			]);
 
 			$allData = $response['data']['data'];

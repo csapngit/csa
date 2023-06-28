@@ -4,7 +4,7 @@
 
 @section('content')
 
-<form action="" method="GET" id="form_tds">
+<form action="#" method="GET" id="form_tds">
 	@csrf
 
 	<div class="form-group">

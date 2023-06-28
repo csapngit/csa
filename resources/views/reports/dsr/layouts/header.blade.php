@@ -1,5 +1,6 @@
 <div class="row" style="font-weight: 600">
 	<div class="col">
+		<!-- Date -->
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
 				{{ __('app.reports.dsr.date') }}
@@ -9,6 +10,7 @@
 			</label>
 		</div>
 
+		<!-- Timegone % -->
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
 				{{ __('app.reports.dsr.timegone_index') }}
@@ -18,6 +20,7 @@
 			</label>
 		</div>
 
+		<!-- Hari Kerja -->
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
 				{{ __('app.reports.dsr.working_days') }}
@@ -27,6 +30,7 @@
 			</label>
 		</div>
 
+		<!-- Timegone -->
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
 				{{ __('app.reports.dsr.timegone') }}
@@ -36,6 +40,7 @@
 			</label>
 		</div>
 
+		<!-- Sisa hari kerja -->
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
 				{{ __('app.reports.dsr.the_rest_of_working_days') }}
@@ -46,6 +51,7 @@
 		</div>
 	</div>
 
+	<!-- Target -->
 	<div class="col">
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
@@ -56,6 +62,7 @@
 			</label>
 		</div>
 
+		<!-- So open -->
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
 				{{ __('app.reports.dsr.so_open') }}
@@ -65,6 +72,7 @@
 			</label>
 		</div>
 
+		<!-- DO -->
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
 				{{ __('app.reports.dsr.delivery_order') }}
@@ -74,6 +82,7 @@
 			</label>
 		</div>
 
+		<!-- AR -->
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
 				{{ __('app.reports.dsr.ar_invoice') }}
@@ -83,6 +92,7 @@
 			</label>
 		</div>
 
+		<!-- Best Estimate -->
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
 				{{ __('app.reports.dsr.best_estimate') }}
@@ -92,6 +102,7 @@
 			</label>
 		</div>
 
+		<!-- Acvh vs Target -->
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
 				{{ __('app.reports.dsr.acvh_vs_target') }}
@@ -101,6 +112,7 @@
 			</label>
 		</div>
 
+		<!-- Achv vs Timegone -->
 		<div class="row">
 			<label for="" class="col-md-3 col-form-label">
 				{{ __('app.reports.dsr.acvh_vs_timegone') }}

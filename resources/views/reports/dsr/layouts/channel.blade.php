@@ -12,6 +12,7 @@
 		</tr>
 	</thead>
 	<tbody>
+		{{-- @dd($channel_DSRs); --}}
 		@foreach ($channel_DSRs as $channels => $channel)
 		<tr>
 			@if ($channels == 'TOTAL')

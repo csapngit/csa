@@ -62,7 +62,11 @@ Route::prefix('itcsa')
 
 Route::prefix('csapng')
 	->group(function () {
-		Route::get('branches', MasterBranchController::class);
+		// Route::get('branches', MasterBranchController::class);
+
+		Route::get('branches', function () {
+			return 'ok';
+		});
 
 		Route::get('channels', MasterChannelController::class);
 

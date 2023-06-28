@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;
 
-class DailySalesReportService extends WorkdayService
+class DailySalesReportSumatraService extends WorkdayService
 {
 	private $table;
 
@@ -31,14 +31,14 @@ class DailySalesReportService extends WorkdayService
 	public function dsrByChannel_CSAJ()
 	{
 		$target_dsrs = DB::table('target_dsrs')
-			->where('area', AreaEnum::CSAJ_TEXT)
-			->whereNotIn('mapping', ['', 'act'])
+			->where('area', AreaEnum::CSAS_TEXT)
+			// ->whereNotIn('mapping', ['', 'act'])
 			->get()
 			->groupBy('mapping');
 
 		// dd($target_dsrs);
 
-		$channels = $this->table->where('master_sales.regional', AreaEnum::CSAJ_TEXT)
+		$channels = $this->table->where('master_sales.regional', AreaEnum::CSAS_TEXT)
 			->where('master_sales.mapping', '!=', '')
 			->whereNotIn('master_sales.mapping', ['act', 'wse', 'e-maping', 'sub 3in1'])
 			->get()
@@ -49,6 +49,8 @@ class DailySalesReportService extends WorkdayService
 		$channel_DSRs = [];
 
 		foreach ($target_dsrs as $key => $target_dsr) {
+
+			// dd($key);
 
 			$channel_DSRs[strtoupper($key)] = [
 				'so_open' => 0,
@@ -69,7 +71,7 @@ class DailySalesReportService extends WorkdayService
 			$delivery_order = $channel->sum('delivery_order');
 			$ar_invoice = $channel->sum('ar_invoice');
 			$sales_total = $so_open + $delivery_order + $ar_invoice;
-			$monthly_target = $channel_DSRs[strtoupper($key)]['monthly_target'];
+			$monthly_target = $channel_DSRs[strtoupper($key)]['monthly_target'] ?? 0;
 			// $monthly_target = 0;
 			$gap = $monthly_target - $sales_total;
 
@@ -141,14 +143,14 @@ class DailySalesReportService extends WorkdayService
 	public function dsrByBranch_CSAJ()
 	{
 		$target_dsrs = DB::table('target_dsrs')
-			->where('mapping', '!=', '')
-			->whereNotIn('mapping', ['', 'act'])
+			->where('area', AreaEnum::CSAS_TEXT)
+			// ->whereNotIn('mapping', ['', 'act'])
 			->get()
 			->groupBy(['branch', 'mapping'])
 			->toArray();
 
 		$dailySalesReports = $this->table
-			->where('area', AreaEnum::CSAJ_TEXT)
+			->where('area', AreaEnum::CSAS_TEXT)
 			->get()
 			->groupBy(['branch_name', 'mapping']);
 

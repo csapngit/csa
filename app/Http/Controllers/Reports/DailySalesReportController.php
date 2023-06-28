@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Reports;
 use App\Http\Controllers\Controller;
 use App\Mail\DsrCSAJ;
 use App\Services\DailySalesReportService;
+use App\Services\DailySalesReportSumatraService;
 use App\Services\WorkdayService;
 use Illuminate\Support\Facades\Mail;
 
@@ -12,9 +13,13 @@ class DailySalesReportController extends Controller
 {
 	protected DailySalesReportService $dsrService;
 
+	protected DailySalesReportSumatraService $dsrSumatraService;
+
 	public function __construct()
 	{
 		$this->dsrService = new DailySalesReportService;
+
+		$this->dsrSumatraService = new DailySalesReportSumatraService;
 	}
 
 	/**
@@ -22,13 +27,27 @@ class DailySalesReportController extends Controller
 	 */
 	public function index()
 	{
-		$dates = $this->dsrService->workday();
+		if (auth()->user()->area == 1) {
+			$dates = $this->dsrService->workday();
 
-		$channel_DSRs = $this->dsrService->dsrByChannel_CSAJ();
+			$channel_DSRs = $this->dsrService->dsrByChannel_CSAJ();
 
-		$branch_datas = $this->dsrService->dsrByBranch_CSAJ();
+			$branch_datas = $this->dsrService->dsrByBranch_CSAJ();
 
-		return view('reports.dsr.index', compact('branch_datas', 'channel_DSRs', 'dates'));
+			return view('reports.dsr.index', compact('branch_datas', 'channel_DSRs', 'dates'));
+		}
+
+		if (auth()->user()->area == 2) {
+			$dates = $this->dsrSumatraService->workday();
+
+			$channel_DSRs = $this->dsrSumatraService->dsrByChannel_CSAJ();
+
+			
+
+			$branch_datas = $this->dsrSumatraService->dsrByBranch_CSAJ();
+
+			return view('reports.dsr.index', compact('branch_datas', 'channel_DSRs', 'dates'));
+		}
 	}
 
 	public function mail()
