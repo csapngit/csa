@@ -44,10 +44,10 @@ class DailySalesReportController extends Controller
 	// Send Email
 	public function mail()
 	{
-		Mail::to('kevin.septian@csahome.com')
+		Mail::to('csapngit@csahome.com')
 			->send(new DsrCSAJ());
 
-		Mail::to('kevin.septian@csahome.com')
+		Mail::to('csapngit@csahome.com')
 			->send(new DsrCSAS());
 
 		return back();
