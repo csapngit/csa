@@ -28,17 +28,17 @@ class DailySalesReportService extends WorkdayService
 			]);
 	}
 
-	public function dsrByChannel_CSAJ()
+	public function dsrByChannel(string $area)
 	{
 		$target_dsrs = DB::table('target_dsrs')
-			->where('area', AreaEnum::CSAJ_TEXT)
+			->where('area', $area)
 			->whereNotIn('mapping', ['', 'act'])
 			->get()
 			->groupBy('mapping');
 
 		// dd($target_dsrs);
 
-		$channels = $this->table->where('master_sales.regional', AreaEnum::CSAJ_TEXT)
+		$channels = $this->table->where('master_sales.regional', $area)
 			->where('master_sales.mapping', '!=', '')
 			->whereNotIn('master_sales.mapping', ['act', 'wse', 'e-maping', 'sub 3in1'])
 			->get()
@@ -84,16 +84,6 @@ class DailySalesReportService extends WorkdayService
 			$channel_DSRs[strtoupper($key)]['sales_total'] = $sales_total;
 			$channel_DSRs[strtoupper($key)]['index_archive'] = $index_archive;
 			$channel_DSRs[strtoupper($key)]['gap'] = $gap;
-
-			// $channel_DSRs[strtoupper($key)] = [
-			// 	'so_open' => $so_open,
-			// 	'delivery_order' => $delivery_order,
-			// 	'ar_invoice' => $ar_invoice,
-			// 	'sales_total' => $sales_total,
-			//  'monthly_target' => $monthly_target,
-			// 	'index_archive' => $index_archive,
-			// 	'gap' => $gap,
-			// ];
 		}
 
 		// dd($channel_DSRs);
@@ -138,17 +128,17 @@ class DailySalesReportService extends WorkdayService
 		return $channel_DSRs;
 	}
 
-	public function dsrByBranch_CSAJ()
+	public function dsrByBranch(string $area)
 	{
 		$target_dsrs = DB::table('target_dsrs')
-			->where('mapping', '!=', '')
+			->where('area', $area)
 			->whereNotIn('mapping', ['', 'act'])
 			->get()
 			->groupBy(['branch', 'mapping'])
 			->toArray();
 
 		$dailySalesReports = $this->table
-			->where('area', AreaEnum::CSAJ_TEXT)
+			->where('area', $area)
 			->get()
 			->groupBy(['branch_name', 'mapping']);
 

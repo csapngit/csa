@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class DsrCSAJ extends Mailable
+class DsrCSAS extends Mailable
 {
 	use Queueable, SerializesModels;
 
@@ -35,13 +35,11 @@ class DsrCSAJ extends Mailable
 	 */
 	public function build()
 	{
-		$subjectTitle = 'DSR CSAJ ' . now()->format('d/M/Y');
+		$subjectTitle = 'DSR CSAS ' . now()->format('d/M/Y');
 
 		$this->dates = $this->dsrService->workday();
-
-		$this->channel_DSRs = $this->dsrService->dsrByChannel(AreaEnum::CSAJ_TEXT);
-		
-		$this->branch_datas = $this->dsrService->dsrByBranch(AreaEnum::CSAJ_TEXT);
+		$this->channel_DSRs = $this->dsrService->dsrByChannel(AreaEnum::CSAS_TEXT);
+		$this->branch_datas = $this->dsrService->dsrByBranch(AreaEnum::CSAS_TEXT);
 
 		return $this->view('mails.dsr', [
 			'dates' => $this->dates,
