@@ -167,30 +167,7 @@ class TdsController extends Controller
 
 	public function inventory()
 	{
-		$inventories = collect([
-			[
-				"DistributorCode" => "string",
-				"BranchCode" => "string",
-				"SKUCode" => "string",
-				"SellerCode" => "string",
-				"Qty" => 0,
-				"FromDate" => "string",
-				"ToDate" => "string",
-				"WarehouseQty" => 0,
-				"IsDiscontinue" => 0
-			],
-			[
-				"DistributorCode" => "string",
-				"BranchCode" => "string",
-				"SKUCode" => "string",
-				"SellerCode" => "string",
-				"Qty" => 0,
-				"FromDate" => "string",
-				"ToDate" => "string",
-				"WarehouseQty" => 0,
-				"IsDiscontinue" => 0
-			],
-		]);
+		$inventories = DB::connection('192.168.11.24')->table('tds_inventorydata')->take(100)->get();
 
 		return $this->post($inventories, '/inventory-data', TdsEnum::INVENTORY);
 	}
