@@ -47,14 +47,10 @@ class DailySalesReportController extends Controller
 	{
 		$csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
 
-		dd($csajUser);
-
 		$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
 
 		Mail::to($csajUser)
 			->send(new DsrCSAJ());
-
-
 
 		Mail::to($csasUser)
 			->send(new DsrCSAS());
