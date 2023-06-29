@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Http;
 
 trait ApiPostTrait
 {
+
+	// $collection berisi data yang dikirim dari table yang dipilih.
+	// $endpoint berisi endpoint api dan diambil hanya bagian akhirnya saja.
+	// $module berisi data dari TdsEnum. apabila module belum ada, bisa dibuat manual.
+	// $isPostApi berisi array. apabila di dalam column table tersebut ingin ada update status
+	// maka bisa diisi [true, {nama_tabel}]
 	public function post($collection, string $endpoint, string $module, $isPostApi = [false])
 	{
 		DB::beginTransaction();
