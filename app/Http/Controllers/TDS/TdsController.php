@@ -160,9 +160,12 @@ class TdsController extends Controller
 
 	public function incentive()
 	{
-		$incentives = DB::connection('192.168.11.24')->table('tds_incentive')->get();
+		$incentives = DB::connection('192.168.11.24')
+			->table('tds_incentive')
+			->where('isPostApi', null)
+			->get();
 
-		return $this->post($incentives, '/incentive', TdsEnum::INCENTIVE);
+		return $this->post($incentives, '/incentive', TdsEnum::INCENTIVE, [true, 'tds_incentive']);
 	}
 
 	public function inventory()
