@@ -52,6 +52,8 @@ class DailySalesReportController extends Controller
 		Mail::to($csajUser)
 			->send(new DsrCSAJ());
 
+		
+
 		Mail::to($csasUser)
 			->send(new DsrCSAS());
 

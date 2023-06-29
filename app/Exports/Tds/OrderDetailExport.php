@@ -9,6 +9,13 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class OrderDetailExport implements FromArray, WithHeadings, WithCustomCsvSettings
 {
+	private $hilih;
+
+	public function __construct($hilih = [])
+	{
+		$this->hilih = $hilih;
+	}
+
 	public function getCsvSettings(): array
 	{
 		return [
@@ -44,48 +51,6 @@ class OrderDetailExport implements FromArray, WithHeadings, WithCustomCsvSetting
 
 	public function array(): array
 	{
-		$token = env('TOKEN_TDS');
-
-		$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
-			'page' => 1,
-			'take' => 0,
-			'date' => request()->date,
-		]);
-
-		if ($response->json('data') == []) {
-			return [];
-		};
-
-		$orders = $response->json('data');
-
-		$detailData = [];
-
-		foreach ($orders['data'] as $order) {
-			foreach ($order['Detail'] as $detail) {
-				$detailData[] = [
-					'DistributorCode' => $order['DistributorCode'],
-					'BranchCode' => $order['BranchCode'],
-					'SalesRepCode' => $order['SalesRepCode'],
-					'RetailerCode' => $order['RetailerCode'],
-					'OrderNo' => $order['OrderNo'],
-					'OrderDate' => date('m/d/Y', strtotime($order['OrderDate'])),
-					'UploadDate' => null,
-					'ChildSKUCode' => $detail['ChildSKUCode'],
-					'OrderQty' => $detail['OrderQtyPcs'],
-					'OrderQty(cases)' => 0,
-					'DeliveryDate' => null,
-					'D1' => null,
-					'D2' => null,
-					'D3' => null,
-					'NonIM' => null,
-					'DiscountAmount' => null,
-					'DiscountRate' => null,
-					'DiscountedPrice' => null,
-					'GoldenStoreStatus' => null,
-				];
-			}
-		}
-
-		return $detailData;
+		return $this->hilih;
 	}
 }

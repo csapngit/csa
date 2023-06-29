@@ -8,6 +8,7 @@ use App\Exports\Tds\OrderExport;
 use App\Http\Controllers\Controller;
 use App\Models\Api;
 use App\Models\User;
+use App\Traits\GetOrderTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -17,6 +18,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class TdsController extends Controller
 {
+	use GetOrderTrait;
+
 	public function index()
 	{
 		$apis = Api::query()->orderBy('order')->get();
@@ -34,46 +37,72 @@ class TdsController extends Controller
 			'page' => 1,
 			'take' => 0,
 			'date' => $date,
-			'startTime' => '12:00:00',
+			'startTime' => '13:00:00',
 			'endTime' => '17:00:00',
 		]);
 
-		dd($response->json('data'));
+		$arrayDataOrder = $response['data']['data'];
 
-		$pagecount = $response['data']['meta']['pageCount'];
+		$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
 
-		// for ($i = 1; $i <= $pagecount; $i++) {
-		// 	$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
-		// 		'page' => $i++,
-		// 		'take' => 0,
-		// 		'date' => $date,
-		// 		'startTime' => '12:00:00',
-		// 		'endTime' => '17:00:00',
-		// 	]);
+		foreach ($branchCodes as $branchCode) {
+			$region = DB::connection('192.168.11.24')->table('tds_branch')->where('BranchCode', $branchCode)->first();
 
-		// 	$allData = $response['data']['data'];
+			$time = now();
 
-		// 	foreach ($allData as $data) {
-		// 		$arrayDataOrder[] = $data;
-		// 	}
-		// }
+			$headerFileName = 'OrderRemarks_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
 
-		// dd(collect($arrayDataOrder)->groupBy('BranchCode'));
+			$detailFileName = 'OrderDetail_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
 
-		$orders = collect($arrayDataOrder)->groupBy('BranchCode');
+			$dataRemarkOrders = $this->orderRemark($branchCode);
 
-		dd($orders);
+			$dataDetailOrders = $this->orderDetail($branchCode);
 
-		$branchData = [];
+			switch ($region->AreaCode) {
+				case 'CSAJ':
 
-		foreach ($orders as $branchCode => $order) {
-			dd($order);
-			foreach ($order as $data) {
-				$branchData[$branchCode] = $data;
+					foreach ($dataRemarkOrders as $dataRemarkOrder) {
+						Excel::store(new OrderExport($dataRemarkOrders), '//CSAJ/' .  $headerFileName, 'sftp');
+					}
+
+					foreach ($dataDetailOrders as $dataDetailOrder) {
+						Excel::store(new OrderDetailExport($dataDetailOrder), '//CSAJ/' .  $detailFileName, 'sftp');
+					}
+
+					break;
+
+				default:
+
+					foreach ($dataRemarkOrders as $dataRemarkOrder) {
+						Excel::store(new OrderExport($dataRemarkOrder), '//CSAS/' .  $headerFileName, 'sftp');
+					}
+
+					foreach ($dataDetailOrders as $dataDetailOrder) {
+						Excel::store(new OrderDetailExport($dataDetailOrder), '//CSAS/' .  $detailFileName, 'sftp');
+					}
+
+					break;
 			}
 		}
 
-		dd($branchData);
+		$hentai = [];
+
+		foreach ($arrayDataOrder as $order) {
+			foreach ($order['Detail'] as $detail) {
+				$hentai[] = [
+					'DistributorCode' => $order['DistributorCode'],
+					'BranchCode' => $order['BranchCode'],
+					'SalesRepCode' => $order['SalesRepCode'],
+					'RetailerCode' => $order['RetailerCode'],
+					'OrderNo' => $order['OrderNo'],
+					'ProductCode' => $detail['ChildSKUCode'],
+					'OrderQtyPCS' => $detail['OrderQtyPcs'],
+					'OrderQtyCS' => 0,
+				];
+			}
+		};
+
+		DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
 
 		return 'ok';
 	}
