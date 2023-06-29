@@ -13,8 +13,6 @@ class IncentiveImport implements ToCollection, WithHeadingRow
 	{
 		$incentives = $collection->toArray();
 
-		dd($incentives);
-
 		$data = [];
 
 		foreach ($incentives as $incentive) {
