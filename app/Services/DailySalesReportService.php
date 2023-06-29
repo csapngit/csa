@@ -28,11 +28,15 @@ class DailySalesReportService extends WorkdayService
 			]);
 	}
 
-	public function dsrByChannel(string $area)
+	/**
+	 * @property array|string $area
+	 */
+	public function dsrByChannel($area)
 	{
+		// dd($area);
 		$target_dsrs = DB::table('target_dsrs')
-			->where('area', $area)
-			->whereNotIn('mapping', ['', 'act'])
+			->whereIn('area', $area)
+			// ->whereNotIn('mapping', ['', 'act'])
 			->get()
 			->groupBy('mapping');
 
@@ -128,11 +132,14 @@ class DailySalesReportService extends WorkdayService
 		return $channel_DSRs;
 	}
 
-	public function dsrByBranch(string $area)
+	/**
+	 * @property array|string $area
+	 */
+	public function dsrByBranch($area)
 	{
 		$target_dsrs = DB::table('target_dsrs')
-			->where('area', $area)
-			->whereNotIn('mapping', ['', 'act'])
+			->whereIn('area', $area)
+			// ->whereNotIn('mapping', ['', 'act'])
 			->get()
 			->groupBy(['branch', 'mapping'])
 			->toArray();

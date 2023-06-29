@@ -107,65 +107,6 @@ class TdsController extends Controller
 		return 'ok';
 	}
 
-	// public function order($date, $branchCode)
-	// {
-	// 	$region = DB::connection('192.168.11.24')->table('tds_branch')->where('BranchCode', $branchCode)->first();
-
-	// 	$time = now();
-
-	// 	$headerFileName = 'OrderRemarks_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
-
-	// 	$detailFileName = 'OrderDetail_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
-
-	// 	return Excel::download(new OrderExport, 'tempOrderHeader.csv', ExcelExcel::CSV);
-	// 	return Excel::download(new OrderDetailExport, 'tempOrderDetail.csv', ExcelExcel::CSV);
-
-	// switch ($region->AreaCode) {
-	// 	case 'CSAJ':
-	// 		Excel::store(new OrderExport, 'CSAJ/' .  $headerFileName, 'sftp');
-
-	// 		Excel::store(new OrderDetailExport, 'CSAJ/' .  $detailFileName, 'sftp');
-	// 		break;
-
-	// 	default:
-	// 		Excel::store(new OrderExport, 'CSAS/' .  $headerFileName, 'sftp');
-
-	// 		Excel::store(new OrderDetailExport, 'CSAS/' .  $detailFileName, 'sftp');
-	// 		break;
-	// }
-
-	// 	$token = env('TOKEN_TDS');
-
-	// 	$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
-	// 		'page' => 1,
-	// 		'take' => 0,
-	// 		'date' => request()->date,
-	// 	]);
-
-	// 	$orders = $response->json('data');
-
-	// 	$hentai = [];
-
-	// 	foreach ($orders['data'] as $order) {
-	// 		foreach ($order['Detail'] as $detail) {
-	// 			$hentai[] = [
-	// 				'DistributorCode' => $order['DistributorCode'],
-	// 				'BranchCode' => $order['BranchCode'],
-	// 				'SalesRepCode' => $order['SalesRepCode'],
-	// 				'RetailerCode' => $order['RetailerCode'],
-	// 				'OrderNo' => $order['OrderNo'],
-	// 				'ProductCode' => $detail['ChildSKUCode'],
-	// 				'OrderQtyPCS' => $detail['OrderQtyPcs'],
-	// 				'OrderQtyCS' => 0,
-	// 			];
-	// 		}
-	// 	};
-
-	// 	DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
-
-	// 	return 'ok';
-	// }
-
 	public function masterBranch()
 	{
 		$branches = DB::connection('192.168.11.24')->table('tds_branch')->get();
@@ -302,7 +243,7 @@ class TdsController extends Controller
 	{
 		$promoPrices = DB::connection('192.168.11.24')->table('tds_promoprice')->get();
 
-		return $this->post($promoPrices, '/promotion-price-master', TdsEnum::PROMOTION_PRICE);
+		return $this->post($promoPrices, '/promotion-price-master', TdsEnum::PROMOTION_PRICE, [true, 'tds_promoprice']);
 	}
 
 	public function masterReason()
@@ -483,4 +424,63 @@ class TdsController extends Controller
 
 		return $this->post($vouchers, '/voucher', TdsEnum::VOUCHER);
 	}
+
+	// public function order($date, $branchCode)
+	// {
+	// 	$region = DB::connection('192.168.11.24')->table('tds_branch')->where('BranchCode', $branchCode)->first();
+
+	// 	$time = now();
+
+	// 	$headerFileName = 'OrderRemarks_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
+
+	// 	$detailFileName = 'OrderDetail_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
+
+	// 	return Excel::download(new OrderExport, 'tempOrderHeader.csv', ExcelExcel::CSV);
+	// 	return Excel::download(new OrderDetailExport, 'tempOrderDetail.csv', ExcelExcel::CSV);
+
+	// switch ($region->AreaCode) {
+	// 	case 'CSAJ':
+	// 		Excel::store(new OrderExport, 'CSAJ/' .  $headerFileName, 'sftp');
+
+	// 		Excel::store(new OrderDetailExport, 'CSAJ/' .  $detailFileName, 'sftp');
+	// 		break;
+
+	// 	default:
+	// 		Excel::store(new OrderExport, 'CSAS/' .  $headerFileName, 'sftp');
+
+	// 		Excel::store(new OrderDetailExport, 'CSAS/' .  $detailFileName, 'sftp');
+	// 		break;
+	// }
+
+	// 	$token = env('TOKEN_TDS');
+
+	// 	$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
+	// 		'page' => 1,
+	// 		'take' => 0,
+	// 		'date' => request()->date,
+	// 	]);
+
+	// 	$orders = $response->json('data');
+
+	// 	$hentai = [];
+
+	// 	foreach ($orders['data'] as $order) {
+	// 		foreach ($order['Detail'] as $detail) {
+	// 			$hentai[] = [
+	// 				'DistributorCode' => $order['DistributorCode'],
+	// 				'BranchCode' => $order['BranchCode'],
+	// 				'SalesRepCode' => $order['SalesRepCode'],
+	// 				'RetailerCode' => $order['RetailerCode'],
+	// 				'OrderNo' => $order['OrderNo'],
+	// 				'ProductCode' => $detail['ChildSKUCode'],
+	// 				'OrderQtyPCS' => $detail['OrderQtyPcs'],
+	// 				'OrderQtyCS' => 0,
+	// 			];
+	// 		}
+	// 	};
+
+	// 	DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
+
+	// 	return 'ok';
+	// }
 }
