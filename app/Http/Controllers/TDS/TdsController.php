@@ -42,21 +42,21 @@ class TdsController extends Controller
 
 		$pagecount = $response['data']['meta']['pageCount'];
 
-		for ($i = 1; $i <= $pagecount; $i++) {
-			$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
-				'page' => $i++,
-				'take' => 0,
-				'date' => $date,
-				'startTime' => '12:00:00',
-				'endTime' => '17:00:00',
-			]);
+		// for ($i = 1; $i <= $pagecount; $i++) {
+		// 	$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
+		// 		'page' => $i++,
+		// 		'take' => 0,
+		// 		'date' => $date,
+		// 		'startTime' => '12:00:00',
+		// 		'endTime' => '17:00:00',
+		// 	]);
 
-			$allData = $response['data']['data'];
+		// 	$allData = $response['data']['data'];
 
-			foreach ($allData as $data) {
-				$arrayDataOrder[] = $data;
-			}
-		}
+		// 	foreach ($allData as $data) {
+		// 		$arrayDataOrder[] = $data;
+		// 	}
+		// }
 
 		// dd(collect($arrayDataOrder)->groupBy('BranchCode'));
 

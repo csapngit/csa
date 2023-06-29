@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\DsrCSAJ;
 use App\Mail\DsrCSAS;
 use App\Services\DailySalesReportService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class DailySalesReportController extends Controller
@@ -44,13 +45,33 @@ class DailySalesReportController extends Controller
 	// Send Email
 	public function mail()
 	{
-		Mail::to('csapngit@csahome.com')
+		$csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
+
+		$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
+
+		Mail::to($csajUser)
 			->send(new DsrCSAJ());
 
-		Mail::to('csapngit@csahome.com')
+		Mail::to($csasUser)
 			->send(new DsrCSAS());
 
 		return back();
+	}
+
+	public function emailDestiny(string $area)
+	{
+		$datas = DB::table('emails')
+			->where('region', $area)
+			->get('name')
+			->toArray();
+
+		$arrayData = [];
+
+		foreach ($datas as $data) {
+			$arrayData[] = $data->name;
+		};
+
+		return $arrayData;
 	}
 
 	// Lihat index mail yang akan dikirim

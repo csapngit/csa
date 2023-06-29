@@ -22,11 +22,11 @@
 
 @include('reports.dsr.layouts.header')
 
-<form action="{{ route('report.dsr.mail') }}" method="POST">
+{{-- <form action="{{ route('report.dsr.mail') }}" method="POST">
 	@csrf
 
 	<button type="submit" class="btn btn-primary mb-2"> Send Email </button>
-</form>
+</form> --}}
 
 <div class="card card-custom">
 	<div class="card-header flex-wrap border-0 pt-6 pb-0">

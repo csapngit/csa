@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
 			RebateStatusTypeSeeder::class,
 			SyncReportSeeder::class,
 			DsrWorkday::class,
+			EmailSeeder::class,
 		]);
 	}
 }

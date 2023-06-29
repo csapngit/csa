@@ -151,7 +151,7 @@ Route::middleware(['auth'])->group(function () {
 
 		// Daily Sales Report
 		Route::get('daily-sales-reports', [DailySalesReportController::class, 'index'])->name('report.dsr');
-		Route::post('send-mail', [DailySalesReportController::class, 'mail'])->name('dsr.mail');
+		Route::get('send-mail', [DailySalesReportController::class, 'mail'])->name('dsr.mail');
 
 		// View DSR Mail Index
 		Route::get('dsr-mail-index', [DailySalesReportController::class, 'mailIndex'])->name('dsr.mail.index');
