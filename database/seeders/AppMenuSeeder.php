@@ -73,6 +73,7 @@ class AppMenuSeeder extends Seeder
 			['title' => 'TDS',							'page' => null,															'icon' => 1,	'bullet' => 1,	'root' => 1,	'newtab' => 0,	'header' => 0,		'order' => 37, 	'group_code' => NULL,														'created_at' => \Carbon\Carbon::now()],
 			['title' => 'API',							'page' => 'tds/index',											'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 37,		'order' => 1, 	'group_code' => GroupMenuEnum::TDS,							'created_at' => \Carbon\Carbon::now()],
 			['title' => 'Incentive',				'page' => 'tds/index-incentive',						'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 37,		'order' => 2, 	'group_code' => GroupMenuEnum::TDS,							'created_at' => \Carbon\Carbon::now()],
+			['title' => 'Promo Price',			'page' => 'tds/index-promoPrice',						'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 37,		'order' => 3, 	'group_code' => GroupMenuEnum::TDS,							'created_at' => \Carbon\Carbon::now()],
 		]);
 	}
 }

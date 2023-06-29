@@ -4,7 +4,6 @@ namespace App\Imports\TDS;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Concerns\ToArray;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -13,6 +12,8 @@ class IncentiveImport implements ToCollection, WithHeadingRow
 	public function collection(Collection $collection)
 	{
 		$incentives = $collection->toArray();
+
+		dd($incentives);
 
 		$data = [];
 

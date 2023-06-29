@@ -21,6 +21,7 @@ use App\Http\Controllers\Reports\SoMonitoringController;
 use App\Http\Controllers\Reports\TargetDsrController;
 use App\Http\Controllers\Reports\TrackingPaymentController;
 use App\Http\Controllers\TDS\IncentiveController;
+use App\Http\Controllers\TDS\PromotionPriceController;
 use App\Http\Controllers\TDS\TdsController;
 use Illuminate\Support\Facades\Route;
 
@@ -175,6 +176,11 @@ Route::middleware(['auth'])->group(function () {
 	Route::controller(IncentiveController::class)->prefix('tds')->group(function () {
 		Route::get('index-incentive', 'index')->name('incentives.index');
 		Route::post('import-incentive', 'import')->name('incentives.import');
+	});
+
+	Route::controller(PromotionPriceController::class)->prefix('tds')->group(function () {
+		Route::get('index-promoPrice', 'index')->name('promoPirices.index');
+		Route::post('import-promoPrice', 'import')->name('promoPirices.import');
 	});
 
 	//todo: Logout
