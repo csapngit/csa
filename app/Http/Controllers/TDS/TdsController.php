@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Excel as ExcelExcel;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 class TdsController extends Controller
 {
@@ -184,14 +185,17 @@ class TdsController extends Controller
 
 	public function masterPrice()
 	{
+		// Edited
 		$prices = DB::connection('192.168.11.24')->table('tds_price')->take(50000)->get();
 
 		$prices = $prices->map(function ($price) {
 			return [
 				'DistributorCode' => $price->DistributorCode,
 				'LocalChannelCode' => $price->LocalChannelCode,
-				'AreaCode' => 'string',
-				'AreaName' => 'string',
+				// 'AreaCode' => 'string',
+				// 'AreaName' => 'string',
+				'AreaCode' => $price->AreaCode,
+				'AreaName' => $price->AreaName,
 				'SKUCode' => $price->SKUCode,
 				'GrossPrice' => $price->GrossPrice,
 				'NetPriceForCashPurchase' => $price->NetPriceforcashpurchase,
@@ -200,6 +204,8 @@ class TdsController extends Controller
 			];
 		});
 
+		// dd($prices->take(100)->toJson());
+
 		$prices = $prices->chunk(5000)->toArray();
 
 		$priceData = [];
@@ -207,6 +213,7 @@ class TdsController extends Controller
 		foreach ($prices as $price) {
 			$priceData[] = $this->post($price, '/pricing-data', TdsEnum::MASTER_PRICE);
 		}
+
 
 		return $priceData;
 	}
@@ -221,6 +228,35 @@ class TdsController extends Controller
 	public function masterProduct()
 	{
 		$products = DB::connection('192.168.11.24')->table('tds_prodmaster')->take(100)->get();
+
+		$products = $products->map(function ($product) {
+			return  [
+				'DistributorCode' => $product->DistributorCode,
+				'BranchCode' => $product->BranchCode,
+				'ProductCode' => $product->ProductCode,
+				'PGProductCode' => $product->PGProductCode,
+				'ProductFullDesc' => $product->ProductFullDesc,
+				'ProductShortDesc' => $product->ProductShortDesc,
+				'CategoryCode' => $product->CategoryCode,
+				'CategoryName' => $product->CategoryName,
+				'BrandCode' => $product->BrandCode,
+				'BrandName' => $product->BrandName,
+				'SubBrandCode' => $product->{'Sub-BrandCode'},
+				'SubBrandName' => $product->{'Sub-BrandName'},
+				'ParentSKUCode' => $product->ParentSKUCode,
+				'ParentSKUName' => $product->ParentSKUName,
+				'MSQSize' => $product->MSQSize,
+				'CaseSize' => $product->CaseSize,
+				'ProductBarcode' => $product->ProductBarcode,
+				'ProductTAXPercentage' => $product->ProductTAXPercentage,
+				'Size' => (float)$product->Size,
+				'Flag' => $product->Flag,
+				'Sequence' => (float)$product->Sequence,
+				'UOM' => $product->UOM
+			];
+		});
+
+		// dd(json_encode($products, JSON_UNESCAPED_SLASHES));
 
 		return $this->post($products, '/product-master', TdsEnum::MASTER_PRODUCT);
 	}
@@ -241,7 +277,10 @@ class TdsController extends Controller
 
 	public function promotionPrice()
 	{
-		$promoPrices = DB::connection('192.168.11.24')->table('tds_promoprice')->get();
+		$promoPrices = DB::connection('192.168.11.24')
+			->table('tds_promoprice')
+			->where('isPostApi', null)
+			->get();
 
 		return $this->post($promoPrices, '/promotion-price-master', TdsEnum::PROMOTION_PRICE, [true, 'tds_promoprice']);
 	}
@@ -279,7 +318,15 @@ class TdsController extends Controller
 
 	public function weekMapping()
 	{
-		$weekMappings = DB::connection('192.168.11.24')->table('tds_weekmapping')->get();
+		$weekMappings = DB::connection('192.168.11.24')->table('tds_weekmapping')->get()->toJson();
+
+		$weekMappings = json_decode($weekMappings, true);
+		foreach ($weekMappings as $item) {
+			$item["StartDate"] = Carbon::parse($item["StartDate"])->format('Y-m-d');
+			$item["EndDate"] = Carbon::parse($item["EndDate"])->format('Y-m-d');
+			$item["Week"] = (int)$item["Week"];
+			$item["WeekSalesTarget"] = (int)$item["WeekSalesTarget"];
+		}
 
 		return $this->post($weekMappings, '/route-plan-details-week-map', TdsEnum::WEEK_MAPPING);
 	}
@@ -321,13 +368,13 @@ class TdsController extends Controller
 				'LoginID' => $seller->LoginID,
 				'Password' => $seller->Password,
 				'OtherSalesRepCode' => $seller->OtherSalesRepCode,
-				'ForceSyncNbrOfStore' => $seller->ForceSyncNbrOfStore,
+				'ForceSyncNbrOfStore' => 999999,
 				'Avatar' => $seller->Avatar,
 				'SiteCode' => $seller->SiteCode,
 			];
 		});
 
-		// dd($sellers->take(10));
+		// dd(json_encode($sellers->take(100), JSON_UNESCAPED_SLASHES));
 
 		return $this->post($sellers, '/seller-master', TdsEnum::MASTER_SELLER);
 	}
@@ -380,6 +427,8 @@ class TdsController extends Controller
 		});
 
 		$stores = $stores->chunk(5000);
+
+		// dd(json_encode($stores, JSON_UNESCAPED_SLASHES));
 
 		$storeData = [];
 

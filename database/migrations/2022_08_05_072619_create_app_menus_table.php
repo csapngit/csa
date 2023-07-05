@@ -23,6 +23,7 @@ class CreateAppMenusTable extends Migration
 			$table->boolean('newtab');
 			$table->integer('header')->nullable();
 			$table->integer('order');
+			$table->string('group_code')->nullable(); //Newly added
 			$table->timestamps();
 		});
 	}

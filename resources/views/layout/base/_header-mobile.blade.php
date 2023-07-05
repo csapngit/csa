@@ -4,23 +4,23 @@
         <a href="{{ url('/') }}">
 
             @php
-                $kt_logo_image = 'logo-light.png'
+                $kt_logo_image = 'logo-csa.png'
             @endphp
 
             @if (config('layout.aside.self.display') == false)
 
                 @if (config('layout.header.self.theme') === 'light')
-                    @php $kt_logo_image = 'logo-dark.png' @endphp
+                    @php $kt_logo_image = 'logo-csa.png' @endphp
                 @elseif (config('layout.header.self.theme') === 'dark')
-                    @php $kt_logo_image = 'logo-light.png' @endphp
+                    @php $kt_logo_image = 'logo-csa.png' @endphp
                 @endif
 
             @else
 
                 @if (config('layout.brand.self.theme') === 'light')
-                    @php $kt_logo_image = 'logo-dark.png' @endphp
+                    @php $kt_logo_image = 'logo-csa.png' @endphp
                 @elseif (config('layout.brand.self.theme') === 'dark')
-                    @php $kt_logo_image = 'logo-light.png' @endphp
+                    @php $kt_logo_image = 'logo-csa.png' @endphp
                 @endif
 
             @endif

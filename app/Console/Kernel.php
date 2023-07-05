@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
 	protected function schedule(Schedule $schedule)
 	{
 		$schedule->call(new DailySalesReportMail)
-			->at('05:00');
+			->at('10:00');
 		// ->onSuccess(function () {
 		// 	DB::table('sync_reports')->insert([
 		// 		'report' => 'DSR',
@@ -53,41 +53,41 @@ class Kernel extends ConsoleKernel
 		// 	]);
 		// });
 
-		//todo: POST INCENTIVE
+		// // todo: POST INCENTIVE
 		// $schedule->call(new Incentive)
-		// 	->at('20:30');
+		// 	->at('10:45');
 
-		//todo: POST INVOICE
+		// // todo: POST INVOICE
 		// $schedule->call(new Invoice)
-		// 	->at('20:30');
+		// 	->at('10:47');
 
-		//todo: POST OVERDUE
+		// // todo: POST OVERDUE
 		// $schedule->call(new Overdue)
-		// 	->at('20:42');
+		// 	->at('10:49');
 
-		//todo: POST MASTER PRICE
+		// // todo: POST MASTER PRICE
 		// $schedule->call(new Price)
-		// 	->at('20:42');
+		// 	->at('10:51');
 
-		//todo: POST MASTER PRODUCT
+		// // todo: POST MASTER PRODUCT
 		// $schedule->call(new Product)
-		// 	->at('20:42');
+		// 	->at('10:53');
 
-		//todo: POST RETURN
+		// // todo: POST RETURN
 		// $schedule->call(new MasterReturn)
-		// 	->at('20:42');
+		// 	->at('10:55');
 
-		//todo: POST SELLER
+		// // todo: POST SELLER
 		// $schedule->call(new Seller)
-		// 	->at('20:42');
+		// 	->at('10:57');
 
-		//todo: POST STORE
+		// // todo: POST STORE
 		// $schedule->call(new MasterStore)
-		// 	->at('20:42');
+		// 	->at('10:59');
 
-		//todo: POST VOUCHER
+		// // todo: POST VOUCHER
 		// $schedule->call(new Voucher)
-		// 	->at('20:42');
+		// 	->at('11:01');
 	}
 
 	/**

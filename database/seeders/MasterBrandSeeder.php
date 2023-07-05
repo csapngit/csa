@@ -16,48 +16,49 @@ class MasterBrandSeeder extends Seeder
 	public function run()
 	{
 		DB::table('master_brands')->insert([
+
 			[
-				'code' => 'PTN',
+				// 'code' => 'PTN',
 				'name' => 'Pantene',
 			],
 			[
-				'code' => 'HNS',
+				// 'code' => 'HNS',
 				'name' => 'H&S',
 			],
 			[
-				'code' => 'REJ',
+				// 'code' => 'REJ',
 				'name' => 'Rejoice',
 			],
 			[
-				'code' => 'HES',
+				// 'code' => 'HES',
 				'name' => 'Herbal Ess',
 			],
 			[
-				'code' => 'DWNY',
+				// 'code' => 'DWNY',
 				'name' => 'Downy',
 			],
 			[
-				'code' => 'GIL',
+				// 'code' => 'GIL',
 				'name' => 'Gillete',
 			],
 			[
-				'code' => 'ORB',
+				// 'code' => 'ORB',
 				'name' => 'Oral B',
 			],
 			[
-				'code' => 'OLAY',
+				// 'code' => 'OLAY',
 				'name' => 'Olay',
 			],
 			[
-				'code' => 'WHSP',
+				// 'code' => 'WHSP',
 				'name' => 'Whisper',
 			],
 			[
-				'code' => 'VIC',
+				// 'code' => 'VIC',
 				'name' => 'Vicks',
 			],
 			[
-				'code' => 'AMBP',
+				// 'code' => 'AMBP',
 				'name' => 'Ambipur',
 			],
 		]);

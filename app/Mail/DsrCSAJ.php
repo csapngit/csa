@@ -40,7 +40,7 @@ class DsrCSAJ extends Mailable
 		$this->dates = $this->dsrService->workday();
 
 		$this->channel_DSRs = $this->dsrService->dsrByChannel(AreaEnum::CSAJ_TEXT);
-		
+
 		$this->branch_datas = $this->dsrService->dsrByBranch(AreaEnum::CSAJ_TEXT);
 
 		return $this->view('mails.dsr', [

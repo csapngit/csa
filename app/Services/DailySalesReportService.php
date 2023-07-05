@@ -35,7 +35,7 @@ class DailySalesReportService extends WorkdayService
 	{
 		// dd($area);
 		$target_dsrs = DB::table('target_dsrs')
-			->whereIn('area', $area)
+			->where('area', $area)
 			// ->whereNotIn('mapping', ['', 'act'])
 			->get()
 			->groupBy('mapping');
@@ -138,7 +138,7 @@ class DailySalesReportService extends WorkdayService
 	public function dsrByBranch($area)
 	{
 		$target_dsrs = DB::table('target_dsrs')
-			->whereIn('area', $area)
+			->where('area', $area)
 			// ->whereNotIn('mapping', ['', 'act'])
 			->get()
 			->groupBy(['branch', 'mapping'])
