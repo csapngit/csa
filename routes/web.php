@@ -216,6 +216,9 @@ Route::controller(TdsController::class)->prefix('tds')->group(function () {
 	Route::get('store-targets', 'storeTarget');
 	Route::get('week-mappings', 'weekMapping');
 	Route::get('vouchers', 'voucher'); // Daily
+	// Route::get('sf-osa-master', 'sfOsaMaster');
+	// Route::get('sf-sosd-master', 'sfSosdMaster');
+	// Route::get('store-target-go-green', 'storeGoGreen');
 });
 
 require __DIR__ . '/auth.php';

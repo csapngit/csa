@@ -139,9 +139,33 @@ class TdsController extends Controller
 		return $this->post($incentives, '/incentive', TdsEnum::INCENTIVE, [true, 'tds_incentive']);
 	}
 
+	public function isdiscontinue($data) {
+		if ($data == "N" || $data == null) {
+			return $data = 0;
+		} else {
+			return $data = 1;
+		};
+	}
+
 	public function inventory()
 	{
 		$inventories = DB::connection('192.168.11.24')->table('tds_inventorydata')->take(100)->get();
+
+		$inventories = $inventories->map(function ($inventory) {
+			return  [
+				'DistributorCode' => $inventory->DistributorCode,
+				'BranchCode' => $inventory->BranchCode,
+				'SKUCode' => $inventory->SKUCode,
+				'SellerCode' => $inventory->SellerCode,
+				'Qty' => $inventory->Qty,
+				'FromDate' => $inventory->FromDate,
+				'ToDate' => $inventory->ToDate,
+				'WarehouseQty' => $inventory->WarehouseQty,
+				'IsDiscontinue' => $this->isdiscontinue($inventory->IsDiscontinue)
+			];
+		});
+
+		// dd(json_encode($inventories, JSON_UNESCAPED_SLASHES));
 
 		return $this->post($inventories, '/inventory-data', TdsEnum::INVENTORY);
 	}
@@ -155,23 +179,25 @@ class TdsController extends Controller
 				'DistributorCode' => $invoice->DistributorCode,
 				'Branchcode' => $invoice->BranchCode,
 				'SalesRepCode' => $invoice->SalesRepCode,
-				'Retailercode' => $invoice->RetailerCode,
 				'InvoiceNo' => $invoice->InvoiceNo,
 				'InvoiceDate' => $invoice->InvoiceDate,
-				'ProductCode' => $invoice->ProductCode,
+				'Retailercode' => $invoice->RetailerCode,
+				// 'ProductCode' => $invoice->ProductCode,
+				'ItemCode' => 'string',
 				'Qty' => $invoice->Qty,
-				'BasePrice' => $invoice->BasePrice,
 				'Value' => $invoice->Value,
-				'DiscValue' => $invoice->DiscValue,
 				'BillValue' => $invoice->BillValue,
 				'OrderRefNo' => $invoice->OrderRefNo,
+				'BasePrice' => $invoice->BasePrice,
+				'DiscValue' => $invoice->DiscValue,
 				'KodeLotsell' => (string) $invoice->KodeLotsell1,
 				'KodeLotsellTambahan' => (string) $invoice->KodeLotselltambahan,
-				'TotalVoucher' => $invoice->TotalVoucher,
 				'JumlahLotsell' => $invoice->JumlahLotsell,
-				'ItemCode' => 'string',
+				'TotalVoucher' => $invoice->TotalVoucher,
 			];
 		});
+
+		// dd(json_encode($invoices, JSON_UNESCAPED_SLASHES));
 
 		return $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
 	}
@@ -378,6 +404,7 @@ class TdsController extends Controller
 
 		return $this->post($sellers, '/seller-master', TdsEnum::MASTER_SELLER);
 	}
+
 	public function sellerTarget()
 	{
 		$sellerTargets = DB::connection('192.168.11.24')->table('tds_sellertarget')->get();
@@ -473,6 +500,13 @@ class TdsController extends Controller
 
 		return $this->post($vouchers, '/voucher', TdsEnum::VOUCHER);
 	}
+
+	// public function sfOsaMaster()
+	// {
+	// 	$sfOsaMasters = DB::connection('192.168.11.24')->table('tds_')->get();
+
+	// 	return $this->post($sfOsaMasters, '/sf-osa-master', TdsEnum::VOUCHER);
+	// }
 
 	// public function order($date, $branchCode)
 	// {
