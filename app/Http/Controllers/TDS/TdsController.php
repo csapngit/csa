@@ -41,10 +41,12 @@ class TdsController extends Controller
 			'take' => 0,
 			'date' => $date,
 			'startTime' => $hour,
-			'endTime' => '13:39:00',
+			'endTime' => $currentTime,
 		]);
 
 		$arrayDataOrder = $response['data']['data'];
+
+		// dd($arrayDataOrder);
 
 		$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
 
