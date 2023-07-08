@@ -28,13 +28,9 @@ class TdsController extends Controller
 		return view('tds.index', compact('apis'));
 	}
 
-	public function order($timeData)
+	public function order($date, $hour)
 	{
-		$datehour = explode("'", $timeData);
-
 		$currentTime = Carbon::now()->format('H:i:s');
-
-		// dd('Data untuk tanggal ' . $datehour[0] . ', dari jam ' . $datehour[1] . ' hingga jam ' . $currentTime);
 
 		$token = env('TOKEN_TDS');
 
@@ -43,12 +39,9 @@ class TdsController extends Controller
 		$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
 			'page' => 1,
 			'take' => 0,
-			// 'date' => $date,
-			// 'startTime' => '13:00:00',
-			// 'endTime' => '17:00:00',
-			'date' => $datehour[0],
-			'startTime' => $datehour[1],
-			'endTime' => $currentTime,
+			'date' => $date,
+			'startTime' => $hour,
+			'endTime' => '13:39:00',
 		]);
 
 		$arrayDataOrder = $response['data']['data'];
@@ -114,7 +107,7 @@ class TdsController extends Controller
 
 		DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
 
-		return 'Data untuk tanggal ' . $datehour[0] . ', dari jam ' . $datehour[1] . ' hingga jam ' . $currentTime;
+		return 'Data untuk tanggal ' . $date . ', dari jam ' . $hour . ' hingga jam ' . $currentTime;
 	}
 
 	public function masterBranch()
