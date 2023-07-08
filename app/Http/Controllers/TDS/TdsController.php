@@ -28,8 +28,14 @@ class TdsController extends Controller
 		return view('tds.index', compact('apis'));
 	}
 
-	public function order($date)
+	public function order($timeData)
 	{
+		$datehour = explode("'", $timeData);
+
+		$currentTime = Carbon::now()->format('H:i:s');
+
+		// dd('Data untuk tanggal ' . $datehour[0] . ', dari jam ' . $datehour[1] . ' hingga jam ' . $currentTime);
+
 		$token = env('TOKEN_TDS');
 
 		$arrayDataOrder = [];
@@ -37,9 +43,12 @@ class TdsController extends Controller
 		$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
 			'page' => 1,
 			'take' => 0,
-			'date' => $date,
-			'startTime' => '13:00:00',
-			'endTime' => '17:00:00',
+			// 'date' => $date,
+			// 'startTime' => '13:00:00',
+			// 'endTime' => '17:00:00',
+			'date' => $datehour[0],
+			'startTime' => $datehour[1],
+			'endTime' => $currentTime,
 		]);
 
 		$arrayDataOrder = $response['data']['data'];
@@ -105,7 +114,7 @@ class TdsController extends Controller
 
 		DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
 
-		return 'ok';
+		return 'Data untuk tanggal ' . $datehour[0] . ', dari jam ' . $datehour[1] . ' hingga jam ' . $currentTime;
 	}
 
 	public function masterBranch()
@@ -139,7 +148,8 @@ class TdsController extends Controller
 		return $this->post($incentives, '/incentive', TdsEnum::INCENTIVE, [true, 'tds_incentive']);
 	}
 
-	public function isdiscontinue($data) {
+	public function isdiscontinue($data)
+	{
 		if ($data == "N" || $data == null) {
 			return $data = 0;
 		} else {
@@ -158,8 +168,8 @@ class TdsController extends Controller
 				'SKUCode' => $inventory->SKUCode,
 				'SellerCode' => $inventory->SellerCode,
 				'Qty' => $inventory->Qty,
-				'FromDate' => $inventory->FromDate,
-				'ToDate' => $inventory->ToDate,
+				'FromDate' => Carbon::parse($inventory->FromDate)->format('Y-m-d'),
+				'ToDate' => Carbon::parse($inventory->ToDate)->format('Y-m-d'),
 				'WarehouseQty' => $inventory->WarehouseQty,
 				'IsDiscontinue' => $this->isdiscontinue($inventory->IsDiscontinue)
 			];
