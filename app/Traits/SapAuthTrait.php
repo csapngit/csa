@@ -8,7 +8,7 @@ trait SapAuthTrait
 {
 	private $ipApi = 'https://192.168.12.130:50000';
 
-	public function login($companyDb = 'CSATRAINING', $username = 'RDITS01', $password = '12345')
+	public function login($companyDb = 'CSALIVE', $username = 'RDITS01', $password = 'Itcs@2022')
 	{
 		$url = $this->ipApi . '/b1s/v1/Login';
 
