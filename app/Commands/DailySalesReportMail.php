@@ -12,31 +12,31 @@ class DailySalesReportMail
 {
 	public function __invoke()
 	{
-		// $csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
+		$csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
 
-		// $csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
+		$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
 
-		Mail::to('pandu.sanjaya@csahome.com')
+		Mail::to($csajUser)
 			->send(new DsrCSAJ());
 
-		Mail::to('pandu.sanjaya@csahome.com')
+		Mail::to($csasUser)
 			->send(new DsrCSAS());
 	}
 
-	// public function emailDestiny(string $area)
-	// {
-	// 	$datas = DB::table('emails')
-	// 		->where('region', $area)
-	// 		// ->where('module', 'DSR')
-	// 		->get('name')
-	// 		->toArray();
+	public function emailDestiny(string $area)
+	{
+		$datas = DB::table('emails')
+			->where('region', $area)
+			// ->where('module', 'DSR')
+			->get('name')
+			->toArray();
 
-	// 	$arrayData = [];
+		$arrayData = [];
 
-	// 	foreach ($datas as $data) {
-	// 		$arrayData[] = $data->name;
-	// 	};
+		foreach ($datas as $data) {
+			$arrayData[] = $data->name;
+		};
 
-	// 	return $arrayData;
-	// }
+		return $arrayData;
+	}
 }
