@@ -46,7 +46,7 @@ class TdsController extends Controller
 
 		$arrayDataOrder = $response['data']['data'];
 
-		dd($arrayDataOrder);
+		// dd($arrayDataOrder);
 
 		$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
 
