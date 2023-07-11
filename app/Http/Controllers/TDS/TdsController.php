@@ -46,7 +46,7 @@ class TdsController extends Controller
 
 		$arrayDataOrder = $response['data']['data'];
 
-		// dd($arrayDataOrder[]['Detail']);
+		// dd($arrayDataOrder);
 
 		$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
 
@@ -90,29 +90,22 @@ class TdsController extends Controller
 			}
 		}
 
-		$hentais = [];
+		// $hentai = [];
 
-		foreach ($arrayDataOrder as $order) {
-			foreach ($order['Detail'] as $detail) {
-				$hentais[] = [
-					'DistributorCode' => $order['DistributorCode'],
-					'BranchCode' => $order['BranchCode'],
-					'SalesRepCode' => $order['SalesRepCode'],
-					'RetailerCode' => $order['RetailerCode'],
-					'OrderNo' => $order['OrderNo'],
-					'ProductCode' => $detail['ChildSKUCode'],
-					'OrderQtyPCS' => $detail['OrderQtyPcs'],
-					'OrderQtyCS' => 0,
-				];
-			}
-		};
-
-		$collection = collect($hentais);
-		$hentais = $collection->chunk(200);
-
-		foreach ($hentais as $hentai) {
-			DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai->toArray());
-		}
+		// foreach ($arrayDataOrder as $order) {
+		// 	foreach ($order['Detail'] as $detail) {
+		// 		$hentai[] = [
+		// 			'DistributorCode' => $order['DistributorCode'],
+		// 			'BranchCode' => $order['BranchCode'],
+		// 			'SalesRepCode' => $order['SalesRepCode'],
+		// 			'RetailerCode' => $order['RetailerCode'],
+		// 			'OrderNo' => $order['OrderNo'],
+		// 			'ProductCode' => $detail['ChildSKUCode'],
+		// 			'OrderQtyPCS' => $detail['OrderQtyPcs'],
+		// 			'OrderQtyCS' => 0,
+		// 		];
+		// 	}
+		// };
 
 		// DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
 
