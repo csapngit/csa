@@ -189,7 +189,7 @@ Route::middleware(['auth'])->group(function () {
 
 //todo: API POST SFA
 Route::controller(TdsController::class)->prefix('tds')->group(function () {
-	Route::get('orders/{date}/{hour}', 'order');
+	Route::get('orders/{date}', 'order');
 	Route::get('branches', 'masterBranch');
 	Route::get('channels', 'masterChannel');
 	Route::get('holidays', 'holiday');

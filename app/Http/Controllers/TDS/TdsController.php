@@ -28,7 +28,7 @@ class TdsController extends Controller
 		return view('tds.index', compact('apis'));
 	}
 
-	public function order($date, $hour)
+	public function order($date)
 	{
 		$currentTime = Carbon::now()->format('H:i:s');
 
@@ -40,13 +40,13 @@ class TdsController extends Controller
 			'page' => 1,
 			'take' => 0,
 			'date' => $date,
-			'startTime' => $hour,
-			'endTime' => $currentTime,
+			// 'startTime' => $hour,
+			// 'endTime' => $currentTime,
 		]);
 
 		$arrayDataOrder = $response['data']['data'];
 
-		// dd($arrayDataOrder);
+		dd($arrayDataOrder);
 
 		$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
 
@@ -109,7 +109,7 @@ class TdsController extends Controller
 
 		DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
 
-		return 'Data untuk tanggal ' . $date . ', dari jam ' . $hour . ' hingga jam ' . $currentTime;
+		return 'Data untuk tanggal ' . $date . ' hingga jam ' . $currentTime;
 	}
 
 	public function masterBranch()
@@ -336,7 +336,32 @@ class TdsController extends Controller
 
 		// return Storage::disk('public')->put('routePlanDetail.json', json_encode($routePlanDetails));
 
+		$routePlanDetails = $routePlanDetails->map(function ($routePlanDetail) {
+			return  [
+				'DistributorCode' => $routePlanDetail->DistributorCode,
+				'BranchCode' => $routePlanDetail->BranchCode,
+				'RetailerCode' => $routePlanDetail->RetailerCode,
+				'RetailerName' => $routePlanDetail->RetailerName,
+				'Monday' => $routePlanDetail->Monday,
+				'Tuesday' => $routePlanDetail->Tuesday,
+				'Wednesday' => $routePlanDetail->Wednesday,
+				'Thursday' => $routePlanDetail->Thursday,
+				'Friday' => $routePlanDetail->Friday,
+				'Saturday' => $routePlanDetail->Saturday,
+				'Sunday' => $routePlanDetail->Sunday,
+				'WK1' => $routePlanDetail->WK1,
+				'WK2' => $routePlanDetail->WK2,
+				'WK3' => $routePlanDetail->WK3,
+				'WK4' => $routePlanDetail->WK4,
+				'SalesRepCode' => $routePlanDetail->SalesRepCode,
+				'isProses' => 0,
+				'crtDatetimeHit' => Carbon::now()->format('Y-m-d'),
+			];
+		});
+
 		$routePlanDetails = $routePlanDetails->chunk(5000)->toArray();
+
+		// dd($routePlanDetails);
 
 		$routeData = [];
 
