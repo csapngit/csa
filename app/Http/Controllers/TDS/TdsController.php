@@ -46,7 +46,7 @@ class TdsController extends Controller
 
 		$arrayDataOrder = $response['data']['data'];
 
-		// dd($arrayDataOrder);
+		// dd($arrayDataOrder[]['Detail']);
 
 		$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
 
@@ -90,11 +90,11 @@ class TdsController extends Controller
 			}
 		}
 
-		$hentai = [];
+		$hentais = [];
 
 		foreach ($arrayDataOrder as $order) {
 			foreach ($order['Detail'] as $detail) {
-				$hentai[] = [
+				$hentais[] = [
 					'DistributorCode' => $order['DistributorCode'],
 					'BranchCode' => $order['BranchCode'],
 					'SalesRepCode' => $order['SalesRepCode'],
@@ -107,7 +107,14 @@ class TdsController extends Controller
 			}
 		};
 
-		DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
+		$collection = collect($hentais);
+		$hentais = $collection->chunk(200);
+
+		foreach ($hentais as $hentai) {
+			DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai->toArray());
+		}
+
+		// DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
 
 		return 'Data untuk tanggal ' . $date . ' hingga jam ' . $currentTime;
 	}
