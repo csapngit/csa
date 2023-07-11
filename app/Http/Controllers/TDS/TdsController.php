@@ -90,24 +90,27 @@ class TdsController extends Controller
 			}
 		}
 
-		// $hentai = [];
+		$hentai = [];
 
-		// foreach ($arrayDataOrder as $order) {
-		// 	foreach ($order['Detail'] as $detail) {
-		// 		$hentai[] = [
-		// 			'DistributorCode' => $order['DistributorCode'],
-		// 			'BranchCode' => $order['BranchCode'],
-		// 			'SalesRepCode' => $order['SalesRepCode'],
-		// 			'RetailerCode' => $order['RetailerCode'],
-		// 			'OrderNo' => $order['OrderNo'],
-		// 			'ProductCode' => $detail['ChildSKUCode'],
-		// 			'OrderQtyPCS' => $detail['OrderQtyPcs'],
-		// 			'OrderQtyCS' => 0,
-		// 		];
-		// 	}
-		// };
+		$dateHour = Carbon::now()->format('Y-m-d H:i:s');
 
-		// DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
+		foreach ($arrayDataOrder as $order) {
+			foreach ($order['Detail'] as $detail) {
+				$hentai[] = [
+					'DistributorCode' => $order['DistributorCode'],
+					'BranchCode' => $order['BranchCode'],
+					'SalesRepCode' => $order['SalesRepCode'],
+					'RetailerCode' => $order['RetailerCode'],
+					'OrderNo' => $order['OrderNo'],
+					'OrderDate' => $dateHour,
+					'ProductCode' => $detail['ChildSKUCode'],
+					'OrderQtyPCS' => $detail['OrderQtyPcs'],
+					'OrderQtyCS' => 0,
+				];
+			}
+		};
+
+		DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
 
 		return 'Data untuk tanggal ' . $date . ' hingga jam ' . $currentTime;
 	}
