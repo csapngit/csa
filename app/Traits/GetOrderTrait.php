@@ -6,23 +6,24 @@ use Illuminate\Support\Facades\Http;
 
 trait GetOrderTrait
 {
-	public function orderRemark($branchCode)
+	public function orderRemark($branchCode, $arrayDataOrder)
 	{
-		$token = env('TOKEN_TDS');
+		// $token = env('TOKEN_TDS');
 
-		$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
-			'page' => 1,
-			'take' => 0,
-			'date' => request()->date,
-			// 'startTime' => '13:00:00',
-			// 'endTime' => '17:00:00',
-		]);
+		//Ini hit API ke dua untuk CSV
+		// $response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
+		// 	'page' => 1,
+		// 	'take' => 0,
+		// 	'date' => request()->date,
+		// 	// 'startTime' => '13:00:00',
+		// 	// 'endTime' => '17:00:00',
+		// ]);
 
-		if ($response['data']['data'] == []) {
+		if ($arrayDataOrder == []) {
 			return [];
 		};
 
-		$orders = collect($response['data']['data'])->where('BranchCode', $branchCode)->toArray();
+		$orders = collect($arrayDataOrder)->where('BranchCode', $branchCode)->toArray();
 
 		$header = [];
 
@@ -41,23 +42,24 @@ trait GetOrderTrait
 		return $header;
 	}
 
-	public function orderDetail($branchCode)
+	public function orderDetail($branchCode, $arrayDataOrder)
 	{
-		$token = env('TOKEN_TDS');
+		// $token = env('TOKEN_TDS');
 
-		$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
-			'page' => 1,
-			'take' => 0,
-			'date' => request()->date,
-			// 'startTime' => '13:00:00',
-			// 'endTime' => '17:00:00',
-		]);
+		//Ini hit API ke tiga untuk CSV
+		// $response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
+		// 	'page' => 1,
+		// 	'take' => 0,
+		// 	'date' => request()->date,
+		// 	// 'startTime' => '13:00:00',
+		// 	// 'endTime' => '17:00:00',
+		// ]);
 
-		if ($response['data']['data'] == []) {
+		if ($arrayDataOrder == []) {
 			return [];
 		};
 
-		$orders = collect($response['data']['data'])->where('BranchCode', $branchCode)->toArray();
+		$orders = collect($arrayDataOrder)->where('BranchCode', $branchCode)->toArray();
 
 		// dd($orders);
 
