@@ -19,7 +19,7 @@ use Carbon\Carbon;
 
 class TdsController extends Controller
 {
-	use GetOrderTrait;
+	// use GetOrderTrait;
 
 	public function index()
 	{
@@ -36,6 +36,7 @@ class TdsController extends Controller
 
 		$arrayDataOrder = [];
 
+		//Ini hit API pertama, ternyata hanya dipakai untuk database, tidak dipakai untuk CSV
 		$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
 			'page' => 1,
 			'take' => 0,
@@ -46,7 +47,35 @@ class TdsController extends Controller
 
 		$arrayDataOrder = $response['data']['data'];
 
-		// dd($arrayDataOrder);
+		//dd($arrayDataOrder);
+
+		$hentai = [];
+
+		$dateHour = Carbon::now()->format('Y-m-d H:i:s');
+
+		foreach ($arrayDataOrder as $dataorder) {
+			foreach ($dataorder['Detail'] as $detail) {
+				$hentai[] = [
+					'DistributorCode' => $dataorder['DistributorCode'],
+					'BranchCode' => $dataorder['BranchCode'],
+					'SalesRepCode' => $dataorder['SalesRepCode'],
+					'RetailerCode' => $dataorder['RetailerCode'],
+					'OrderNo' => $dataorder['OrderNo'],
+					'OrderDate' => $dateHour,
+					'ProductCode' => $detail['ChildSKUCode'],
+					'OrderQtyPCS' => $detail['OrderQtyPcs'],
+					'OrderQtyCS' => 0,
+				];
+			}
+		};
+
+		$collecthentai = collect($hentai);
+		$chunkhentais = $collecthentai->chunk(200);
+
+		//Save database
+		foreach ($chunkhentais as $chunkhentai) {
+			DB::connection('192.168.11.24')->table('tds_orddetail')->insert($chunkhentai->toArray());
+		}
 
 		$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
 
@@ -59,9 +88,64 @@ class TdsController extends Controller
 
 			$detailFileName = 'OrderDetail_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
 
-			$dataRemarkOrders = $this->orderRemark($branchCode);
+			//OrderTrait
+			if ($response['data']['data'] == []) {
+				return 'Data kosong';
+			};
 
-			$dataDetailOrders = $this->orderDetail($branchCode);
+			$orders = collect($response['data']['data'])->where('BranchCode', $branchCode)->toArray();
+
+			$header = [];
+
+			foreach ($orders as $order) {
+				$header[] = [
+					'DistributorCode' => $order['DistributorCode'],
+					'OrderNo' => $order['OrderNo'],
+					'SalesRepCode' => $order['SalesRepCode'],
+					'PONumber' => null,
+					'Remarks' => null,
+					'RetailerCode' => $order['RetailerCode'],
+					'GoldenStoreStatus' => null
+				];
+			}
+
+			$detailData = [];
+
+			foreach ($orders as $data) {
+				foreach ($data['Detail'] as $detail) {
+					$detailData[$branchCode][] = [
+						'DistributorCode' => $data['DistributorCode'],
+						'BranchCode' => $data['BranchCode'],
+						'SalesRepCode' => $data['SalesRepCode'],
+						'RetailerCode' => $data['RetailerCode'],
+						'OrderNo' => $data['OrderNo'],
+						'OrderDate' => date('m/d/Y', strtotime($data['OrderDate'])),
+						'UploadDate' => null,
+						'ChildSKUCode' => $detail['ChildSKUCode'],
+						'OrderQty' => $detail['OrderQtyPcs'],
+						'OrderQty(cases)' => 0,
+						'DeliveryDate' => null,
+						'D1' => null,
+						'D2' => null,
+						'D3' => null,
+						'NonIM' => null,
+						'DiscountAmount' => null,
+						'DiscountRate' => null,
+						'DiscountedPrice' => null,
+						'GoldenStoreStatus' => null,
+					];
+				}
+			}
+
+			//Order Trait
+
+			// return $detailData;
+
+			// return $header;
+
+			$dataRemarkOrders = $header;
+
+			$dataDetailOrders = $detailData;
 
 			switch ($region->AreaCode) {
 				case 'CSAJ':
@@ -71,7 +155,7 @@ class TdsController extends Controller
 					}
 
 					foreach ($dataDetailOrders as $dataDetailOrder) {
-						Excel::store(new OrderDetailExport($dataDetailOrder), '//CSAJ/' .  $detailFileName, 'sftp');
+						Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAJ/' .  $detailFileName, 'sftp');
 					}
 
 					break;
@@ -79,38 +163,16 @@ class TdsController extends Controller
 				default:
 
 					foreach ($dataRemarkOrders as $dataRemarkOrder) {
-						Excel::store(new OrderExport($dataRemarkOrder), '//CSAS/' .  $headerFileName, 'sftp');
+						Excel::store(new OrderExport($dataRemarkOrders), '//CSAS/' .  $headerFileName, 'sftp');
 					}
 
 					foreach ($dataDetailOrders as $dataDetailOrder) {
-						Excel::store(new OrderDetailExport($dataDetailOrder), '//CSAS/' .  $detailFileName, 'sftp');
+						Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAS/' .  $detailFileName, 'sftp');
 					}
 
 					break;
 			}
 		}
-
-		$hentai = [];
-
-		$dateHour = Carbon::now()->format('Y-m-d H:i:s');
-
-		foreach ($arrayDataOrder as $order) {
-			foreach ($order['Detail'] as $detail) {
-				$hentai[] = [
-					'DistributorCode' => $order['DistributorCode'],
-					'BranchCode' => $order['BranchCode'],
-					'SalesRepCode' => $order['SalesRepCode'],
-					'RetailerCode' => $order['RetailerCode'],
-					'OrderNo' => $order['OrderNo'],
-					'OrderDate' => $dateHour,
-					'ProductCode' => $detail['ChildSKUCode'],
-					'OrderQtyPCS' => $detail['OrderQtyPcs'],
-					'OrderQtyCS' => 0,
-				];
-			}
-		};
-
-		DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
 
 		return 'Data untuk tanggal ' . $date . ' hingga jam ' . $currentTime;
 	}
