@@ -14,8 +14,8 @@ trait GetOrderTrait
 			'page' => 1,
 			'take' => 0,
 			'date' => request()->date,
-			'startTime' => '13:00:00',
-			'endTime' => '17:00:00',
+			// 'startTime' => '13:00:00',
+			// 'endTime' => '17:00:00',
 		]);
 
 		if ($response['data']['data'] == []) {
@@ -49,8 +49,8 @@ trait GetOrderTrait
 			'page' => 1,
 			'take' => 0,
 			'date' => request()->date,
-			'startTime' => '13:00:00',
-			'endTime' => '17:00:00',
+			// 'startTime' => '13:00:00',
+			// 'endTime' => '17:00:00',
 		]);
 
 		if ($response['data']['data'] == []) {
