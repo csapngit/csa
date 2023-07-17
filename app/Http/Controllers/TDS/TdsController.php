@@ -415,6 +415,24 @@ class TdsController extends Controller
 	{
 		$product_priorities = DB::connection('192.168.11.24')->table('tds_ifast')->get();
 
+		$product_priorities = $product_priorities->map(function ($product_priority) {
+			return  [
+				'DistributorCode' => $product_priority->DistributorCode,
+				'LocalChannelCode' => $product_priority->LocalChannelCode,
+				'PromoName' => $product_priority->PromoName,
+				'SKUCode' => $product_priority->SKUCode,
+				'FromDate' => Carbon::parse($product_priority->FromDate)->format('Y-m-d'),
+				'ToDate' => Carbon::parse($product_priority->ToDate)->format('Y-m-d'),
+				'DistributionPeriod' => $product_priority->DistributionPeriod,
+				'PriorityName' => $product_priority->PriorityName,
+				'DropSizeVal' => $product_priority->DropSizeVal,
+				'DropSizeQty' => $product_priority->DropSizeQty,
+				'InitiativeName' => $product_priority->InitiativeName
+			];
+		});
+
+		// dd(json_encode($product_priorities, JSON_UNESCAPED_SLASHES));
+
 		return $this->post($product_priorities, '/product-priority', TdsEnum::PRODUCT_PRIORITY);
 	}
 
