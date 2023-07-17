@@ -15,6 +15,7 @@ class CreateDailySalesReportsTable extends Migration
 	{
 		Schema::create('daily_sales_reports', function (Blueprint $table) {
 			$table->id();
+			$table->string('area')->nullable(); //Newly added
 			$table->string('branch')->nullable();
 			$table->string('so_salesperson_id')->nullable();
 			$table->string('business')->nullable(); // Reguler|RSU|CNR Project

@@ -214,7 +214,7 @@ class TdsController extends Controller
 			return $data = 0;
 		} else {
 			return $data = 1;
-		};
+		}
 	}
 
 	public function inventory()
@@ -272,11 +272,65 @@ class TdsController extends Controller
 		return $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
 	}
 
+	public function targetpeSurvey($target)
+	{
+		if ($target == "N") {
+			return $target = 0;
+		} else if ($target == "Y") {
+			return $target = 1;
+		} else {
+			return $target;
+		}
+	}
+
 	public function peSurvey()
 	{
 		$peSurveys = DB::connection('192.168.11.24')->table('tds_pesurvey')->get();
 
-		return $this->post($peSurveys, '/pe-question-master', TdsEnum::PE_SURVEY);
+		$peSurveys = $peSurveys->map(function ($peSurvey) {
+			return  [
+				'DistributorCode' => $peSurvey->DistributorCode,
+				'BranchCode' => $peSurvey->BranchCode,
+				'LocalChannelCode' => $peSurvey->LocalChannelCode,
+				'LocalChannelName' => $peSurvey->LocalChannelName,
+				'SubChannelCode' => $peSurvey->SubChannelCode,
+				'SubChannelName' => $peSurvey->SubChannelName,
+				'CategoryCode' => $peSurvey->CategoryCode,
+				'BrandCode' => $peSurvey->BrandCode,
+				'BrandName' => $peSurvey->BrandName,
+				'QuestionCategory' => $peSurvey->QuestionCategory,
+				'QuestionGroup' => $peSurvey->QuestionGroup,
+				'QuestionCode' => $peSurvey->QuestionCode,
+				'Question' => $peSurvey->Question,
+				'QuestionFormat' => $peSurvey->QuestionFormat,
+				'ShareofText' => $peSurvey->ShareofText,
+				'AnswerType' => $peSurvey->AnswerType,
+				'Target' => floatval(number_format(floatval(str_replace(',', '.', str_replace('.', '', $this->targetpeSurvey($peSurvey->Target)))), 1)),
+				'Weightage' => floatval(number_format((float)$peSurvey->Weightage, 1)),
+				'FromDate' => $peSurvey->FromDate,
+				'ToDate' => $peSurvey->ToDate,
+				'Photo' => $peSurvey->Photo,
+				'Backend' => $peSurvey->Backend,
+				'Flag' => $peSurvey->Flag,
+				'TargetGoldCat' => (float)$peSurvey->TargetGoldCat,
+				'LinkRef' => (float)$peSurvey->LinkRef,
+				'VendorQuestionCode' => $peSurvey->VendorQuestionCode,
+			];
+		});
+
+		$peSurveys = $peSurveys->chunk(5000)->toArray();
+
+		// dd($peSurveys->toJson(JSON_UNESCAPED_SLASHES));
+
+		$peSurveyData = [];
+
+		foreach ($peSurveys as $peSurvey) {
+			$peSurveyData[] = $this->post($peSurvey, '/pe-question-master', TdsEnum::PE_SURVEY);
+		}
+
+		return $peSurveyData;
+
+		// return $this->post($peSurveys, '/pe-question-master', TdsEnum::PE_SURVEY);
 	}
 
 	public function masterPrice()
