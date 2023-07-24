@@ -16,10 +16,10 @@ class DailySalesReportMail
 
 		$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
 
-		Mail::to('pandu.sanjaya@csahome.com')
+		Mail::to($csajUser)
 			->send(new DsrCSAJ());
 
-		Mail::to('pandu.sanjaya@csahome.com')
+		Mail::to($csasUser)
 			->send(new DsrCSAS());
 	}
 
