@@ -41,7 +41,7 @@ class DsrCSAS extends Mailable
 		$this->channel_DSRs = $this->dsrService->dsrByChannel(AreaEnum::CSAS_TEXT);
 		$this->branch_datas = $this->dsrService->dsrByBranch(AreaEnum::CSAS_TEXT);
 
-		return $this->view('mails.dsr', [
+		return $this->view('mails.dsrCSAS', [
 			'dates' => $this->dates,
 			'channel_DSRs' => $this->channel_DSRs,
 			'branch_datas' => $this->branch_datas,

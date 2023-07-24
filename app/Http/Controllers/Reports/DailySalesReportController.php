@@ -36,9 +36,9 @@ class DailySalesReportController extends Controller
 		if (auth()->user()->area == AreaEnum::CSAJ) {
 			$dates = $this->dsrService->workday();
 
-			$channel_DSRs = $this->dsrService->dsrByChannel([AreaEnum::CSAJ_TEXT]);
+			$channel_DSRs = $this->dsrService->dsrByChannel(AreaEnum::CSAJ_TEXT);
 
-			$branch_datas = $this->dsrService->dsrByBranch([AreaEnum::CSAJ_TEXT]);
+			$branch_datas = $this->dsrService->dsrByBranch(AreaEnum::CSAJ_TEXT);
 
 			return view('reports.dsr.index', compact('branch_datas', 'channel_DSRs', 'dates'));
 		}
@@ -47,9 +47,9 @@ class DailySalesReportController extends Controller
 		if (auth()->user()->area == AreaEnum::CSAS) {
 			$dates = $this->dsrService->workday();
 
-			$channel_DSRs = $this->dsrService->dsrByChannel([AreaEnum::CSAS_TEXT]);
+			$channel_DSRs = $this->dsrService->dsrByChannel(AreaEnum::CSAS_TEXT);
 
-			$branch_datas = $this->dsrService->dsrByBranch([AreaEnum::CSAS_TEXT]);
+			$branch_datas = $this->dsrService->dsrByBranch(AreaEnum::CSAS_TEXT);
 
 			return view('reports.dsr.index', compact('branch_datas', 'channel_DSRs', 'dates'));
 		}

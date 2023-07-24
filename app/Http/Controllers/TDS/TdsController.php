@@ -219,7 +219,8 @@ class TdsController extends Controller
 
 	public function inventory()
 	{
-		$inventories = DB::connection('192.168.11.24')->table('tds_inventorydata')->take(100)->get();
+		$inventories = DB::connection('192.168.11.24')->table('tds_inventorydata')
+			->get();
 
 		$inventories = $inventories->map(function ($inventory) {
 			return  [
@@ -236,6 +237,7 @@ class TdsController extends Controller
 		});
 
 		// dd(json_encode($inventories, JSON_UNESCAPED_SLASHES));
+		// dd($inventories);
 
 		return $this->post($inventories, '/inventory-data', TdsEnum::INVENTORY);
 	}
@@ -336,7 +338,8 @@ class TdsController extends Controller
 	public function masterPrice()
 	{
 		// Edited
-		$prices = DB::connection('192.168.11.24')->table('tds_price')->take(50000)->get();
+		$prices = DB::connection('192.168.11.24')->table('tds_price')
+			->get();
 
 		$prices = $prices->map(function ($price) {
 			return [
@@ -354,7 +357,7 @@ class TdsController extends Controller
 			];
 		});
 
-		// dd($prices->take(100)->toJson());
+		// dd($prices);
 
 		$prices = $prices->chunk(5000)->toArray();
 
@@ -372,12 +375,30 @@ class TdsController extends Controller
 	{
 		$productBundles = DB::connection('192.168.11.24')->table('tds_prodbundle')->get();
 
+		$productBundles = $productBundles->map(function ($productBundle) {
+			return [
+				'DistributorCode' => $productBundle->DistributorCode,
+				'BranchCode' => $productBundle->BranchCode,
+				'Bundle_ProductCode' => $productBundle->Bundle_ProductCode,
+				'Bundle_ProductName' => $productBundle->Bundle_ProductName,
+				'ProductCode' => $productBundle->ProductCode,
+				'FromDate' => Carbon::parse($productBundle->FromDate)->format('Y-m-d'),
+				'ToDate' => Carbon::parse($productBundle->ToDate)->format('Y-m-d'),
+				'TU_Factor' => $productBundle->TU_Factor,
+				'IV_Factor' => $productBundle->IV_Factor,
+			];
+		});
+
+		// dd(json_encode($productBundles, JSON_UNESCAPED_SLASHES));
+
 		return $this->post($productBundles, '/product-bundle-map', TdsEnum::PRODUCT_BUNDLE);
 	}
 
 	public function masterProduct()
 	{
-		$products = DB::connection('192.168.11.24')->table('tds_prodmaster')->take(100)->get();
+		$products = DB::connection('192.168.11.24')->table('tds_prodmaster')
+			// ->where('ProductCode', 'Like', 'C%')
+			->get();
 
 		$products = $products->map(function ($product) {
 			return  [
@@ -406,9 +427,21 @@ class TdsController extends Controller
 			];
 		});
 
-		// dd(json_encode($products, JSON_UNESCAPED_SLASHES));
+		// dd($products);
 
-		return $this->post($products, '/product-master', TdsEnum::MASTER_PRODUCT);
+		$products = $products->chunk(5000)->toArray();
+
+		// dd($products);
+
+		$productData = [];
+
+		foreach ($products as $product) {
+			$productData[] = $this->post($product, '/product-master', TdsEnum::MASTER_PRODUCT);
+		}
+
+		return $productData;
+
+		// return $this->post($products, '/product-master', TdsEnum::MASTER_PRODUCT);
 	}
 
 	public function productPriority()
@@ -469,7 +502,16 @@ class TdsController extends Controller
 
 	public function routePlanDetail()
 	{
-		$routePlanDetails = DB::connection('192.168.11.24')->table('tds_route')->get();
+		$routePlanDetails = DB::connection('192.168.11.24')->table('tds_route')
+			// ->whereNotIn('SalesRepCode', ['B1SRPS03', 'B1SRPS04', 'B1SRPS06', 'D1SRSB04', 'E2SRPS01', 'E2SRPS02'])
+			// ->whereIn('SalesRepCode', ['A4SRSB01', 'A4SRSB02', 'E1SRSB02', 'E1SRSB03', 'C2SRSB01', 'C2SRSB03', 'C2SRSB04'])
+			->whereIn('SalesRepCode', [
+				'A2SRATV005', 'A2SRATV008', 'A2SRATV009',
+				'A2SRSB02', 'A2SRSB08', 'A2SRSB10', 'A2SRSB01', 'A2SRSB03', 'A2SRSB04', 'A2SRSB05', 'A2SRSB06',
+				'A2SRSB07', 'B2SRSB02', 'B2SRSB03', 'B2SRATV002', 'B2SRATV003', 'B2SRATV004', 'B3SRSB01',
+				'B3SRATV001', 'B3SRATV002'
+			])
+			->get();
 
 		// return Storage::disk('public')->put('routePlanDetail.json', json_encode($routePlanDetails));
 
@@ -496,9 +538,9 @@ class TdsController extends Controller
 			];
 		});
 
-		$routePlanDetails = $routePlanDetails->chunk(5000)->toArray();
+		// dd($routePlanDetails->toJson(JSON_UNESCAPED_SLASHES));
 
-		// dd($routePlanDetails);
+		$routePlanDetails = $routePlanDetails->chunk(5000)->toArray();
 
 		$routeData = [];
 
