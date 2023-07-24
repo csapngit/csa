@@ -407,7 +407,7 @@ class TdsController extends Controller
 				'ProductCode' => $product->ProductCode,
 				'PGProductCode' => $product->PGProductCode,
 				'ProductFullDesc' => $product->ProductFullDesc,
-				'ProductShortDesc' => $product->ProductShortDesc,
+				'ProductShortDesc' => $product->ProductShortDesc == '' ? '-' : $product->ProductShortDesc,
 				'CategoryCode' => $product->CategoryCode,
 				'CategoryName' => $product->CategoryName,
 				'BrandCode' => $product->BrandCode,
@@ -427,7 +427,7 @@ class TdsController extends Controller
 			];
 		});
 
-		// dd($products);
+		// dd($products->toJson(JSON_UNESCAPED_SLASHES));
 
 		$products = $products->chunk(5000)->toArray();
 

@@ -263,19 +263,29 @@ class DailySalesReportService extends WorkdayService
 			}
 
 			$dailySalesReports->forget('Pandeglang');
+
+			//Add TSP as new key
 			$dailySalesReports->put('TSP', collect());
 			$dailySalesReports['TSP']->put('ISM', collect());
 
 			foreach ($dailySalesReports->keys() as $keyBranch) {
 				foreach ($dailySalesReports[$keyBranch]->keys() as $keyMapping) {
 					foreach ($dailySalesReports[$keyBranch][$keyMapping] as $keyMappingData) {
-						if ($keyMapping == 'ISM' && $keyBranch != 'TSP') {
+						if ($keyMapping == 'ISM' && $keyBranch != 'TSP') { //Add all branch's ISM to TSP
 							$dailySalesReports['TSP']['ISM'][] = $keyMappingData;
 						}
 					}
 				}
 			}
 
+			//Remove ISM from other branches
+			foreach ($dailySalesReports->keys() as $keyBranch) {
+				foreach ($dailySalesReports[$keyBranch]->keys() as $keyMapping) {
+					if ($keyMapping == 'ISM' && $keyBranch != 'TSP') {
+						$dailySalesReports[$keyBranch]->forget('ISM');
+					}
+				}
+			}
 
 			// dd($dailySalesReports);
 

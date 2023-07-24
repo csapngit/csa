@@ -40,7 +40,7 @@ class DailySalesReportController extends Controller
 
 			$branch_datas = $this->dsrService->dsrByBranch(AreaEnum::CSAJ_TEXT);
 
-			return view('reports.dsr.index', compact('branch_datas', 'channel_DSRs', 'dates'));
+			return view('reports.dsr.indexCSAJ', compact('branch_datas', 'channel_DSRs', 'dates'));
 		}
 
 		// Login user untuk view DSR CSAS
@@ -51,7 +51,7 @@ class DailySalesReportController extends Controller
 
 			$branch_datas = $this->dsrService->dsrByBranch(AreaEnum::CSAS_TEXT);
 
-			return view('reports.dsr.index', compact('branch_datas', 'channel_DSRs', 'dates'));
+			return view('reports.dsr.indexCSAS', compact('branch_datas', 'channel_DSRs', 'dates'));
 		}
 	}
 

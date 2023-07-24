@@ -40,7 +40,7 @@
                         <td class="value">{{ number_format($dsr['sales_total']) }}</td>
                         <td class="value">{{ number_format($dsr['monthly_target']) }}</td>
                         <td class="value"
-                            style="color: white; background: {{ $dsr['index_archive'] < $dates['timegone_index'] ? 'red' : 'green' }}">
+                            style="color: white; background: {{ $dsr['index_archive'] < $dates['timegone_index'] - 10 ? 'red' : ($dsr['index_archive'] >= $dates['timegone_index'] - 5 ? 'green' : 'orange') }}">
                             {{ round($dsr['index_archive'], 2) }}{{ __('app.operators.percentage') }}</td>
                         <td class="value">{{ number_format($dsr['gap']) }}</td>
                     @endif

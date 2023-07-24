@@ -33,7 +33,7 @@
                     <td class="value">{{ number_format($channel['sales_total']) }}</td>
                     <td class="value">{{ number_format($channel['monthly_target']) }}</td>
                     <td class="value"
-                        style="color: white; background: {{ $channel['index_archive'] < $dates['timegone_index'] ? 'red' : 'green' }}">
+                        style="color: white; background: {{ $channel['index_archive'] < $dates['timegone_index'] - 10 ? 'red' : ($channel['index_archive'] >= $dates['timegone_index'] - 5 ? 'green' : 'orange') }}">
                         {{ round($channel['index_archive'], 2) }}{{ __('app.operators.percentage') }}</td>
                     <td class="value">{{ number_format($channel['gap']) }}</td>
                 @endif
