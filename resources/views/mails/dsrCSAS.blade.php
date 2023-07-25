@@ -47,8 +47,6 @@
     <br />
     <br />
 
-    {{-- @include('mails.layouts.dsr.branch') --}}
-
 </body>
 
 </html>

@@ -60,8 +60,8 @@
                     <td height="40" align="right" style="border: 1px solid black; padding-right: 5px">
                         {{ number_format($channel['monthly_target']) }}
                     </td>
-                    <td class="value"
-                        style="color: white; background: {{ $channel['index_archive'] < $dates['timegone_index'] - 10 ? 'red' : ($channel['index_archive'] >= $dates['timegone_index'] - 5 ? 'green' : 'orange') }}">
+                    <td height="40" align="right"
+                        style="border: 1px solid black; padding-right: 5px; background: {{ $channel['index_archive'] < $dates['timegone_index'] - 10 ? 'red' : ($channel['index_archive'] >= $dates['timegone_index'] - 5 ? 'green' : 'orange') }}">
                         {{ round($channel['index_archive'], 2) }}{{ __('app.operators.percentage') }}</td>
                     <td height="40" align="right" style="border: 1px solid black; padding-right: 5px">
                         {{ number_format($channel['gap']) }}</td>

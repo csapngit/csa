@@ -505,12 +505,13 @@ class TdsController extends Controller
 		$routePlanDetails = DB::connection('192.168.11.24')->table('tds_route')
 			// ->whereNotIn('SalesRepCode', ['B1SRPS03', 'B1SRPS04', 'B1SRPS06', 'D1SRSB04', 'E2SRPS01', 'E2SRPS02'])
 			// ->whereIn('SalesRepCode', ['A4SRSB01', 'A4SRSB02', 'E1SRSB02', 'E1SRSB03', 'C2SRSB01', 'C2SRSB03', 'C2SRSB04'])
-			->whereIn('SalesRepCode', [
-				'A2SRATV005', 'A2SRATV008', 'A2SRATV009',
-				'A2SRSB02', 'A2SRSB08', 'A2SRSB10', 'A2SRSB01', 'A2SRSB03', 'A2SRSB04', 'A2SRSB05', 'A2SRSB06',
-				'A2SRSB07', 'B2SRSB02', 'B2SRSB03', 'B2SRATV002', 'B2SRATV003', 'B2SRATV004', 'B3SRSB01',
-				'B3SRATV001', 'B3SRATV002'
-			])
+			// ->whereIn('SalesRepCode', [
+			// 	'A2SRATV005', 'A2SRATV008', 'A2SRATV009',
+			// 	'A2SRSB02', 'A2SRSB08', 'A2SRSB10', 'A2SRSB01', 'A2SRSB03', 'A2SRSB04', 'A2SRSB05', 'A2SRSB06',
+			// 	'A2SRSB07', 'B2SRSB02', 'B2SRSB03', 'B2SRATV002', 'B2SRATV003', 'B2SRATV004', 'B3SRSB01',
+			// 	'B3SRATV001', 'B3SRATV002'
+			// ])
+			// ->where('SalesRepCode', 'like', '140WSE%')
 			->get();
 
 		// return Storage::disk('public')->put('routePlanDetail.json', json_encode($routePlanDetails));
@@ -539,6 +540,7 @@ class TdsController extends Controller
 		});
 
 		// dd($routePlanDetails->toJson(JSON_UNESCAPED_SLASHES));
+		// dd($routePlanDetails);
 
 		$routePlanDetails = $routePlanDetails->chunk(5000)->toArray();
 
