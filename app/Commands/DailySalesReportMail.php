@@ -12,14 +12,14 @@ class DailySalesReportMail
 {
 	public function __invoke()
 	{
-		// $csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
+		$csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
 
-		// $csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
+		$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
 
-		Mail::to('pandu.sanjaya@csahome.com')
+		Mail::to($csajUser)
 			->send(new DsrCSAJ());
 
-		Mail::to('pandu.sanjaya@csahome.com')
+		Mail::to($csasUser)
 			->send(new DsrCSAS());
 	}
 
