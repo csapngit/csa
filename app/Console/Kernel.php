@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
 	protected function schedule(Schedule $schedule)
 	{
 		$schedule->call(new DailySalesReportMail)
-			->at('05:00');
+			->at('15:15');
 		// ->onSuccess(function () {
 		// 	DB::table('sync_reports')->insert([
 		// 		'report' => 'DSR',

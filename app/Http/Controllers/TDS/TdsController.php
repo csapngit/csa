@@ -220,6 +220,7 @@ class TdsController extends Controller
 	public function inventory()
 	{
 		$inventories = DB::connection('192.168.11.24')->table('tds_inventorydata')
+			->where('FromDate', '2023-07-26')
 			->get();
 
 		$inventories = $inventories->map(function ($inventory) {
@@ -512,6 +513,13 @@ class TdsController extends Controller
 			// 	'B3SRATV001', 'B3SRATV002'
 			// ])
 			// ->where('SalesRepCode', 'like', '140WSE%')
+			// ->whereIn('SalesRepCode', [
+			// 	'A1SR35',
+			// 	'A1SR55',
+			// 	'A1SR63',
+			// 	'A3SRSB02',
+			// 	'A3SRSB05'
+			// ])
 			->get();
 
 		// return Storage::disk('public')->put('routePlanDetail.json', json_encode($routePlanDetails));
