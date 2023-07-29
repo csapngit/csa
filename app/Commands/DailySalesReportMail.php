@@ -12,15 +12,20 @@ class DailySalesReportMail
 {
 	public function __invoke()
 	{
-		$csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
+		$checkCSAS = DB::table('daily_sales_reports')->where('area', 'CSAS')->get();
+		$checkCSAJ = DB::table('daily_sales_reports')->where('area', 'CSAJ')->get();
 
-		$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
+		if ($checkCSAS->isNotEmpty() && $checkCSAJ->isNotEmpty()) {
+			$csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
 
-		Mail::to($csajUser)
-			->send(new DsrCSAJ());
+			$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
 
-		Mail::to($csasUser)
-			->send(new DsrCSAS());
+			Mail::to($csajUser)
+				->send(new DsrCSAJ());
+
+			Mail::to($csasUser)
+				->send(new DsrCSAS());
+		}
 	}
 
 	public function emailDestiny(string $area)
