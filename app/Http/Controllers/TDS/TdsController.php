@@ -222,7 +222,6 @@ class TdsController extends Controller
 	public function inventory()
 	{
 		$inventories = DB::connection('192.168.11.24')->table('tds_inventorydata')
-			->where('FromDate', '2023-07-26')
 			->get();
 
 		$inventories = $inventories->map(function ($inventory) {
@@ -235,14 +234,25 @@ class TdsController extends Controller
 				'FromDate' => Carbon::parse($inventory->FromDate)->format('Y-m-d'),
 				'ToDate' => Carbon::parse($inventory->ToDate)->format('Y-m-d'),
 				'WarehouseQty' => $inventory->WarehouseQty,
-				'IsDiscontinue' => $this->isdiscontinue($inventory->IsDiscontinue)
+				'IsDiscontinue' => $this->isdiscontinue($inventory->IsDiscontinue),
+				'SiteCode' => $inventory->SiteCode
 			];
 		});
 
+		$inventories = $inventories->chunk(5000)->toArray();
+
+		$inventoryData = [];
+
 		// dd(json_encode($inventories, JSON_UNESCAPED_SLASHES));
 		// dd($inventories);
+		foreach ($inventories as $inventory) {
+			$inventoryData[] = $this->post($inventory, '/inventory-data', TdsEnum::INVENTORY);
+		}
 
-		return $this->post($inventories, '/inventory-data', TdsEnum::INVENTORY);
+
+		return $inventoryData;
+
+		// return $this->post($inventories, '/inventory-data', TdsEnum::INVENTORY);
 	}
 
 	public function invoice()
@@ -326,6 +336,7 @@ class TdsController extends Controller
 		$peSurveys = $peSurveys->chunk(5000)->toArray();
 
 		// dd($peSurveys->toJson(JSON_UNESCAPED_SLASHES));
+		// dd($peSurveys);
 
 		$peSurveyData = [];
 
@@ -467,6 +478,7 @@ class TdsController extends Controller
 		});
 
 		// dd(json_encode($product_priorities, JSON_UNESCAPED_SLASHES));
+		// dd($product_priorities);
 
 		return $this->post($product_priorities, '/product-priority', TdsEnum::PRODUCT_PRIORITY);
 	}
@@ -525,9 +537,11 @@ class TdsController extends Controller
 				'WK2' => $routePlanDetail->WK2,
 				'WK3' => $routePlanDetail->WK3,
 				'WK4' => $routePlanDetail->WK4,
+				'Sequence' => $routePlanDetail->Sequence,
 				'SalesRepCode' => $routePlanDetail->SalesRepCode,
 				'isProses' => 0,
 				'crtDatetimeHit' => Carbon::now()->format('Y-m-d'),
+				'SiteCode' => $routePlanDetail->SiteCode
 			];
 		});
 
@@ -566,19 +580,81 @@ class TdsController extends Controller
 	{
 		$sbdDistributions = DB::connection('192.168.11.24')->table('tds_sbd')->get();
 
-		return $this->post($sbdDistributions, '/sbd-distribution', TdsEnum::SBD);
+		$sbdDistributions = $sbdDistributions->map(function ($sbdDistribution) {
+			return  [
+				'DistributorCode' => $sbdDistribution->DistributorCode,
+				'BranchCode' => $sbdDistribution->BranchCode,
+				'LocalChannelCode' => $sbdDistribution->LocalChannelCode,
+				'SubChannelCode' => $sbdDistribution->SubChannelCode,
+				'GroupName' => $sbdDistribution->GroupName,
+				'ParentCode' => $sbdDistribution->ParentCode,
+				'FromDate' => Carbon::parse($sbdDistribution->FromDate)->format('Y-m-d'),
+				'ToDate' => Carbon::parse($sbdDistribution->ToDate)->format('Y-m-d'),
+				'DropSizeVal' => $sbdDistribution->DropSizeVal,
+				'DropSizeQty' => $sbdDistribution->DropSizeQty,
+				'VisibilityDevice' => $sbdDistribution->VisibilityDevice,
+				'SBDName' => $sbdDistribution->SBDName,
+				'MaxEPSKU' => $sbdDistribution->MaxEPSKU,
+				'MaxGSSKU' => $sbdDistribution->MaxGSSKU,
+				'GSTarget' => $sbdDistribution->GS_Target,
+			];
+		});
+
+		$sbdDistributions = $sbdDistributions->chunk(5000)->toArray();
+
+		// dd($sbdDistributions);
+
+		$sbdDistributionData = [];
+
+		foreach ($sbdDistributions as $sbdDistribution) {
+			$sbdDistributionData[] = $this->post($sbdDistribution, '/sbd-distribution', TdsEnum::SBD);
+		}
+
+		return $sbdDistributionData;
+		// return $this->post($sbdDistributions, '/sbd-distribution', TdsEnum::SBD);
 	}
 
 	public function sbdMerchendising()
 	{
 		$sbdMerchs = DB::connection('192.168.11.24')->table('tds_sbdmerc')->get();
 
-		return $this->post($sbdMerchs, '/sbd-merchandising', TdsEnum::SBD_MERC);
+		$sbdMerchs = $sbdMerchs->map(function ($sbdMerch) {
+			return  [
+				'DistributorCode' => $sbdMerch->DistributorCode,
+				'SubChannelCode' => $sbdMerch->SubChannelCode,
+				'SBDName' => $sbdMerch->SBDName,
+				'CategoryCode' => $sbdMerch->CategoryCode,
+				'BrandCode' => $sbdMerch->BrandCode,
+				'Value' => $sbdMerch->Value,
+				'FromDate' => Carbon::parse($sbdMerch->FromDate)->format('Y-m-d'),
+				'ToDate' => Carbon::parse($sbdMerch->ToDate)->format('Y-m-d'),
+				'ItemCode' => $sbdMerch->ItemCode,
+				'ItemName' => $sbdMerch->ItemName,
+				'Criteria' => $sbdMerch->Criteria,
+				'VisibilityType' => $sbdMerch->VisibilityType,
+			];
+		});
+
+		$sbdMerchs = $sbdMerchs->chunk(5000)->toArray();
+
+		// dd($sbdMerchs);
+
+		$sbdMerchData = [];
+
+		foreach ($sbdMerchs as $sbdMerch) {
+			$sbdMerchData[] = $this->post($sbdMerch, '/sbd-merchandising', TdsEnum::SBD_MERC);
+		}
+
+		return $sbdMerchData;
+
+		// return $this->post($sbdMerchs, '/sbd-merchandising', TdsEnum::SBD_MERC);
 	}
 
 	public function seller()
 	{
-		$sellers = DB::connection('192.168.11.24')->table('tds_seller')->get();
+		$sellers = DB::connection('192.168.11.24')->table('tds_seller')
+			->where('SellerType', '!=', '')
+			->get();
 
 		$sellers = $sellers->map(function ($seller) {
 			return [
@@ -606,6 +682,7 @@ class TdsController extends Controller
 		});
 
 		// dd(json_encode($sellers->take(100), JSON_UNESCAPED_SLASHES));
+		// dd($sellers);
 
 		return $this->post($sellers, '/seller-master', TdsEnum::MASTER_SELLER);
 	}
