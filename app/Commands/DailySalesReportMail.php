@@ -14,8 +14,18 @@ class DailySalesReportMail
 	{
 		$checkCSAS = DB::table('daily_sales_reports')->where('area', 'CSAS')->get();
 		$checkCSAJ = DB::table('daily_sales_reports')->where('area', 'CSAJ')->get();
+		$soCSAJ = DB::table('daily_sales_reports')->where('area', 'CSAJ')->sum('sales_order');
+		$doCSAJ = DB::table('daily_sales_reports')->where('area', 'CSAJ')->sum('delivery_order');
+		$arCSAJ = DB::table('daily_sales_reports')->where('area', 'CSAJ')->sum('ar_invoice');
+		$bestCSAJ = $soCSAJ + $doCSAJ + $arCSAJ;
 
-		if ($checkCSAS->isNotEmpty() && $checkCSAJ->isNotEmpty()) {
+		$soCSAS = DB::table('daily_sales_reports')->where('area', 'CSAS')->sum('sales_order');
+		$doCSAS = DB::table('daily_sales_reports')->where('area', 'CSAS')->sum('delivery_order');
+		$arCSAS = DB::table('daily_sales_reports')->where('area', 'CSAS')->sum('ar_invoice');
+		$bestCSAS = $soCSAS + $doCSAS + $arCSAS;
+
+
+		if ($checkCSAS->isNotEmpty() && $checkCSAJ->isNotEmpty() && $bestCSAJ != 0 && $bestCSAS != 0) {
 			$csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
 
 			$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
