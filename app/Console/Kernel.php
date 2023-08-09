@@ -41,8 +41,8 @@ class Kernel extends ConsoleKernel
 		$schedule->call(new DailySalesReportMail)
 			->at('05:00');
 
-		$schedule->call('App\Http\Controllers\TDS\TdsController@order', ['date' => Carbon::now()->format('Y-m-d')])
-			->at('12:25');
+		// $schedule->call('App\Http\Controllers\TDS\TdsController@order', ['date' => Carbon::now()->format('Y-m-d')])
+		// 	->at('12:25');
 
 
 		// $schedule->call(new OrderDetail)

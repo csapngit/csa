@@ -789,22 +789,28 @@ class TdsController extends Controller
 
 		$currentTime = Carbon::now()->format('H:i:s');
 
-		$token = env('TOKEN_TDS');
+		// $token = env('TOKEN_TDS');
 
 		$arrayDataOrder = [];
 
 		//Ini hit API pertama, ternyata hanya dipakai untuk database, tidak dipakai untuk CSV
-		$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
-			'page' => 1,
-			'take' => 0,
-			'date' => $date,
-			// 'startTime' => $hour,
-			// 'endTime' => $currentTime,
-		]);
+		// $response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
+		// 	'page' => 1,
+		// 	'take' => 0,
+		// 	'date' => $date,
+		// 	// 'startTime' => $hour,
+		// 	// 'endTime' => $currentTime,
+		// ]);
 
-		$arrayDataOrder = $response['data']['data'];
+		$response = DB::connection('192.168.11.24')->table('tds_orddetail')
+			->take(100)->orderByDesc('OrderDate')->get()->toArray();
 
-		//dd($arrayDataOrder);
+		$firstkey = array_keys($response);
+		// $secondkey = array_keys($response[$firstkey]);
+
+		// $arrayDataOrder = $response[""][""];
+
+		dd($firstkey);
 
 		$hentai = [];
 
@@ -826,6 +832,8 @@ class TdsController extends Controller
 			}
 		};
 
+		dd($hentai);
+
 		$collecthentai = collect($hentai);
 		$chunkhentais = $collecthentai->chunk(200);
 
@@ -841,9 +849,9 @@ class TdsController extends Controller
 
 			$time = now();
 
-			$headerFileName = 'OrderRemarks_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
+			$headerFileName = 'Test_OrderRemarks_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
 
-			$detailFileName = 'OrderDetail_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
+			$detailFileName = 'Test_OrderDetail_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
 
 			//OrderTrait
 			if ($response['data']['data'] == []) {
@@ -908,11 +916,13 @@ class TdsController extends Controller
 				case 'CSAJ':
 
 					foreach ($dataRemarkOrders as $dataRemarkOrder) {
-						Excel::store(new OrderExport($dataRemarkOrders), '//CSAJ/' .  $headerFileName, 'sftp');
+						$upload  = Storage::disk('sftp')->put('//CSAJ/' . $headerFileName, $dataRemarkOrders);
+						// Excel::store(new OrderExport($dataRemarkOrders), '//CSAJ/' .  $headerFileName, 'sftp');
 					}
 
 					foreach ($dataDetailOrders as $dataDetailOrder) {
-						Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAJ/' .  $detailFileName, 'sftp');
+						$upload  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $dataDetailOrders);
+						// Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAJ/' .  $detailFileName, 'sftp');
 					}
 
 					break;
@@ -920,11 +930,13 @@ class TdsController extends Controller
 				default:
 
 					foreach ($dataRemarkOrders as $dataRemarkOrder) {
-						Excel::store(new OrderExport($dataRemarkOrders), '//CSAS/' .  $headerFileName, 'sftp');
+						$upload  = Storage::disk('sftp')->put('//CSAS/' . $headerFileName, $dataRemarkOrders);
+						//Excel::store(new OrderExport($dataRemarkOrders), '//CSAS/' .  $headerFileName, 'sftp');
 					}
 
 					foreach ($dataDetailOrders as $dataDetailOrder) {
-						Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAS/' .  $detailFileName, 'sftp');
+						$upload  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $dataDetailOrders);
+						//Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAS/' .  $detailFileName, 'sftp');
 					}
 
 					break;
