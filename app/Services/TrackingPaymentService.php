@@ -127,8 +127,8 @@ class TrackingPaymentService extends WorkdayService
 			}
 		}
 
-		$totaltarget = $trackingpayments['data']['Jakarta']['TOTAL']['Total']['target'] + $trackingpayments['data']['Sumatra']['TOTAL']['Total']['target'];
-		$totalrealisasi = $trackingpayments['data']['Jakarta']['TOTAL']['Total']['realisasi_payment'] + $trackingpayments['data']['Sumatra']['TOTAL']['Total']['realisasi_payment'];
+		$totaltarget = $trackingpayments['data']['CSAJ']['TOTAL']['Total']['target'] + $trackingpayments['data']['CSAS']['TOTAL']['Total']['target'];
+		$totalrealisasi = $trackingpayments['data']['CSAJ']['TOTAL']['Total']['realisasi_payment'] + $trackingpayments['data']['CSAS']['TOTAL']['Total']['realisasi_payment'];
 
 		$achv_vs_target = 0;
 		if ($totalrealisasi != 0 && $totaltarget != 0) {
@@ -144,6 +144,17 @@ class TrackingPaymentService extends WorkdayService
 		$trackingpayments['total']['achievement'] = $totalrealisasi;
 		$trackingpayments['total']['achievetarget'] = $achv_vs_target;
 		$trackingpayments['total']['achievetimegone'] = $acvh_vs_timegone;
+
+		// $date = now();
+
+		// $workDay = DB::table('workdays')
+		// 	->where('date', 'LIKE', $date->format('Y-m') . '%')
+		// 	->get('value')
+		// 	->sum('value');
+
+		// $workDay = 0;
+
+		// $trackingpayments['data'][$area][$branch]
 
 		foreach ($trackingpayments['data'] as $area => $areadata) {
 			foreach ($areadata as $branch => $branchdata) {

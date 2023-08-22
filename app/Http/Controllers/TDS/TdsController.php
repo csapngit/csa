@@ -497,6 +497,22 @@ class TdsController extends Controller
 			->where('isPostApi', null)
 			->get();
 
+		$promoPrices = $promoPrices->map(function ($promoPrice) {
+			return  [
+				'DistributorCode' => $promoPrice->DistributorCode,
+				'LocalChannelCode' => $promoPrice->LocalChannelCode,
+				'AccountName' => $promoPrice->AccountName,
+				'PromoCode' => $promoPrice->PromoCode,
+				'PromoName' => $promoPrice->PromoName,
+				'Description' => $promoPrice->Description,
+				'FromDate' => Carbon::parse($promoPrice->FromDate)->format('Y-m-d'),
+				'ToDate' => Carbon::parse($promoPrice->ToDate)->format('Y-m-d'),
+				'RegularPrice' => $promoPrice->RegularPrice,
+				'PromoPrice' => $promoPrice->PromoPrice,
+				'Flag' => $promoPrice->Flag,
+			];
+		});
+
 		return $this->post($promoPrices, '/promotion-price-master', TdsEnum::PROMOTION_PRICE, [true, 'tds_promoprice']);
 	}
 

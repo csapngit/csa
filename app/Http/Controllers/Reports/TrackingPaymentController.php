@@ -31,7 +31,7 @@ class TrackingPaymentController extends Controller
 	{
 		$allUser = $this->emailDestiny();
 
-		Mail::to($allUser)
+		Mail::to('harits.zaidmalik@csahome.com')
 			->send(new TrackingPayment());
 
 		return 'ok mantab';
