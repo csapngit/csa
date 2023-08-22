@@ -88,6 +88,15 @@ class DailySalesReportController extends Controller
 		return $arrayData;
 	}
 
+	public function mailself()
+	{
+
+		Mail::to('pandu.sanjaya@csahome.com')
+			->send(new DsrCSAJ());
+
+		return back();
+	}
+
 	// Lihat index mail yang akan dikirim
 	public function mailIndex()
 	{

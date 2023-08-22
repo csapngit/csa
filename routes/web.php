@@ -153,12 +153,16 @@ Route::middleware(['auth'])->group(function () {
 		// Daily Sales Report
 		Route::get('daily-sales-reports', [DailySalesReportController::class, 'index'])->name('report.dsr');
 		Route::get('send-mail', [DailySalesReportController::class, 'mail'])->name('dsr.mail');
+		Route::get('send-mail-self', [DailySalesReportController::class, 'mailself'])->name('dsr.mailself');
 
 		// View DSR Mail Index
 		Route::get('dsr-mail-index', [DailySalesReportController::class, 'mailIndex'])->name('dsr.mail.index');
 
 		// Tracking Payment
 		Route::get('tracking-payment', [TrackingPaymentController::class, 'index'])->name('tracking.payment');
+		Route::get('send-trackingpayment', [TrackingPaymentController::class, 'mail'])->name('trackingpayment.mail');
+		Route::get('trackingpayment-mail-index', [TrackingPaymentController::class, 'mailIndex'])->name('trackingpayment.mail.index');
+
 
 		Route::resource('target-dsrs', TargetDsrController::class)
 			->except('show');
