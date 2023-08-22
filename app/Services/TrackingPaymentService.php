@@ -127,8 +127,8 @@ class TrackingPaymentService extends WorkdayService
 			}
 		}
 
-		$totaltarget = $trackingpayments['data']['CSAJ']['TOTAL']['Total']['target'] + $trackingpayments['data']['CSAS']['TOTAL']['Total']['target'];
-		$totalrealisasi = $trackingpayments['data']['CSAJ']['TOTAL']['Total']['realisasi_payment'] + $trackingpayments['data']['CSAS']['TOTAL']['Total']['realisasi_payment'];
+		$totaltarget = $trackingpayments['data']['Jakarta']['TOTAL']['Total']['target'] + $trackingpayments['data']['Sumatra']['TOTAL']['Total']['target'];
+		$totalrealisasi = $trackingpayments['data']['Jakarta']['TOTAL']['Total']['realisasi_payment'] + $trackingpayments['data']['Sumatra']['TOTAL']['Total']['realisasi_payment'];
 
 		$achv_vs_target = 0;
 		if ($totalrealisasi != 0 && $totaltarget != 0) {
