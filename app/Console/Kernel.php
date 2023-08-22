@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Commands\DailySalesReportMail;
+use App\Commands\TrackingPaymentMail;
 use App\Commands\TDS\Incentive;
 use App\Commands\TDS\Invoice;
 use App\Commands\TDS\MasterReturn;
@@ -13,6 +14,7 @@ use App\Commands\TDS\Product;
 use App\Commands\TDS\Seller;
 use App\Commands\TDS\Voucher;
 use App\Commands\TDS\OrderDetail;
+use App\Mail\TrackingPayment;
 use Exception;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -40,6 +42,9 @@ class Kernel extends ConsoleKernel
 	{
 		$schedule->call(new DailySalesReportMail)
 			->at('05:00');
+
+		// $schedule->call(new TrackingPaymentMail)
+		// 	->at('05:10');
 
 		// $schedule->call('App\Http\Controllers\TDS\TdsController@order', ['date' => Carbon::now()->format('Y-m-d')])
 		// 	->at('12:25');

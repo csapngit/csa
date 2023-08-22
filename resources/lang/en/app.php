@@ -296,6 +296,17 @@ return [
 			'timegone' => 'Timegone',
 			'working_days' => 'Hari Kerja',
 			'the_rest_of_working_days' => 'Sisa Hari Kerja',
+		],
+		'trackingpayment' => [
+			'target' => 'Target',
+			'date' => 'Date',
+			'achievement' => 'Achievement',
+			'acvh_vs_target' => 'Achv vs Target',
+			'acvh_vs_timegone' => 'Achv vs Timegone',
+			'timegone_index' => 'Timegone %',
+			'timegone' => 'Timegone',
+			'working_days' => 'Hari Kerja',
+			'the_rest_of_working_days' => 'Sisa Hari Kerja',
 		]
 	],
 

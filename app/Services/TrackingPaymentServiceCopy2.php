@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 
-class TrackingPaymentService extends WorkdayService
+class TrackingPaymentService
 {
 	public function TrackingPayment()
 	{
@@ -113,73 +113,13 @@ class TrackingPaymentService extends WorkdayService
 					$total_index = $total_realisasi_payment / $total_target * 100;
 				}
 
-				// $trackingpayments['total'][$area][$branch] = [
-				// 	'target' => $total_target,
-				// 	'realisasi_payment' => $total_realisasi_payment,
-				// 	'index' => $total_index,
-				// ];
-
-				$trackingpayments['data'][$area][$branch]['Total'] = [
+				$trackingpayments['total'][$area][$branch] = [
 					'target' => $total_target,
 					'realisasi_payment' => $total_realisasi_payment,
 					'index' => $total_index,
 				];
 			}
 		}
-
-		$totaltarget = $trackingpayments['data']['CSAJ']['TOTAL']['Total']['target'] + $trackingpayments['data']['CSAS']['TOTAL']['Total']['target'];
-		$totalrealisasi = $trackingpayments['data']['CSAJ']['TOTAL']['Total']['realisasi_payment'] + $trackingpayments['data']['CSAS']['TOTAL']['Total']['realisasi_payment'];
-
-		$achv_vs_target = 0;
-		if ($totalrealisasi != 0 && $totaltarget != 0) {
-			$achv_vs_target = $totalrealisasi / $totaltarget * 100;
-		}
-
-		$acvh_vs_timegone = 0;
-		if ($achv_vs_target > 0 && $this->timegone_index > 0) {
-			$acvh_vs_timegone = $achv_vs_target / $this->timegone_index * 100;
-		}
-
-		$trackingpayments['total']['totaltarget'] = $totaltarget;
-		$trackingpayments['total']['achievement'] = $totalrealisasi;
-		$trackingpayments['total']['achievetarget'] = $achv_vs_target;
-		$trackingpayments['total']['achievetimegone'] = $acvh_vs_timegone;
-
-		foreach ($trackingpayments['data'] as $area => $areadata) {
-			foreach ($areadata as $branch => $branchdata) {
-				if ($this->workDay > 0) {
-					$trackingpayments['data'][$area][$branch]['Average']['GT'] = $trackingpayments['data'][$area][$branch]['GT']['realisasi_payment'] / $this->workDay;
-					$trackingpayments['data'][$area][$branch]['Average']['MT'] = $trackingpayments['data'][$area][$branch]['MT']['realisasi_payment'] / $this->workDay;
-				} else {
-					$trackingpayments['data'][$area][$branch]['Average']['GT'] = 0;
-					$trackingpayments['data'][$area][$branch]['Average']['MT'] = 0;
-				}
-				$trackingpayments['data'][$area][$branch]['Average']['Total'] = $trackingpayments['data'][$area][$branch]['Average']['GT'] + $trackingpayments['data'][$area][$branch]['Average']['MT'];
-			}
-		}
-
-		foreach ($trackingpayments['data'] as $area => $payments) {
-			foreach ($payments as $branch => $payment) {
-
-				$total_avg_GT = array_sum(array_column($payment['Average'], 'GT'));
-				$total_avg_MT = array_sum(array_column($payment['Average'], 'MT'));
-				$total_avg_Total = array_sum(array_column($payment['Average'], 'Total'));
-
-				// $trackingpayments['total'][$area][$branch] = [
-				// 	'target' => $total_target,
-				// 	'realisasi_payment' => $total_realisasi_payment,
-				// 	'index' => $total_index,
-				// ];
-
-				$trackingpayments['data'][$area][$branch]['Total']['Average'] = [
-					'GT' => $total_avg_GT,
-					'MT' => $total_avg_MT,
-					'Total' => $total_avg_Total,
-				];
-			}
-		}
-
-		// dd($trackingpayments);
 
 		return $trackingpayments;
 	}

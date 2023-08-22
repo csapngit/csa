@@ -358,11 +358,9 @@ class TdsController extends Controller
 		$prices = $prices->map(function ($price) {
 			return [
 				'DistributorCode' => $price->DistributorCode,
-				'LocalChannelCode' => $price->LocalChannelCode,
-				// 'AreaCode' => 'string',
-				// 'AreaName' => 'string',
-				'AreaCode' => $price->AreaCode,
-				'AreaName' => $price->AreaName,
+				'LocalChannelCode' => '"',
+				'AreaCode' => '"',
+				'AreaName' => '"',
 				'SKUCode' => $price->SKUCode,
 				'GrossPrice' => $price->GrossPrice,
 				'NetPriceForCashPurchase' => $price->NetPriceforcashpurchase,
@@ -411,6 +409,7 @@ class TdsController extends Controller
 	public function masterProduct()
 	{
 		$products = DB::connection('192.168.11.24')->table('tds_prodmaster')
+			->where('CategoryCode', '!=', '')
 			->get();
 
 		$products = $products->map(function ($product) {
@@ -436,7 +435,8 @@ class TdsController extends Controller
 				'Size' => (float)$product->Size,
 				'Flag' => $product->Flag,
 				'Sequence' => (float)$product->Sequence,
-				'UOM' => $product->UOM
+				'UOM' => $product->UOM,
+				'SiteCode' => $product->BranchCode
 			];
 		});
 
@@ -541,7 +541,9 @@ class TdsController extends Controller
 				'SalesRepCode' => $routePlanDetail->SalesRepCode,
 				'isProses' => 0,
 				'crtDatetimeHit' => Carbon::now()->format('Y-m-d'),
-				'SiteCode' => $routePlanDetail->SiteCode
+				'SiteCode' => $routePlanDetail->SiteCode,
+				'StartDate' => '2023-08-01',
+				'UploadDate' => Carbon::now()->format('Y-m-d h:i:s')
 			];
 		});
 
@@ -696,7 +698,9 @@ class TdsController extends Controller
 
 	public function masterStore()
 	{
-		$stores = DB::connection('192.168.11.24')->table('tds_storemaster')->get();
+		$stores = DB::connection('192.168.11.24')->table('tds_storemaster')
+			->whereNotNull('SiteCode')
+			->get();
 
 		$stores = $stores->map(function ($store) {
 			return [
@@ -738,6 +742,7 @@ class TdsController extends Controller
 		$stores = $stores->chunk(5000);
 
 		// dd(json_encode($stores, JSON_UNESCAPED_SLASHES));
+		// dd($stores);
 
 		$storeData = [];
 
@@ -805,42 +810,37 @@ class TdsController extends Controller
 		$response = DB::connection('192.168.11.24')->table('tds_orddetail')
 			->take(100)->orderByDesc('OrderDate')->get()->toArray();
 
-		$firstkey = array_keys($response);
-		// $secondkey = array_keys($response[$firstkey]);
+		$arrayDataOrder = $response;
 
-		// $arrayDataOrder = $response[""][""];
-
-		dd($firstkey);
+		// dd($arrayDataOrder);
 
 		$hentai = [];
 
 		$dateHour = Carbon::now()->format('Y-m-d H:i:s');
 
 		foreach ($arrayDataOrder as $dataorder) {
-			foreach ($dataorder['Detail'] as $detail) {
-				$hentai[] = [
-					'DistributorCode' => $dataorder['DistributorCode'],
-					'BranchCode' => $dataorder['BranchCode'],
-					'SalesRepCode' => $dataorder['SalesRepCode'],
-					'RetailerCode' => $dataorder['RetailerCode'],
-					'OrderNo' => $dataorder['OrderNo'],
-					'OrderDate' => $dateHour,
-					'ProductCode' => $detail['ChildSKUCode'],
-					'OrderQtyPCS' => $detail['OrderQtyPcs'],
-					'OrderQtyCS' => 0,
-				];
-			}
+			$hentai[] = [
+				'DistributorCode' => $dataorder->DistributorCode,
+				'BranchCode' => $dataorder->BranchCode,
+				'SalesRepCode' => $dataorder->SalesRepCode,
+				'RetailerCode' => $dataorder->RetailerCode,
+				'OrderNo' => $dataorder->OrderNo,
+				'OrderDate' => $dateHour,
+				'ProductCode' => $dataorder->ProductCode,
+				'OrderQtyPCS' => $dataorder->OrderQtyPCS,
+				'OrderQtyCS' => 0,
+			];
 		};
 
-		dd($hentai);
+		// dd($hentai);
 
 		$collecthentai = collect($hentai);
 		$chunkhentais = $collecthentai->chunk(200);
 
 		//Save database
-		foreach ($chunkhentais as $chunkhentai) {
-			DB::connection('192.168.11.24')->table('tds_orddetail')->insert($chunkhentai->toArray());
-		}
+		// foreach ($chunkhentais as $chunkhentai) {
+		// 	DB::connection('192.168.11.24')->table('tds_orddetail')->insert($chunkhentai->toArray());
+		// }
 
 		$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
 
@@ -854,53 +854,111 @@ class TdsController extends Controller
 			$detailFileName = 'Test_OrderDetail_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
 
 			//OrderTrait
-			if ($response['data']['data'] == []) {
+			if ($response == []) {
 				return 'Data kosong';
 			};
 
-			$orders = collect($response['data']['data'])->where('BranchCode', $branchCode)->toArray();
+			$orders = collect($response)->where('BranchCode', $branchCode)->toArray();
+
+			$handleRemarks = fopen($headerFileName, 'w');
+
+			//add Header Remarks
+			fputcsv(
+				$handleRemarks,
+				[
+					"DistributorCode",
+					"OrderNo",
+					"SalesRepCode",
+					"PONumber",
+					"Remarks",
+					"RetailerCode",
+					"GoldenStoreStatus",
+				],
+				";"
+			);
 
 			$header = [];
 
+			//add Data Remarks
 			foreach ($orders as $order) {
-				$header[] = [
-					'DistributorCode' => $order['DistributorCode'],
-					'OrderNo' => $order['OrderNo'],
-					'SalesRepCode' => $order['SalesRepCode'],
-					'PONumber' => null,
-					'Remarks' => null,
-					'RetailerCode' => $order['RetailerCode'],
-					'GoldenStoreStatus' => null
-				];
+				fputcsv(
+					$handleRemarks,
+					[
+						$order->DistributorCode,
+						$order->OrderNo,
+						$order->SalesRepCode,
+						null,
+						null,
+						$order->RetailerCode,
+						null
+					],
+					";"
+				);
 			}
+
+			fclose($handleRemarks);
+
+			$handleDetail = fopen($detailFileName, 'w');
+
+			//add Header Detail
+			fputcsv(
+				$handleDetail,
+				[
+					"DistributorCode",
+					"BranchCode",
+					"SalesRepCode",
+					"RetailerCode",
+					"OrderNo",
+					"OrderDate",
+					"UploadDate",
+					"ChildSKUCode",
+					"OrderQty",
+					"OrderQty(cases)",
+					"DeliveryDate",
+					"D2",
+					"D3",
+					"NonIM",
+					"DiscountAmount",
+					"DiscountRate",
+					"DiscountedPrice",
+					"GoldenStoreStatus",
+				],
+				";"
+			);
 
 			$detailData = [];
 
 			foreach ($orders as $data) {
-				foreach ($data['Detail'] as $detail) {
-					$detailData[$branchCode][] = [
-						'DistributorCode' => $data['DistributorCode'],
-						'BranchCode' => $data['BranchCode'],
-						'SalesRepCode' => $data['SalesRepCode'],
-						'RetailerCode' => $data['RetailerCode'],
-						'OrderNo' => $data['OrderNo'],
-						'OrderDate' => date('m/d/Y', strtotime($data['OrderDate'])),
-						'UploadDate' => null,
-						'ChildSKUCode' => $detail['ChildSKUCode'],
-						'OrderQty' => $detail['OrderQtyPcs'],
-						'OrderQty(cases)' => 0,
-						'DeliveryDate' => null,
-						'D1' => null,
-						'D2' => null,
-						'D3' => null,
-						'NonIM' => null,
-						'DiscountAmount' => null,
-						'DiscountRate' => null,
-						'DiscountedPrice' => null,
-						'GoldenStoreStatus' => null,
-					];
-				}
+				fputcsv(
+					$handleDetail,
+					[
+						$data->DistributorCode,
+						$data->BranchCode,
+						$data->SalesRepCode,
+						$data->RetailerCode,
+						$data->OrderNo,
+						date('m/d/Y', strtotime($data->OrderDate)),
+						null,
+						$data->ProductCode,
+						$data->OrderQtyPCS,
+						0,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+					],
+					";"
+				);
 			}
+
+			fclose($handleDetail);
+
+			// dd($headerFileName);
 
 			//Order Trait
 
@@ -908,36 +966,38 @@ class TdsController extends Controller
 
 			// return $header;
 
-			$dataRemarkOrders = $header;
+			// $dataRemarkOrders = $header;
+			// dd($dataRemarkOrders);
 
-			$dataDetailOrders = $detailData;
+			// $dataDetailOrders = $detailData;
+			// dd($dataDetailOrders);
 
 			switch ($region->AreaCode) {
 				case 'CSAJ':
 
-					foreach ($dataRemarkOrders as $dataRemarkOrder) {
-						$upload  = Storage::disk('sftp')->put('//CSAJ/' . $headerFileName, $dataRemarkOrders);
-						// Excel::store(new OrderExport($dataRemarkOrders), '//CSAJ/' .  $headerFileName, 'sftp');
-					}
+					// foreach ($dataRemarkOrders as $dataRemarkOrder) {
+					$upload  = Storage::disk('sftp')->put('//CSAJ/' . $headerFileName, file_get_contents($headerFileName));
+					// Excel::store(new OrderExport($dataRemarkOrders), '//CSAJ/' .  $headerFileName, 'sftp');
+					// }
 
-					foreach ($dataDetailOrders as $dataDetailOrder) {
-						$upload  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $dataDetailOrders);
-						// Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAJ/' .  $detailFileName, 'sftp');
-					}
+					// foreach ($dataDetailOrders as $dataDetailOrder) {
+					$upload  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $handleDetail);
+					// Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAJ/' .  $detailFileName, 'sftp');
+					// }
 
 					break;
 
 				default:
 
-					foreach ($dataRemarkOrders as $dataRemarkOrder) {
-						$upload  = Storage::disk('sftp')->put('//CSAS/' . $headerFileName, $dataRemarkOrders);
-						//Excel::store(new OrderExport($dataRemarkOrders), '//CSAS/' .  $headerFileName, 'sftp');
-					}
+					// foreach ($dataRemarkOrders as $dataRemarkOrder) {
+					$upload  = Storage::disk('sftp')->put('//CSAS/' . $headerFileName, $handleRemarks);
+					//Excel::store(new OrderExport($dataRemarkOrders), '//CSAS/' .  $headerFileName, 'sftp');
+					// }
 
-					foreach ($dataDetailOrders as $dataDetailOrder) {
-						$upload  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $dataDetailOrders);
-						//Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAS/' .  $detailFileName, 'sftp');
-					}
+					// foreach ($dataDetailOrders as $dataDetailOrder) {
+					$upload  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $handleDetail);
+					//Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAS/' .  $detailFileName, 'sftp');
+					// }
 
 					break;
 			}

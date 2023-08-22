@@ -1,14 +1,14 @@
-<table class="table table-bordered" style="width: 500px">
+<table style="width: 100%; border: 1px solid black; border-collapse: collapse;">
     <thead>
         <tr>
             {{-- <th rowspan="2" class="text-center" style="vertical-align: middle">Area</th>
 			<th rowspan="2" class="text-center" style="vertical-align: middle">Cabang</th> --}}
-            <th colspan="3" class="text-center" style="background-color: #ACACAC">Total</th>
+            <th colspan="3" style="background-color: #ACACAC; text-align:center; border:1px solid black;">Total</th>
         </tr>
         <tr>
-            <th>Target Payment</th>
-            <th>Realisasi Payment</th>
-            <th>Percentage</th>
+            <th style="border:1px solid black;">Target Payment</th>
+            <th style="border:1px solid black;">Realisasi Payment</th>
+            <th style="border:1px solid black;">Percentage</th>
         </tr>
     </thead>
     <tbody>
@@ -25,18 +25,22 @@
                 <tr>
                     @if ($branch == 'TOTAL')
                         {{-- <td style="font-weight: 600; background-color: yellow">{{ $branch }}</td> --}}
-                        <td style="font-weight: 600; background-color: yellow">{{ __('app.operators.rupiah') }}
+                        <td style="font-weight: 600; background-color: yellow; border:1px solid black;">
+                            {{ __('app.operators.rupiah') }}
                             {{ number_format($total_payment['target'] ?? 0) }}</td>
-                        <td style="font-weight: 600; background-color: yellow">{{ __('app.operators.rupiah') }}
+                        <td style="font-weight: 600; background-color: yellow; border:1px solid black;">
+                            {{ __('app.operators.rupiah') }}
                             {{ number_format($total_payment['realisasi_payment'] ?? 0) }}</td>
-                        <td style="font-weight: 600; background-color: yellow">
+                        <td style="font-weight: 600; background-color: yellow; border:1px solid black;">
                             {{ round($total_payment['index'], 2) }}{{ __('app.operators.percentage') }}</td>
                     @else
                         {{-- <td>{{ $branch }}</td> --}}
-                        <td>{{ __('app.operators.rupiah') }} {{ number_format($total_payment['target'] ?? 0) }}</td>
-                        <td>{{ __('app.operators.rupiah') }}
+                        <td style="border:1px solid black;">{{ __('app.operators.rupiah') }}
+                            {{ number_format($total_payment['target'] ?? 0) }}</td>
+                        <td style="border:1px solid black;">{{ __('app.operators.rupiah') }}
                             {{ number_format($total_payment['realisasi_payment'] ?? 0) }}</td>
-                        <td>{{ round($total_payment['index'] ?? 0, 2) }}{{ __('app.operators.percentage') }}</td>
+                        <td style="border:1px solid black;">
+                            {{ round($total_payment['index'] ?? 0, 2) }}{{ __('app.operators.percentage') }}</td>
                     @endif
                 </tr>
             @endforeach

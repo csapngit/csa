@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class WorkdayService
 {
 	protected $timegone_index;
+	protected $workDay;
 
 	public function workday()
 	{
