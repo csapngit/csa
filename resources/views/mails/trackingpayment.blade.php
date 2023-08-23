@@ -14,8 +14,8 @@
     <h3 style="text-align: center;">TRACKING PAYMENT REPORT</h3>
 
     @include('mails.layouts.trackingpayment.header-timegone')
-
-    <div style="display:flex">
+    <br />
+    <div style="overflow-x:scroll;">
         @include('mails.layouts.trackingpayment.gt')
         {{-- @include('mails.layouts.trackingpayment.mt')
         @include('mails.layouts.trackingpayment.total') --}}

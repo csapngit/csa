@@ -161,6 +161,7 @@ Route::middleware(['auth'])->group(function () {
 		// Tracking Payment
 		Route::get('tracking-payment', [TrackingPaymentController::class, 'index'])->name('tracking.payment');
 		Route::get('send-trackingpayment', [TrackingPaymentController::class, 'mail'])->name('trackingpayment.mail');
+		Route::get('send-trackingpayment-self', [TrackingPaymentController::class, 'mailself'])->name('trackingpayment.mailself');
 		Route::get('trackingpayment-mail-index', [TrackingPaymentController::class, 'mailIndex'])->name('trackingpayment.mail.index');
 
 

@@ -145,29 +145,50 @@ class TrackingPaymentService extends WorkdayService
 		$trackingpayments['total']['achievetarget'] = $achv_vs_target;
 		$trackingpayments['total']['achievetimegone'] = $acvh_vs_timegone;
 
-		// $date = now();
+		$date = now();
 
-		// $workDay = DB::table('workdays')
-		// 	->where('date', 'LIKE', $date->format('Y-m') . '%')
-		// 	->get('value')
-		// 	->sum('value');
+		$workDay = DB::table('workdays')
+			->where('date', 'LIKE', $date->format('Y-m') . '%')
+			->get('value')
+			->sum('value');
 
 		// $workDay = 0;
 
-		// $trackingpayments['data'][$area][$branch]
-
 		foreach ($trackingpayments['data'] as $area => $areadata) {
 			foreach ($areadata as $branch => $branchdata) {
-				if ($this->workDay > 0) {
-					$trackingpayments['data'][$area][$branch]['Average']['GT'] = $trackingpayments['data'][$area][$branch]['GT']['realisasi_payment'] / $this->workDay;
-					$trackingpayments['data'][$area][$branch]['Average']['MT'] = $trackingpayments['data'][$area][$branch]['MT']['realisasi_payment'] / $this->workDay;
-				} else {
-					$trackingpayments['data'][$area][$branch]['Average']['GT'] = 0;
-					$trackingpayments['data'][$area][$branch]['Average']['MT'] = 0;
+				foreach ($branchdata as $segment => $segmentdata) {
+					if ($segment == 'GT') {
+						$trackingpayments['data'][$area][$branch]['Average']['GT'] = $trackingpayments['data'][$area][$branch][$segment]['realisasi_payment'] / $workDay;
+						$avgGT = $trackingpayments['data'][$area][$branch]['Average']['GT'];
+					} else if ($segment == 'MT') {
+						$trackingpayments['data'][$area][$branch]['Average']['MT'] = $trackingpayments['data'][$area][$branch][$segment]['realisasi_payment'] / $workDay;;
+						$avgMT = $trackingpayments['data'][$area][$branch]['Average']['MT'];
+					}
 				}
-				$trackingpayments['data'][$area][$branch]['Average']['Total'] = $trackingpayments['data'][$area][$branch]['Average']['GT'] + $trackingpayments['data'][$area][$branch]['Average']['MT'];
+				$trackingpayments['data'][$area][$branch]['Average']['Total'] = $avgGT + $avgMT;
+				$avgGT = 0;
+				$avgMT = 0;
 			}
 		}
+
+		// foreach ($trackingpayments['data'] as $area => $areadata) {
+		// 	foreach ($areadata as $branch => $branchdata) {
+		// 		if ($workDay > 0) {
+		// 			if (array_key_exists("GT", $trackingpayments['data'][$area][$branch])) {
+		// 				dd("Key exists!");
+		// 			} else {
+		// 				dd("Key does not exist!");
+		// 			}
+
+		// 			$trackingpayments['data'][$area][$branch]['Average']['GT'] = $trackingpayments['data'][$area][$branch]['GT']['realisasi_payment'] / $workDay;
+		// 			$trackingpayments['data'][$area][$branch]['Average']['MT'] = $trackingpayments['data'][$area][$branch]['MT']['realisasi_payment'] / $workDay;
+		// 		} else {
+		// 			$trackingpayments['data'][$area][$branch]['Average']['GT'] = 0;
+		// 			$trackingpayments['data'][$area][$branch]['Average']['MT'] = 0;
+		// 		}
+		// 		$trackingpayments['data'][$area][$branch]['Average']['Total'] = $trackingpayments['data'][$area][$branch]['Average']['GT'] + $trackingpayments['data'][$area][$branch]['Average']['MT'];
+		// 	}
+		// }
 
 		foreach ($trackingpayments['data'] as $area => $payments) {
 			foreach ($payments as $branch => $payment) {

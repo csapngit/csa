@@ -31,7 +31,7 @@ class TrackingPaymentController extends Controller
 	{
 		$allUser = $this->emailDestiny();
 
-		Mail::to('harits.zaidmalik@csahome.com')
+		Mail::to($allUser)
 			->send(new TrackingPayment());
 
 		return 'ok mantab';
@@ -51,6 +51,14 @@ class TrackingPaymentController extends Controller
 		};
 
 		return $arrayData;
+	}
+
+	public function mailself()
+	{
+		Mail::to('pandu.sanjaya@csahome.com')
+			->send(new TrackingPayment());
+
+		return 'ok mantab';
 	}
 
 	// Lihat index mail yang akan dikirim

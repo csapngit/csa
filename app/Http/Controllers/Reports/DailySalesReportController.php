@@ -75,7 +75,7 @@ class DailySalesReportController extends Controller
 	{
 		$datas = DB::table('emails')
 			->where('region', $area)
-			// ->where('module', 'DSR')
+			->where('module', 'dsr')
 			->get('name')
 			->toArray();
 

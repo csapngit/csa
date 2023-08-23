@@ -494,7 +494,6 @@ class TdsController extends Controller
 	{
 		$promoPrices = DB::connection('192.168.11.24')
 			->table('tds_promoprice')
-			->where('isPostApi', null)
 			->get();
 
 		$promoPrices = $promoPrices->map(function ($promoPrice) {
@@ -513,6 +512,7 @@ class TdsController extends Controller
 			];
 		});
 
+		// dd($promoPrices->toJson(JSON_UNESCAPED_SLASHES));
 		return $this->post($promoPrices, '/promotion-price-master', TdsEnum::PROMOTION_PRICE, [true, 'tds_promoprice']);
 	}
 
