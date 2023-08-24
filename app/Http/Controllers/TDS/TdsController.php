@@ -532,7 +532,8 @@ class TdsController extends Controller
 
 	public function routePlanDetail()
 	{
-		$routePlanDetails = DB::connection('192.168.11.24')->table('tds_route')->get();
+		$routePlanDetails = DB::connection('192.168.11.24')->table('tds_route')
+			->get();
 
 		// return Storage::disk('public')->put('routePlanDetail.json', json_encode($routePlanDetails));
 

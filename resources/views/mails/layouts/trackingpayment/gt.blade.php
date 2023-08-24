@@ -1,56 +1,3 @@
-{{-- <table style="width: 100%; border: 1px solid black; border-collapse: collapse; ">
-    <thead>
-        <tr>
-            <th rowspan="2" style="vertical-align: middle; text-align: center; border: 1px solid black;">Area</th>
-            <th rowspan="2" style="vertical-align: middle; text-align: center; border: 1px solid black;">Cabang</th>
-            <th colspan="3" style="background-color: #ACACAC; text-align: center; border: 1px solid black;">GT</th>
-        </tr>
-        <tr>
-            <th style="border: 1px solid black;">Target Payment</th>
-            <th style="border: 1px solid black;">Realisasi Payment</th>
-            <th style="border: 1px solid black;">Percentage</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($trackingpayments['data'] as $area => $tracking_payments)
-            @php
-                $branch_total = count($tracking_payments);
-            @endphp
-
-            <tr>
-                <td rowspan="{{ $branch_total + 1 }}" style="text-align: center; border: 1px solid black;">
-                    {{ $area }}</td>
-            </tr>
-
-            @foreach ($tracking_payments as $branch => $tracking_payment)
-                <tr>
-                    @if ($branch == 'TOTAL')
-                        <td style="font-weight: 600; background-color: yellow; border: 1px solid black;">
-                            {{ $branch }}</td>
-                        <td style="font-weight: 600; background-color: yellow; border: 1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['GT']['target'] ?? 0) }}</td>
-                        <td style="font-weight: 600; background-color: yellow; border: 1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['GT']['realisasi_payment'] ?? 0) }}</td>
-                        <td style="font-weight: 600; background-color: yellow; border: 1px solid black;">
-                            {{ round($tracking_payment['GT']['index'], 2) }}{{ __('app.operators.percentage') }}</td>
-                    @else
-                        <td style="border: 1px solid black;">{{ $branch }}</td>
-                        <td style="border: 1px solid black;">{{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['GT']['target'] ?? 0) }}</td>
-                        <td style="border: 1px solid black;">{{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['GT']['realisasi_payment'] ?? 0) }}</td>
-                        <td style="border: 1px solid black;">
-                            {{ round($tracking_payment['GT']['index'] ?? 0, 2) }}{{ __('app.operators.percentage') }}
-                        </td>
-                    @endif
-                </tr>
-            @endforeach
-        @endforeach
-    </tbody>
-</table> --}}
-
 <table style="width: 150%; border: 1px solid black; border-collapse: collapse; ">
     <thead>
         <tr>
@@ -92,116 +39,174 @@
     </thead>
     <tbody>
         @foreach ($trackingpayments['data'] as $area => $tracking_payments)
-            @php
-                $branch_total = count($tracking_payments);
-            @endphp
+            @if ($area != 'GRANDTOTAL')
+                @php
+                    $branch_total = count($tracking_payments);
+                @endphp
 
-            <tr>
-                <td rowspan="{{ $branch_total + 1 }}" style="text-align: center; border: 1px solid black;">
-                    {{ $area }}</td>
-            </tr>
-
-            @foreach ($tracking_payments as $branch => $tracking_payment)
                 <tr>
-                    @if ($branch == 'TOTAL')
-                        <td height="40"
-                            style="padding-left:5px; font-weight: 600; background-color:lightsteelblue; border: 1px solid black;">
-                            {{ $branch }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border: 1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['GT']['target'] ?? 0) }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border: 1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['GT']['realisasi_payment'] ?? 0) }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600;background-color: {{ $tracking_payment['GT']['index'] < 50 ? 'red' : ($tracking_payment['GT']['index'] > 90 ? 'limegreen' : 'yellow') }}; border: 1px solid black;">
-                            {{ round($tracking_payment['GT']['index'], 2) }}{{ __('app.operators.percentage') }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['MT']['target'] ?? 0) }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['MT']['realisasi_payment'] ?? 0) }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600; background-color: {{ $tracking_payment['MT']['index'] < 50 ? 'red' : ($tracking_payment['MT']['index'] > 90 ? 'limegreen' : 'yellow') }}; border:1px solid black;">
-                            {{ round($tracking_payment['MT']['index'], 2) }}{{ __('app.operators.percentage') }}
-                        </td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['Total']['target'] ?? 0) }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['Total']['realisasi_payment'] ?? 0) }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600; background-color: {{ $tracking_payment['Total']['index'] < 50 ? 'red' : ($tracking_payment['Total']['index'] > 90 ? 'limegreen' : 'yellow') }}; border:1px solid black;">
-                            {{ round($tracking_payment['Total']['index'], 2) }}{{ __('app.operators.percentage') }}
-                        </td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['Average']['GT'] ?? 0) }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['Average']['MT'] ?? 0) }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; font-weight: 600; background-color:lightsteelblue; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['Average']['Total'] ?? 0) }}</td>
-                    @else
-                        <td height="40" style="padding-left:5px; border: 1px solid black;">{{ $branch }}</td>
-                        <td height="40" align="right" style="padding-right:5px; border: 1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['GT']['target'] ?? 0) }}</td>
-                        <td height="40" align="right" height="40"
-                            style="padding-right:5px; border: 1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['GT']['realisasi_payment'] ?? 0) }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; background-color: {{ ($tracking_payment['GT']['index'] ?? 0) < 50 ? 'red' : (($tracking_payment['GT']['index'] ?? 0) > 90 ? 'limegreen' : 'yellow') }}; border: 1px solid black;">
-                            {{ round($tracking_payment['GT']['index'] ?? 0, 2) }}{{ __('app.operators.percentage') }}
-                        </td>
-                        <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['MT']['target'] ?? 0) }}
-                        </td>
-                        <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['MT']['realisasi_payment'] ?? 0) }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; background-color: {{ ($tracking_payment['MT']['index'] ?? 0) < 50 ? 'red' : (($tracking_payment['MT']['index'] ?? 0) > 90 ? 'limegreen' : 'yellow') }}; border:1px solid black;">
-                            {{ round($tracking_payment['MT']['index'] ?? 0, 2) }}{{ __('app.operators.percentage') }}
-                        </td>
-                        <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['Total']['target'] ?? 0) }}
-                        </td>
-                        <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['Total']['realisasi_payment'] ?? 0) }}</td>
-                        <td height="40" align="right"
-                            style="padding-right:5px; background-color: {{ ($tracking_payment['Total']['index'] ?? 0) < 50 ? 'red' : (($tracking_payment['Total']['index'] ?? 0) > 90 ? 'limegreen' : 'yellow') }}; border:1px solid black;">
-                            {{ round($tracking_payment['Total']['index'] ?? 0, 2) }}{{ __('app.operators.percentage') }}
-                        </td>
-                        <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['Average']['GT'] ?? 0) }}
-                        </td>
-                        <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['Average']['MT'] ?? 0) }}</td>
-                        <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
-                            {{ __('app.operators.rupiah') }}
-                            {{ number_format($tracking_payment['Average']['Total'] ?? 0) }}</td>
-                    @endif
+                    <td rowspan="{{ $branch_total + 1 }}" style="text-align: center; border: 1px solid black;">
+                        {{ $area }}</td>
                 </tr>
-            @endforeach
+
+                @foreach ($tracking_payments as $branch => $tracking_payment)
+                    <tr>
+                        @if ($branch == 'TOTAL')
+                            <td height="40"
+                                style="padding-left:5px; font-weight: 600; background-color:lightsteelblue; border: 1px solid black;">
+                                {{ $branch }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border: 1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['GT']['target'] ?? 0) }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border: 1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['GT']['realisasi_payment'] ?? 0) }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600;background-color: {{ $tracking_payment['GT']['index'] < 50 ? 'red' : ($tracking_payment['GT']['index'] > 90 ? 'limegreen' : 'yellow') }}; border: 1px solid black;">
+                                {{ round($tracking_payment['GT']['index'], 2) }}{{ __('app.operators.percentage') }}
+                            </td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['MT']['target'] ?? 0) }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['MT']['realisasi_payment'] ?? 0) }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600; background-color: {{ $tracking_payment['MT']['index'] < 50 ? 'red' : ($tracking_payment['MT']['index'] > 90 ? 'limegreen' : 'yellow') }}; border:1px solid black;">
+                                {{ round($tracking_payment['MT']['index'], 2) }}{{ __('app.operators.percentage') }}
+                            </td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['Total']['target'] ?? 0) }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['Total']['realisasi_payment'] ?? 0) }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600; background-color: {{ $tracking_payment['Total']['index'] < 50 ? 'red' : ($tracking_payment['Total']['index'] > 90 ? 'limegreen' : 'yellow') }}; border:1px solid black;">
+                                {{ round($tracking_payment['Total']['index'], 2) }}{{ __('app.operators.percentage') }}
+                            </td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['Average']['GT'] ?? 0) }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600; background-color: lightsteelblue; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['Average']['MT'] ?? 0) }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; font-weight: 600; background-color:lightsteelblue; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['Average']['Total'] ?? 0) }}</td>
+                        @else
+                            <td height="40" style="padding-left:5px; border: 1px solid black;">{{ $branch }}
+                            </td>
+                            <td height="40" align="right" style="padding-right:5px; border: 1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['GT']['target'] ?? 0) }}</td>
+                            <td height="40" align="right" height="40"
+                                style="padding-right:5px; border: 1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['GT']['realisasi_payment'] ?? 0) }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; background-color: {{ ($tracking_payment['GT']['index'] ?? 0) < 50 ? 'red' : (($tracking_payment['GT']['index'] ?? 0) > 90 ? 'limegreen' : 'yellow') }}; border: 1px solid black;">
+                                {{ round($tracking_payment['GT']['index'] ?? 0, 2) }}{{ __('app.operators.percentage') }}
+                            </td>
+                            <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['MT']['target'] ?? 0) }}
+                            </td>
+                            <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['MT']['realisasi_payment'] ?? 0) }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; background-color: {{ ($tracking_payment['MT']['index'] ?? 0) < 50 ? 'red' : (($tracking_payment['MT']['index'] ?? 0) > 90 ? 'limegreen' : 'yellow') }}; border:1px solid black;">
+                                {{ round($tracking_payment['MT']['index'] ?? 0, 2) }}{{ __('app.operators.percentage') }}
+                            </td>
+                            <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['Total']['target'] ?? 0) }}
+                            </td>
+                            <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['Total']['realisasi_payment'] ?? 0) }}</td>
+                            <td height="40" align="right"
+                                style="padding-right:5px; background-color: {{ ($tracking_payment['Total']['index'] ?? 0) < 50 ? 'red' : (($tracking_payment['Total']['index'] ?? 0) > 90 ? 'limegreen' : 'yellow') }}; border:1px solid black;">
+                                {{ round($tracking_payment['Total']['index'] ?? 0, 2) }}{{ __('app.operators.percentage') }}
+                            </td>
+                            <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['Average']['GT'] ?? 0) }}
+                            </td>
+                            <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['Average']['MT'] ?? 0) }}</td>
+                            <td height="40" align="right" style="padding-right:5px; border:1px solid black;">
+                                {{ __('app.operators.rupiah') }}
+                                {{ number_format($tracking_payment['Average']['Total'] ?? 0) }}</td>
+                        @endif
+                    </tr>
+                @endforeach
+            @else
+                <tr>
+                    <td colspan="2" height="40"
+                        style="text-align: center; background-color:lightpink; font-weight: 600; border: 1px solid black;">
+                        {{ $area }}</td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600; background-color:lightpink; border: 1px solid black;">
+                        {{ __('app.operators.rupiah') }}
+                        {{ number_format($tracking_payments['GT']['target'] ?? 0) }}</td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600; background-color: lightpink; border: 1px solid black;">
+                        {{ __('app.operators.rupiah') }}
+                        {{ number_format($tracking_payments['GT']['realisasi_payment'] ?? 0) }}</td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600;background-color: {{ $tracking_payments['GT']['index'] < 50 ? 'red' : ($tracking_payments['GT']['index'] > 90 ? 'limegreen' : 'yellow') }}; border: 1px solid black;">
+                        {{ round($tracking_payments['GT']['index'], 2) }}{{ __('app.operators.percentage') }}
+                    </td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600; background-color: lightpink; border:1px solid black;">
+                        {{ __('app.operators.rupiah') }}
+                        {{ number_format($tracking_payments['MT']['target'] ?? 0) }}</td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600; background-color: lightpink; border:1px solid black;">
+                        {{ __('app.operators.rupiah') }}
+                        {{ number_format($tracking_payments['MT']['realisasi_payment'] ?? 0) }}</td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600; background-color: {{ $tracking_payments['MT']['index'] < 50 ? 'red' : ($tracking_payments['MT']['index'] > 90 ? 'limegreen' : 'yellow') }}; border:1px solid black;">
+                        {{ round($tracking_payments['MT']['index'], 2) }}{{ __('app.operators.percentage') }}
+                    </td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600; background-color: lightpink; border:1px solid black;">
+                        {{ __('app.operators.rupiah') }}
+                        {{ number_format($tracking_payments['Total']['target'] ?? 0) }}</td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600; background-color: lightpink; border:1px solid black;">
+                        {{ __('app.operators.rupiah') }}
+                        {{ number_format($tracking_payments['Total']['realisasi_payment'] ?? 0) }}</td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600; background-color: {{ $tracking_payments['Total']['index'] < 50 ? 'red' : ($tracking_payments['Total']['index'] > 90 ? 'limegreen' : 'yellow') }}; border:1px solid black;">
+                        {{ round($tracking_payments['Total']['index'], 2) }}{{ __('app.operators.percentage') }}
+                    </td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600; background-color: lightpink; border:1px solid black;">
+                        {{ __('app.operators.rupiah') }}
+                        {{ number_format($tracking_payments['Average']['GT'] ?? 0) }}</td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600; background-color: lightpink; border:1px solid black;">
+                        {{ __('app.operators.rupiah') }}
+                        {{ number_format($tracking_payments['Average']['MT'] ?? 0) }}</td>
+                    <td height="40" align="right"
+                        style="padding-right:5px; font-weight: 600; background-color:lightpink; border:1px solid black;">
+                        {{ __('app.operators.rupiah') }}
+                        {{ number_format($tracking_payments['Average']['Total'] ?? 0) }}</td>
+                </tr>
+            @endif
         @endforeach
     </tbody>
 </table>

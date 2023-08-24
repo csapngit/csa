@@ -44,7 +44,7 @@ class Kernel extends ConsoleKernel
 			->at('05:00');
 
 		$schedule->call(new TrackingPaymentMail)
-			->at('05:10');
+			->at('10:10');
 
 		// $schedule->call('App\Http\Controllers\TDS\TdsController@order', ['date' => Carbon::now()->format('Y-m-d')])
 		// 	->at('12:25');

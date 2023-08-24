@@ -211,6 +211,38 @@ class TrackingPaymentService extends WorkdayService
 			}
 		}
 
+		$grandtotal_GT_target = $trackingpayments['data']['CSAJ']['TOTAL']['GT']['target'] + $trackingpayments['data']['CSAS']['TOTAL']['GT']['target'];
+		$grandtotal_GT_realisasi = $trackingpayments['data']['CSAJ']['TOTAL']['GT']['realisasi_payment'] + $trackingpayments['data']['CSAS']['TOTAL']['GT']['realisasi_payment'];
+		if ($grandtotal_GT_target != 0 && $grandtotal_GT_realisasi != 0) {
+			$grandtotal_GT_index = $grandtotal_GT_realisasi / $grandtotal_GT_target * 100;
+		}
+		$grandtotal_MT_target = $trackingpayments['data']['CSAJ']['TOTAL']['MT']['target'] + $trackingpayments['data']['CSAS']['TOTAL']['MT']['target'];
+		$grandtotal_MT_realisasi = $trackingpayments['data']['CSAJ']['TOTAL']['MT']['realisasi_payment'] + $trackingpayments['data']['CSAS']['TOTAL']['MT']['realisasi_payment'];
+		if ($grandtotal_MT_target != 0 && $grandtotal_MT_realisasi != 0) {
+			$grandtotal_MT_index = $grandtotal_MT_realisasi / $grandtotal_MT_target * 100;
+		}
+		$grandtotal_Total_target = $trackingpayments['data']['CSAJ']['TOTAL']['Total']['target'] + $trackingpayments['data']['CSAS']['TOTAL']['Total']['target'];
+		$grandtotal_Total_realisasi = $trackingpayments['data']['CSAJ']['TOTAL']['Total']['realisasi_payment'] + $trackingpayments['data']['CSAS']['TOTAL']['Total']['realisasi_payment'];
+		if ($grandtotal_Total_target != 0 && $grandtotal_Total_realisasi != 0) {
+			$grandtotal_Total_index = $grandtotal_Total_realisasi / $grandtotal_Total_target * 100;
+		}
+		$grandtotal_Avg_GT = $trackingpayments['data']['CSAJ']['TOTAL']['Average']['GT'] + $trackingpayments['data']['CSAS']['TOTAL']['Average']['GT'];
+		$grandtotal_Avg_MT = $trackingpayments['data']['CSAJ']['TOTAL']['Average']['MT'] + $trackingpayments['data']['CSAS']['TOTAL']['Average']['MT'];
+		$grandtotal_Avg_Total = $grandtotal_Avg_GT + $grandtotal_Avg_MT;
+
+		$trackingpayments['data']['GRANDTOTAL']['GT']['target'] = $grandtotal_GT_target;
+		$trackingpayments['data']['GRANDTOTAL']['GT']['realisasi_payment'] = $grandtotal_GT_realisasi;
+		$trackingpayments['data']['GRANDTOTAL']['GT']['index'] = $grandtotal_GT_index;
+		$trackingpayments['data']['GRANDTOTAL']['MT']['target'] = $grandtotal_MT_target;
+		$trackingpayments['data']['GRANDTOTAL']['MT']['realisasi_payment'] = $grandtotal_MT_realisasi;
+		$trackingpayments['data']['GRANDTOTAL']['MT']['index'] = $grandtotal_MT_index;
+		$trackingpayments['data']['GRANDTOTAL']['Total']['target'] = $grandtotal_Total_target;
+		$trackingpayments['data']['GRANDTOTAL']['Total']['realisasi_payment'] = $grandtotal_Total_realisasi;
+		$trackingpayments['data']['GRANDTOTAL']['Total']['index'] = $grandtotal_Total_index;
+		$trackingpayments['data']['GRANDTOTAL']['Average']['GT'] = $grandtotal_Avg_GT;
+		$trackingpayments['data']['GRANDTOTAL']['Average']['MT'] = $grandtotal_Avg_MT;
+		$trackingpayments['data']['GRANDTOTAL']['Average']['Total'] = $grandtotal_Avg_Total;
+
 		// dd($trackingpayments);
 
 		return $trackingpayments;
