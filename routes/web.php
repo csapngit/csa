@@ -195,6 +195,7 @@ Route::middleware(['auth'])->group(function () {
 //todo: API POST SFA
 Route::controller(TdsController::class)->prefix('tds')->group(function () {
 	Route::get('orders/{date}', 'order');
+	Route::get('ordertds', 'ordertds');
 	Route::get('orderscheduler', 'orderScheduler');
 	Route::get('branches', 'masterBranch');
 	Route::get('channels', 'masterChannel');
