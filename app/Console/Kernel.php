@@ -51,66 +51,66 @@ class Kernel extends ConsoleKernel
 		// 	->at('12:25');
 
 
-		$schedule->call(new OrderDetail)
-			->at('08:25')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('08:55')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('09:25')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('09:55')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('10:25')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('10:55')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('11:25')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('11:55')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('12:25')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('12:55')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('13:25')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('13:55')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('14:25')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('14:55')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('15:25')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('15:55')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('16:25')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('16:55')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('17:25')
-			->days([1, 2, 3, 4, 5, 6]);
-		$schedule->call(new OrderDetail)
-			->at('17:55')
-			->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('08:25')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('08:55')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('09:25')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('09:55')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('10:25')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('10:55')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('11:25')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('11:55')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('12:25')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('12:55')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('13:25')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('13:55')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('14:25')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('14:55')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('15:25')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('15:55')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('16:25')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('16:55')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('17:25')
+		// 	->days([1, 2, 3, 4, 5, 6]);
+		// $schedule->call(new OrderDetail)
+		// 	->at('17:55')
+		// 	->days([1, 2, 3, 4, 5, 6]);
 		// $schedule->call(new OrderDetail)
 		// 	->at('18:25')
 		// 	->days([1, 2, 3, 4, 5, 6]);
@@ -119,7 +119,7 @@ class Kernel extends ConsoleKernel
 		// 	->days([1, 2, 3, 4, 5, 6]);
 
 		$schedule->call(new OrderTDS)
-			->at('09:53')
+			->at('09:58')
 			->days([1, 2, 3, 4, 5, 6]);
 
 		// ->onSuccess(function () {
