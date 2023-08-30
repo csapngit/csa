@@ -119,7 +119,7 @@ class Kernel extends ConsoleKernel
 		// 	->days([1, 2, 3, 4, 5, 6]);
 
 		$schedule->call(new OrderTDS)
-			->at('09:49')
+			->at('09:53')
 			->days([1, 2, 3, 4, 5, 6]);
 
 		// ->onSuccess(function () {
