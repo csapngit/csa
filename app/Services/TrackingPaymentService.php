@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class TrackingPaymentService extends WorkdayService
@@ -9,6 +10,7 @@ class TrackingPaymentService extends WorkdayService
 	public function TrackingPayment()
 	{
 		$date = now()->format('Ym');
+		// $date = Carbon::yesterday()->format('Ym');
 
 		$target_payments = DB::table('target_tracking_payments')
 			->get()
@@ -152,7 +154,7 @@ class TrackingPaymentService extends WorkdayService
 			->get('value')
 			->sum('value');
 
-		// $workDay = 0;
+		// $workDay = 24;
 
 		foreach ($trackingpayments['data'] as $area => $areadata) {
 			foreach ($areadata as $branch => $branchdata) {

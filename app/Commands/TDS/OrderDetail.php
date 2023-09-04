@@ -64,7 +64,7 @@ class OrderDetail
 		};
 
 		$collecthentai = collect($hentai);
-		$chunkhentais = $collecthentai->chunk(200);
+		$chunkhentais = $collecthentai->chunk(1000);
 
 		//Save database
 		foreach ($chunkhentais as $chunkhentai) {

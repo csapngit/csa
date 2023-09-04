@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Excel as ExcelExcel;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
+use Psy\Command\WhereamiCommand;
 
 class TdsController extends Controller
 {
@@ -28,154 +29,155 @@ class TdsController extends Controller
 		return view('tds.index', compact('apis'));
 	}
 
-	public function order($date)
-	{
-		$currentTime = Carbon::now()->format('H:i:s');
+	// //Tidak Dipakai
+	// public function order($date)
+	// {
+	// 	$currentTime = Carbon::now()->format('H:i:s');
 
-		$token = env('TOKEN_TDS');
+	// 	$token = env('TOKEN_TDS');
 
-		$arrayDataOrder = [];
+	// 	$arrayDataOrder = [];
 
-		//Ini hit API pertama, ternyata hanya dipakai untuk database, tidak dipakai untuk CSV
-		$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
-			'page' => 1,
-			'take' => 0,
-			'date' => $date,
-			// 'startTime' => $hour,
-			// 'endTime' => $currentTime,
-		]);
+	// 	//Ini hit API pertama, ternyata hanya dipakai untuk database, tidak dipakai untuk CSV
+	// 	$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
+	// 		'page' => 1,
+	// 		'take' => 0,
+	// 		'date' => $date,
+	// 		// 'startTime' => $hour,
+	// 		// 'endTime' => $currentTime,
+	// 	]);
 
-		$arrayDataOrder = $response['data']['data'];
+	// 	$arrayDataOrder = $response['data']['data'];
 
-		//dd($arrayDataOrder);
+	// 	//dd($arrayDataOrder);
 
-		$hentai = [];
+	// 	$hentai = [];
 
-		$dateHour = Carbon::now()->format('Y-m-d H:i:s');
+	// 	$dateHour = Carbon::now()->format('Y-m-d H:i:s');
 
-		foreach ($arrayDataOrder as $dataorder) {
-			foreach ($dataorder['Detail'] as $detail) {
-				$hentai[] = [
-					'DistributorCode' => $dataorder['DistributorCode'],
-					'BranchCode' => $dataorder['BranchCode'],
-					'SalesRepCode' => $dataorder['SalesRepCode'],
-					'RetailerCode' => $dataorder['RetailerCode'],
-					'OrderNo' => $dataorder['OrderNo'],
-					'OrderDate' => $dateHour,
-					'ProductCode' => $detail['ChildSKUCode'],
-					'OrderQtyPCS' => $detail['OrderQtyPcs'],
-					'OrderQtyCS' => 0,
-				];
-			}
-		};
+	// 	foreach ($arrayDataOrder as $dataorder) {
+	// 		foreach ($dataorder['Detail'] as $detail) {
+	// 			$hentai[] = [
+	// 				'DistributorCode' => $dataorder['DistributorCode'],
+	// 				'BranchCode' => $dataorder['BranchCode'],
+	// 				'SalesRepCode' => $dataorder['SalesRepCode'],
+	// 				'RetailerCode' => $dataorder['RetailerCode'],
+	// 				'OrderNo' => $dataorder['OrderNo'],
+	// 				'OrderDate' => $dateHour,
+	// 				'ProductCode' => $detail['ChildSKUCode'],
+	// 				'OrderQtyPCS' => $detail['OrderQtyPcs'],
+	// 				'OrderQtyCS' => 0,
+	// 			];
+	// 		}
+	// 	};
 
-		$collecthentai = collect($hentai);
-		$chunkhentais = $collecthentai->chunk(200);
+	// 	$collecthentai = collect($hentai);
+	// 	$chunkhentais = $collecthentai->chunk(200);
 
-		//Save database
-		foreach ($chunkhentais as $chunkhentai) {
-			DB::connection('192.168.11.24')->table('tds_orddetail')->insert($chunkhentai->toArray());
-		}
+	// 	//Save database
+	// 	foreach ($chunkhentais as $chunkhentai) {
+	// 		DB::connection('192.168.11.24')->table('tds_orddetail')->insert($chunkhentai->toArray());
+	// 	}
 
-		$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
+	// 	$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
 
-		foreach ($branchCodes as $branchCode) {
-			$region = DB::connection('192.168.11.24')->table('tds_branch')->where('BranchCode', $branchCode)->first();
+	// 	foreach ($branchCodes as $branchCode) {
+	// 		$region = DB::connection('192.168.11.24')->table('tds_branch')->where('BranchCode', $branchCode)->first();
 
-			$time = now();
+	// 		$time = now();
 
-			$headerFileName = 'OrderRemarks_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
+	// 		$headerFileName = 'OrderRemarks_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
 
-			$detailFileName = 'OrderDetail_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
+	// 		$detailFileName = 'OrderDetail_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
 
-			//OrderTrait
-			if ($response['data']['data'] == []) {
-				return 'Data kosong';
-			};
+	// 		//OrderTrait
+	// 		if ($response['data']['data'] == []) {
+	// 			return 'Data kosong';
+	// 		};
 
-			$orders = collect($response['data']['data'])->where('BranchCode', $branchCode)->toArray();
+	// 		$orders = collect($response['data']['data'])->where('BranchCode', $branchCode)->toArray();
 
-			$header = [];
+	// 		$header = [];
 
-			foreach ($orders as $order) {
-				$header[] = [
-					'DistributorCode' => $order['DistributorCode'],
-					'OrderNo' => $order['OrderNo'],
-					'SalesRepCode' => $order['SalesRepCode'],
-					'PONumber' => null,
-					'Remarks' => null,
-					'RetailerCode' => $order['RetailerCode'],
-					'GoldenStoreStatus' => null
-				];
-			}
+	// 		foreach ($orders as $order) {
+	// 			$header[] = [
+	// 				'DistributorCode' => $order['DistributorCode'],
+	// 				'OrderNo' => $order['OrderNo'],
+	// 				'SalesRepCode' => $order['SalesRepCode'],
+	// 				'PONumber' => null,
+	// 				'Remarks' => null,
+	// 				'RetailerCode' => $order['RetailerCode'],
+	// 				'GoldenStoreStatus' => null
+	// 			];
+	// 		}
 
-			$detailData = [];
+	// 		$detailData = [];
 
-			foreach ($orders as $data) {
-				foreach ($data['Detail'] as $detail) {
-					$detailData[$branchCode][] = [
-						'DistributorCode' => $data['DistributorCode'],
-						'BranchCode' => $data['BranchCode'],
-						'SalesRepCode' => $data['SalesRepCode'],
-						'RetailerCode' => $data['RetailerCode'],
-						'OrderNo' => $data['OrderNo'],
-						'OrderDate' => date('m/d/Y', strtotime($data['OrderDate'])),
-						'UploadDate' => null,
-						'ChildSKUCode' => $detail['ChildSKUCode'],
-						'OrderQty' => $detail['OrderQtyPcs'],
-						'OrderQty(cases)' => 0,
-						'DeliveryDate' => null,
-						'D1' => null,
-						'D2' => null,
-						'D3' => null,
-						'NonIM' => null,
-						'DiscountAmount' => null,
-						'DiscountRate' => null,
-						'DiscountedPrice' => null,
-						'GoldenStoreStatus' => null,
-					];
-				}
-			}
+	// 		foreach ($orders as $data) {
+	// 			foreach ($data['Detail'] as $detail) {
+	// 				$detailData[$branchCode][] = [
+	// 					'DistributorCode' => $data['DistributorCode'],
+	// 					'BranchCode' => $data['BranchCode'],
+	// 					'SalesRepCode' => $data['SalesRepCode'],
+	// 					'RetailerCode' => $data['RetailerCode'],
+	// 					'OrderNo' => $data['OrderNo'],
+	// 					'OrderDate' => date('m/d/Y', strtotime($data['OrderDate'])),
+	// 					'UploadDate' => null,
+	// 					'ChildSKUCode' => $detail['ChildSKUCode'],
+	// 					'OrderQty' => $detail['OrderQtyPcs'],
+	// 					'OrderQty(cases)' => 0,
+	// 					'DeliveryDate' => null,
+	// 					'D1' => null,
+	// 					'D2' => null,
+	// 					'D3' => null,
+	// 					'NonIM' => null,
+	// 					'DiscountAmount' => null,
+	// 					'DiscountRate' => null,
+	// 					'DiscountedPrice' => null,
+	// 					'GoldenStoreStatus' => null,
+	// 				];
+	// 			}
+	// 		}
 
-			//Order Trait
+	// 		//Order Trait
 
-			// return $detailData;
+	// 		// return $detailData;
 
-			// return $header;
+	// 		// return $header;
 
-			$dataRemarkOrders = $header;
+	// 		$dataRemarkOrders = $header;
 
-			$dataDetailOrders = $detailData;
+	// 		$dataDetailOrders = $detailData;
 
-			switch ($region->AreaCode) {
-				case 'CSAJ':
+	// 		switch ($region->AreaCode) {
+	// 			case 'CSAJ':
 
-					foreach ($dataRemarkOrders as $dataRemarkOrder) {
-						Excel::store(new OrderExport($dataRemarkOrders), '//CSAJ/' .  $headerFileName, 'sftp');
-					}
+	// 				foreach ($dataRemarkOrders as $dataRemarkOrder) {
+	// 					Excel::store(new OrderExport($dataRemarkOrders), '//CSAJ/' .  $headerFileName, 'sftp');
+	// 				}
 
-					foreach ($dataDetailOrders as $dataDetailOrder) {
-						Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAJ/' .  $detailFileName, 'sftp');
-					}
+	// 				foreach ($dataDetailOrders as $dataDetailOrder) {
+	// 					Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAJ/' .  $detailFileName, 'sftp');
+	// 				}
 
-					break;
+	// 				break;
 
-				default:
+	// 			default:
 
-					foreach ($dataRemarkOrders as $dataRemarkOrder) {
-						Excel::store(new OrderExport($dataRemarkOrders), '//CSAS/' .  $headerFileName, 'sftp');
-					}
+	// 				foreach ($dataRemarkOrders as $dataRemarkOrder) {
+	// 					Excel::store(new OrderExport($dataRemarkOrders), '//CSAS/' .  $headerFileName, 'sftp');
+	// 				}
 
-					foreach ($dataDetailOrders as $dataDetailOrder) {
-						Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAS/' .  $detailFileName, 'sftp');
-					}
+	// 				foreach ($dataDetailOrders as $dataDetailOrder) {
+	// 					Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAS/' .  $detailFileName, 'sftp');
+	// 				}
 
-					break;
-			}
-		}
+	// 				break;
+	// 		}
+	// 	}
 
-		return 'Data untuk tanggal ' . $date . ' hingga jam ' . $currentTime;
-	}
+	// 	return 'Data untuk tanggal ' . $date . ' hingga jam ' . $currentTime;
+	// }
 
 	public function masterBranch()
 	{
@@ -512,7 +514,8 @@ class TdsController extends Controller
 			];
 		});
 
-		// dd($promoPrices->toJson(JSON_UNESCAPED_SLASHES));
+		// dd($promoPrices);
+		dd($promoPrices->toJson(JSON_UNESCAPED_SLASHES));
 		return $this->post($promoPrices, '/promotion-price-master', TdsEnum::PROMOTION_PRICE, [true, 'tds_promoprice']);
 	}
 
@@ -533,7 +536,7 @@ class TdsController extends Controller
 	public function routePlanDetail()
 	{
 		$routePlanDetails = DB::connection('192.168.11.24')->table('tds_route')
-			->whereIn('RetailerCode', ['CJA0008738', 'CJA0008739', 'CJA0008495'])
+			// ->whereNotNull('StartDate')
 			->get();
 
 		// return Storage::disk('public')->put('routePlanDetail.json', json_encode($routePlanDetails));
@@ -560,7 +563,7 @@ class TdsController extends Controller
 				'isProses' => 0,
 				'crtDatetimeHit' => Carbon::now()->format('Y-m-d'),
 				'SiteCode' => $routePlanDetail->SiteCode,
-				'StartDate' => '2023-08-01',
+				'StartDate' => Carbon::parse($routePlanDetail->StartDate)->format('Y-m-d'),
 				'UploadDate' => Carbon::now()->format('Y-m-d h:i:s')
 			];
 		});
@@ -711,13 +714,15 @@ class TdsController extends Controller
 	{
 		$sellerTargets = DB::connection('192.168.11.24')->table('tds_sellertarget')->get();
 
+		// dd($sellerTargets);
+
 		return $this->post($sellerTargets, '/seller-target', TdsEnum::SELLER_TARGET);
 	}
 
 	public function masterStore()
 	{
 		$stores = DB::connection('192.168.11.24')->table('tds_storemaster')
-			// ->whereNotNull('SiteCode')
+			->whereNotNull('SiteCode')
 			->get();
 
 		$stores = $stores->map(function ($store) {
@@ -796,7 +801,20 @@ class TdsController extends Controller
 	{
 		$storeTargets = DB::connection('192.168.11.24')->table('tds_storetarget')->get();
 
-		return $this->post($storeTargets, '/store-target', TdsEnum::STORE_TARGET);
+		$storeTargets = $storeTargets->chunk(5000);
+
+		// dd(json_encode($stores, JSON_UNESCAPED_SLASHES));
+		// dd($storeTargets);
+
+		$storeTargetData = [];
+
+		foreach ($storeTargets as $storeTarget) {
+			$storeTargetData[] = $this->post($storeTarget, '/store-target', TdsEnum::STORE_TARGET);
+		}
+
+		return $storeTargetData;
+
+		// return $this->post($storeTargets, '/store-target', TdsEnum::STORE_TARGET);
 	}
 
 	public function voucher()
@@ -806,351 +824,517 @@ class TdsController extends Controller
 		return $this->post($vouchers, '/voucher', TdsEnum::VOUCHER);
 	}
 
-	public function ordertds()
+	// public function ordertds()
+	// {
+	// 	$date = Carbon::now()->format('Y-m-d');
+
+	// 	$orderDatas = DB::table('tds_orderdata')->get();
+
+	// 	$orderBranches = $orderDatas->unique('BranchCode');
+
+	// 	foreach ($orderBranches as $branch) {
+	// 		$region = DB::connection('192.168.11.24')->table('tds_branch')->where('BranchCode', $branch->BranchCode)->first();
+
+	// 		$remarksFileName = 'Test_OrderRemarks_' . $branch->BranchCode . '_' . Carbon::parse($branch->OrderDate)->format('Ymd') . '_' . Carbon::parse($branch->OrderDate)->format('Hi') . '.csv';
+
+	// 		$detailFileName = 'Test_OrderDetail_' . $branch->BranchCode . '_' . Carbon::parse($branch->OrderDate)->format('Ymd') . '_' . Carbon::parse($branch->OrderDate)->format('Hi') . '.csv';
+
+	// 		$orders = $orderDatas->where('BranchCode', $branch->BranchCode);
+
+	// 		$handleRemarks = fopen($remarksFileName, 'w+');
+
+	// 		$handleDetail = fopen($detailFileName, 'w+');
+
+	// 		fputcsv(
+	// 			$handleRemarks,
+	// 			[
+	// 				"DistributorCode",
+	// 				"OrderNo",
+	// 				"SalesRepCode",
+	// 				"PONumber",
+	// 				"Remarks",
+	// 				"RetailerCode",
+	// 				"GoldenStoreStatus",
+	// 			],
+	// 			";"
+	// 		);
+
+	// 		fputcsv(
+	// 			$handleDetail,
+	// 			[
+	// 				"DistributorCode",
+	// 				"BranchCode",
+	// 				"SalesRepCode",
+	// 				"RetailerCode",
+	// 				"OrderNo",
+	// 				"OrderDate",
+	// 				"UploadDate",
+	// 				"ChildSKUCode",
+	// 				"OrderQty",
+	// 				"OrderQty(cases)",
+	// 				"DeliveryDate",
+	// 				"D1",
+	// 				"D2",
+	// 				"D3",
+	// 				"NonIM",
+	// 				"DiscountAmount",
+	// 				"DiscountRate",
+	// 				"DiscountedPrice",
+	// 				"GoldenStoreStatus",
+	// 			],
+	// 			";"
+	// 		);
+
+	// 		foreach ($orders as $order) {
+	// 			fputcsv(
+	// 				$handleRemarks,
+	// 				[
+	// 					$order->DistributorCode,
+	// 					$order->OrderNo,
+	// 					$order->SalesRepCode,
+	// 					null,
+	// 					null,
+	// 					$order->RetailerCode,
+	// 					null
+	// 				],
+	// 				";"
+	// 			);
+
+	// 			fputcsv(
+	// 				$handleDetail,
+	// 				[
+	// 					$order->DistributorCode,
+	// 					$order->BranchCode,
+	// 					$order->SalesRepCode,
+	// 					$order->RetailerCode,
+	// 					$order->OrderNo,
+	// 					date('m/d/Y', strtotime($order->OrderDate)),
+	// 					null,
+	// 					$order->ProductCode,
+	// 					$order->OrderQtyPCS,
+	// 					0,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 				],
+	// 				";"
+	// 			);
+	// 		}
+
+	// 		switch ($region->AreaCode) {
+	// 			case 'CSAJ':
+
+	// 				$uploadremarks  = Storage::disk('sftp')->put('//CSAJ/' . $remarksFileName, $handleRemarks);
+
+	// 				$uploaddetail  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $handleDetail);
+
+	// 				break;
+
+	// 			default:
+
+	// 				$uploadremarks  = Storage::disk('sftp')->put('//CSAS/' . $remarksFileName, $handleRemarks);
+
+	// 				$uploaddetail  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $handleDetail);
+
+	// 				break;
+	// 		}
+
+	// 		fclose($handleRemarks);
+	// 		fclose($handleDetail);
+	// 	}
+
+	// 	return 'mantap uye';
+	// }
+
+	public function hitorder()
 	{
+
 		$date = Carbon::now()->format('Y-m-d');
 
-		$orderDatas = DB::table('tds_orderdata')->get();
-
-		$orderBranches = $orderDatas->unique('BranchCode');
-
-		foreach ($orderBranches as $branch) {
-			$region = DB::connection('192.168.11.24')->table('tds_branch')->where('BranchCode', $branch->BranchCode)->first();
-
-			$remarksFileName = 'Test_OrderRemarks_' . $branch->BranchCode . '_' . Carbon::parse($branch->OrderDate)->format('Ymd') . '_' . Carbon::parse($branch->OrderDate)->format('Hi') . '.csv';
-
-			$detailFileName = 'Test_OrderDetail_' . $branch->BranchCode . '_' . Carbon::parse($branch->OrderDate)->format('Ymd') . '_' . Carbon::parse($branch->OrderDate)->format('Hi') . '.csv';
-
-			$orders = $orderDatas->where('BranchCode', $branch->BranchCode);
-
-			$handleRemarks = fopen($remarksFileName, 'w+');
-
-			$handleDetail = fopen($detailFileName, 'w+');
-
-			fputcsv(
-				$handleRemarks,
-				[
-					"DistributorCode",
-					"OrderNo",
-					"SalesRepCode",
-					"PONumber",
-					"Remarks",
-					"RetailerCode",
-					"GoldenStoreStatus",
-				],
-				";"
-			);
-
-			fputcsv(
-				$handleDetail,
-				[
-					"DistributorCode",
-					"BranchCode",
-					"SalesRepCode",
-					"RetailerCode",
-					"OrderNo",
-					"OrderDate",
-					"UploadDate",
-					"ChildSKUCode",
-					"OrderQty",
-					"OrderQty(cases)",
-					"DeliveryDate",
-					"D1",
-					"D2",
-					"D3",
-					"NonIM",
-					"DiscountAmount",
-					"DiscountRate",
-					"DiscountedPrice",
-					"GoldenStoreStatus",
-				],
-				";"
-			);
-
-			foreach ($orders as $order) {
-				fputcsv(
-					$handleRemarks,
-					[
-						$order->DistributorCode,
-						$order->OrderNo,
-						$order->SalesRepCode,
-						null,
-						null,
-						$order->RetailerCode,
-						null
-					],
-					";"
-				);
-
-				fputcsv(
-					$handleDetail,
-					[
-						$order->DistributorCode,
-						$order->BranchCode,
-						$order->SalesRepCode,
-						$order->RetailerCode,
-						$order->OrderNo,
-						date('m/d/Y', strtotime($order->OrderDate)),
-						null,
-						$order->ProductCode,
-						$order->OrderQtyPCS,
-						0,
-						null,
-						null,
-						null,
-						null,
-						null,
-						null,
-						null,
-						null,
-						null,
-					],
-					";"
-				);
-			}
-
-			switch ($region->AreaCode) {
-				case 'CSAJ':
-
-					$uploadremarks  = Storage::disk('sftp')->put('//CSAJ/' . $remarksFileName, $handleRemarks);
-
-					$uploaddetail  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $handleDetail);
-
-					break;
-
-				default:
-
-					$uploadremarks  = Storage::disk('sftp')->put('//CSAS/' . $remarksFileName, $handleRemarks);
-
-					$uploaddetail  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $handleDetail);
-
-					break;
-			}
-
-			fclose($handleRemarks);
-			fclose($handleDetail);
-		}
-
-		return 'mantap uye';
-	}
-
-	public function orderScheduler()
-	{
-		$date = Carbon::now()->format('Y-m-d');
-
-		$currentTime = Carbon::now()->format('H:i:s');
-
-		// $token = env('TOKEN_TDS');
+		$token = env('TOKEN_TDS');
 
 		$arrayDataOrder = [];
 
-		//Ini hit API pertama, ternyata hanya dipakai untuk database, tidak dipakai untuk CSV
-		// $response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
-		// 	'page' => 1,
-		// 	'take' => 0,
-		// 	'date' => $date,
-		// 	// 'startTime' => $hour,
-		// 	// 'endTime' => $currentTime,
-		// ]);
+		//Hit API
+		$response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
+			'page' => 1,
+			'take' => 0,
+			'date' => $date,
+		]);
 
-		$response = DB::connection('192.168.11.24')->table('tds_orddetail')
-			->take(100)->orderByDesc('OrderDate')->get()->toArray();
+		$currentTime = Carbon::now()->format('H:i:s');
 
-		$arrayDataOrder = $response;
+		$arrayDataOrder = $response['data']['data'];
 
-		// dd($arrayDataOrder);
-
-		$hentai = [];
+		$dbDatas = [];
 
 		$dateHour = Carbon::now()->format('Y-m-d H:i:s');
 
 		foreach ($arrayDataOrder as $dataorder) {
-			$hentai[] = [
-				'DistributorCode' => $dataorder->DistributorCode,
-				'BranchCode' => $dataorder->BranchCode,
-				'SalesRepCode' => $dataorder->SalesRepCode,
-				'RetailerCode' => $dataorder->RetailerCode,
-				'OrderNo' => $dataorder->OrderNo,
-				'OrderDate' => $dateHour,
-				'ProductCode' => $dataorder->ProductCode,
-				'OrderQtyPCS' => $dataorder->OrderQtyPCS,
-				'OrderQtyCS' => 0,
-			];
+			foreach ($dataorder['Detail'] as $detail) {
+				$dbDatas[] = [
+					'DistributorCode' => $dataorder['DistributorCode'],
+					'BranchCode' => $dataorder['BranchCode'],
+					'SalesRepCode' => $dataorder['SalesRepCode'],
+					'RetailerCode' => $dataorder['RetailerCode'],
+					'OrderNo' => $dataorder['OrderNo'],
+					'OrderDate' => $dateHour,
+					'ProductCode' => $detail['ChildSKUCode'],
+					'OrderQtyPCS' => $detail['OrderQtyPcs'],
+					'OrderQtyCS' => 0,
+				];
+			}
 		};
 
-		// dd($hentai);
-
-		$collecthentai = collect($hentai);
-		$chunkhentais = $collecthentai->chunk(200);
+		$collectdbDatas = collect($dbDatas);
+		$chunkdbDatas = $collectdbDatas->chunk(1000);
 
 		//Save database
-		// foreach ($chunkhentais as $chunkhentai) {
-		// 	DB::connection('192.168.11.24')->table('tds_orddetail')->insert($chunkhentai->toArray());
-		// }
+		foreach ($chunkdbDatas as $chunkdbData) {
+			DB::connection('192.168.11.24')->table('tds_orderdata')->insert($chunkdbData->toArray());
+		}
 
-		$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
+		return 'Hit sampai walawalabingbing ' . $currentTime;
+	}
 
-		foreach ($branchCodes as $branchCode) {
-			$region = DB::connection('192.168.11.24')->table('tds_branch')->where('BranchCode', $branchCode)->first();
+	public function csvorder()
+	{
+		$date = Carbon::now()->format('Y-m-d');
 
-			$time = now();
+		// $remarksDatas = DB::table('tds_orderdata')->select('OrderNo', 'SalesRepCode', 'RetailerCode', 'BranchCode', 'DistributorCode')->distinct()->get();
+		//$orderDatas = DB::table('tds_orderdata')
+		// $orderDatas = DB::connection('192.168.11.24')->table('tds_orddetail')
+		$orderDatas = DB::connection('192.168.11.24')->table('tds_orderdata')
+			->where(DB::raw('Convert(char(8), OrderDate, 112)'), now()->format('Ymd'))
+			// ->where(DB::raw('Convert(char(8), OrderDate, 112)'), '20230901')
+			// ->where('OrderDate', '2023-09-01 17:12:00')
+			->whereNull('CSV')
+			->get();
+		// dd($orderDatas);
+		$remarksDatas = $orderDatas->unique('OrderNo');
+		$orderBranches = $orderDatas->unique('BranchCode');
 
-			$headerFileName = 'Test_OrderRemarks_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
+		// dd($remarksDatas);
 
-			$detailFileName = 'Test_OrderDetail_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
+		foreach ($orderBranches as $branch) {
+			//Ambil data branch dari table branch untuk tau regionnya
+			$region = DB::connection('192.168.11.24')->table('tds_branch')->where('BranchCode', $branch->BranchCode)->first();
 
-			//OrderTrait
-			if ($response == []) {
-				return 'Data kosong';
-			};
+			//Buat nama file
+			$remarksFileName = 'OrderRemarks_' . $branch->BranchCode . '_' . Carbon::parse($branch->OrderDate)->format('Ymd') . '_' . Carbon::parse($branch->OrderDate)->format('Hi') . '.csv';
+			$detailFileName = 'OrderDetail_' . $branch->BranchCode . '_' . Carbon::parse($branch->OrderDate)->format('Ymd') . '_' . Carbon::parse($branch->OrderDate)->format('Hi') . '.csv';
 
-			$orders = collect($response)->where('BranchCode', $branchCode)->toArray();
+			//Buat header file
+			$remarks = "DistributorCode;OrderNo;SalesRepCode;PONumber;Remarks;RetailerCode;GoldenStoreStatus" . "\n";
+			$detail = "DistributorCode;BranchCode;SalesRepCode;RetailerCode;OrderNo;OrderDate;UploadDate;ChildSKUCode;OrderQty;OrderQty(cases);DeliveryDate;D1;D2;D3;NonIM;DiscountAmount;DiscountRate;DiscountedPrice;GoldenStoreStatus" . "\n";
 
-			$handleRemarks = fopen($headerFileName, 'w');
+			//Ambil data yang sesuai dengan branch
+			$orderRemarks = $remarksDatas->where('BranchCode', $branch->BranchCode);
+			$orderDetails = $orderDatas->where('BranchCode', $branch->BranchCode);
 
-			//add Header Remarks
-			fputcsv(
-				$handleRemarks,
-				[
-					"DistributorCode",
-					"OrderNo",
-					"SalesRepCode",
-					"PONumber",
-					"Remarks",
-					"RetailerCode",
-					"GoldenStoreStatus",
-				],
-				";"
-			);
-
-			$header = [];
-
-			//add Data Remarks
-			foreach ($orders as $order) {
-				fputcsv(
-					$handleRemarks,
-					[
-						$order->DistributorCode,
-						$order->OrderNo,
-						$order->SalesRepCode,
-						null,
-						null,
-						$order->RetailerCode,
-						null
-					],
-					";"
-				);
+			//Isi remarks
+			foreach ($orderRemarks as $order) {
+				$remarks .= $order->DistributorCode . ';' .
+					$order->OrderNo . ';' .
+					$order->SalesRepCode . ';' .
+					null . ';' .
+					null . ';' .
+					$order->RetailerCode . ';' .
+					null . "\n";
 			}
 
-			fclose($handleRemarks);
+			unset($idDatas);
+			$idDatas = [];
 
-			$handleDetail = fopen($detailFileName, 'w');
+			//Isi detail
+			foreach ($orderDetails as $order) {
+				$detail .= $order->DistributorCode . ';' .
+					$order->BranchCode . ';' .
+					$order->SalesRepCode . ';' .
+					$order->RetailerCode . ';' .
+					$order->OrderNo . ';' .
+					Carbon::parse($order->OrderDate)->format('m/d/Y') . ';' .
+					null . ';' .
+					$order->ProductCode . ';' .
+					$order->OrderQtyPCS . ';' .
+					0 . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . "\n";
 
-			//add Header Detail
-			fputcsv(
-				$handleDetail,
-				[
-					"DistributorCode",
-					"BranchCode",
-					"SalesRepCode",
-					"RetailerCode",
-					"OrderNo",
-					"OrderDate",
-					"UploadDate",
-					"ChildSKUCode",
-					"OrderQty",
-					"OrderQty(cases)",
-					"DeliveryDate",
-					"D2",
-					"D3",
-					"NonIM",
-					"DiscountAmount",
-					"DiscountRate",
-					"DiscountedPrice",
-					"GoldenStoreStatus",
-				],
-				";"
-			);
-
-			$detailData = [];
-
-			foreach ($orders as $data) {
-				fputcsv(
-					$handleDetail,
-					[
-						$data->DistributorCode,
-						$data->BranchCode,
-						$data->SalesRepCode,
-						$data->RetailerCode,
-						$data->OrderNo,
-						date('m/d/Y', strtotime($data->OrderDate)),
-						null,
-						$data->ProductCode,
-						$data->OrderQtyPCS,
-						0,
-						null,
-						null,
-						null,
-						null,
-						null,
-						null,
-						null,
-						null,
-						null,
-					],
-					";"
-				);
+				$idDatas[] = $order->id;
 			}
 
-			fclose($handleDetail);
 
-			// dd($headerFileName);
 
-			//Order Trait
+			// $uploadremarks = Storage::disk('sfa')->put($remarksFileName, $remarks);
+			// $uploaddetail = Storage::disk('sfa')->put($detailFileName, $detail);
 
-			// return $detailData;
-
-			// return $header;
-
-			// $dataRemarkOrders = $header;
-			// dd($dataRemarkOrders);
-
-			// $dataDetailOrders = $detailData;
-			// dd($dataDetailOrders);
+			// if ($uploadremarks && $uploaddetail) {
+			// 	DB::table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
+			// }
 
 			switch ($region->AreaCode) {
 				case 'CSAJ':
 
-					// foreach ($dataRemarkOrders as $dataRemarkOrder) {
-					$upload  = Storage::disk('sftp')->put('//CSAJ/' . $headerFileName, file_get_contents($headerFileName));
-					// Excel::store(new OrderExport($dataRemarkOrders), '//CSAJ/' .  $headerFileName, 'sftp');
-					// }
+					$uploadremarks  = Storage::disk('sftp')->put('//CSAJ/' . $remarksFileName, $remarks);
 
-					// foreach ($dataDetailOrders as $dataDetailOrder) {
-					$upload  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $handleDetail);
-					// Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAJ/' .  $detailFileName, 'sftp');
-					// }
+					$uploaddetail  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $detail);
+
+					if ($uploadremarks && $uploaddetail) {
+						DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
+					}
 
 					break;
 
 				default:
 
-					// foreach ($dataRemarkOrders as $dataRemarkOrder) {
-					$upload  = Storage::disk('sftp')->put('//CSAS/' . $headerFileName, $handleRemarks);
-					//Excel::store(new OrderExport($dataRemarkOrders), '//CSAS/' .  $headerFileName, 'sftp');
-					// }
+					$uploadremarks  = Storage::disk('sftp')->put('//CSAS/' . $remarksFileName, $remarks);
 
-					// foreach ($dataDetailOrders as $dataDetailOrder) {
-					$upload  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $handleDetail);
-					//Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAS/' .  $detailFileName, 'sftp');
-					// }
+					$uploaddetail  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $detail);
+
+					if ($uploadremarks && $uploaddetail) {
+						DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
+					}
 
 					break;
 			}
 		}
 
-		return 'Data untuk tanggal ' . $date . ' hingga jam ' . $currentTime;
+		return 'oka jadi csv mantap ';
 	}
+
+
+	// // Tidak Dipakai
+	// public function orderScheduler()
+	// {
+	// 	$date = Carbon::now()->format('Y-m-d');
+
+	// 	$currentTime = Carbon::now()->format('H:i:s');
+
+	// 	// $token = env('TOKEN_TDS');
+
+	// 	$arrayDataOrder = [];
+
+	// 	//Ini hit API pertama, ternyata hanya dipakai untuk database, tidak dipakai untuk CSV
+	// 	// $response = Http::withToken($token)->get(env('API_TDS') . '/order-data', [
+	// 	// 	'page' => 1,
+	// 	// 	'take' => 0,
+	// 	// 	'date' => $date,
+	// 	// 	// 'startTime' => $hour,
+	// 	// 	// 'endTime' => $currentTime,
+	// 	// ]);
+
+	// 	$response = DB::connection('192.168.11.24')->table('tds_orddetail')
+	// 		->take(100)->orderByDesc('OrderDate')->get()->toArray();
+
+	// 	$arrayDataOrder = $response;
+
+	// 	// dd($arrayDataOrder);
+
+	// 	$hentai = [];
+
+	// 	$dateHour = Carbon::now()->format('Y-m-d H:i:s');
+
+	// 	foreach ($arrayDataOrder as $dataorder) {
+	// 		$hentai[] = [
+	// 			'DistributorCode' => $dataorder->DistributorCode,
+	// 			'BranchCode' => $dataorder->BranchCode,
+	// 			'SalesRepCode' => $dataorder->SalesRepCode,
+	// 			'RetailerCode' => $dataorder->RetailerCode,
+	// 			'OrderNo' => $dataorder->OrderNo,
+	// 			'OrderDate' => $dateHour,
+	// 			'ProductCode' => $dataorder->ProductCode,
+	// 			'OrderQtyPCS' => $dataorder->OrderQtyPCS,
+	// 			'OrderQtyCS' => 0,
+	// 		];
+	// 	};
+
+	// 	// dd($hentai);
+
+	// 	$collecthentai = collect($hentai);
+	// 	$chunkhentais = $collecthentai->chunk(200);
+
+	// 	//Save database
+	// 	// foreach ($chunkhentais as $chunkhentai) {
+	// 	// 	DB::connection('192.168.11.24')->table('tds_orddetail')->insert($chunkhentai->toArray());
+	// 	// }
+
+	// 	$branchCodes = collect($arrayDataOrder)->groupBy('BranchCode')->keys()->toArray();
+
+	// 	foreach ($branchCodes as $branchCode) {
+	// 		$region = DB::connection('192.168.11.24')->table('tds_branch')->where('BranchCode', $branchCode)->first();
+
+	// 		$time = now();
+
+	// 		$headerFileName = 'Test_OrderRemarks_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
+
+	// 		$detailFileName = 'Test_OrderDetail_' . $branchCode . '_' . $time->format('Ymd') . '_' . $time->format('Hi') . '.csv';
+
+	// 		//OrderTrait
+	// 		if ($response == []) {
+	// 			return 'Data kosong';
+	// 		};
+
+	// 		$orders = collect($response)->where('BranchCode', $branchCode)->toArray();
+
+	// 		$handleRemarks = fopen($headerFileName, 'w');
+
+	// 		//add Header Remarks
+	// 		fputcsv(
+	// 			$handleRemarks,
+	// 			[
+	// 				"DistributorCode",
+	// 				"OrderNo",
+	// 				"SalesRepCode",
+	// 				"PONumber",
+	// 				"Remarks",
+	// 				"RetailerCode",
+	// 				"GoldenStoreStatus",
+	// 			],
+	// 			";"
+	// 		);
+
+	// 		$header = [];
+
+	// 		//add Data Remarks
+	// 		foreach ($orders as $order) {
+	// 			fputcsv(
+	// 				$handleRemarks,
+	// 				[
+	// 					$order->DistributorCode,
+	// 					$order->OrderNo,
+	// 					$order->SalesRepCode,
+	// 					null,
+	// 					null,
+	// 					$order->RetailerCode,
+	// 					null
+	// 				],
+	// 				";"
+	// 			);
+	// 		}
+
+	// 		fclose($handleRemarks);
+
+	// 		$handleDetail = fopen($detailFileName, 'w');
+
+	// 		//add Header Detail
+	// 		fputcsv(
+	// 			$handleDetail,
+	// 			[
+	// 				"DistributorCode",
+	// 				"BranchCode",
+	// 				"SalesRepCode",
+	// 				"RetailerCode",
+	// 				"OrderNo",
+	// 				"OrderDate",
+	// 				"UploadDate",
+	// 				"ChildSKUCode",
+	// 				"OrderQty",
+	// 				"OrderQty(cases)",
+	// 				"DeliveryDate",
+	// 				"D2",
+	// 				"D3",
+	// 				"NonIM",
+	// 				"DiscountAmount",
+	// 				"DiscountRate",
+	// 				"DiscountedPrice",
+	// 				"GoldenStoreStatus",
+	// 			],
+	// 			";"
+	// 		);
+
+	// 		$detailData = [];
+
+	// 		foreach ($orders as $data) {
+	// 			fputcsv(
+	// 				$handleDetail,
+	// 				[
+	// 					$data->DistributorCode,
+	// 					$data->BranchCode,
+	// 					$data->SalesRepCode,
+	// 					$data->RetailerCode,
+	// 					$data->OrderNo,
+	// 					date('m/d/Y', strtotime($data->OrderDate)),
+	// 					null,
+	// 					$data->ProductCode,
+	// 					$data->OrderQtyPCS,
+	// 					0,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 					null,
+	// 				],
+	// 				";"
+	// 			);
+	// 		}
+
+	// 		fclose($handleDetail);
+
+	// 		// dd($headerFileName);
+
+	// 		//Order Trait
+
+	// 		// return $detailData;
+
+	// 		// return $header;
+
+	// 		// $dataRemarkOrders = $header;
+	// 		// dd($dataRemarkOrders);
+
+	// 		// $dataDetailOrders = $detailData;
+	// 		// dd($dataDetailOrders);
+
+	// 		switch ($region->AreaCode) {
+	// 			case 'CSAJ':
+
+	// 				// foreach ($dataRemarkOrders as $dataRemarkOrder) {
+	// 				$upload  = Storage::disk('sftp')->put('//CSAJ/' . $headerFileName, file_get_contents($headerFileName));
+	// 				// Excel::store(new OrderExport($dataRemarkOrders), '//CSAJ/' .  $headerFileName, 'sftp');
+	// 				// }
+
+	// 				// foreach ($dataDetailOrders as $dataDetailOrder) {
+	// 				$upload  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $handleDetail);
+	// 				// Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAJ/' .  $detailFileName, 'sftp');
+	// 				// }
+
+	// 				break;
+
+	// 			default:
+
+	// 				// foreach ($dataRemarkOrders as $dataRemarkOrder) {
+	// 				$upload  = Storage::disk('sftp')->put('//CSAS/' . $headerFileName, $handleRemarks);
+	// 				//Excel::store(new OrderExport($dataRemarkOrders), '//CSAS/' .  $headerFileName, 'sftp');
+	// 				// }
+
+	// 				// foreach ($dataDetailOrders as $dataDetailOrder) {
+	// 				$upload  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $handleDetail);
+	// 				//Excel::store(new OrderDetailExport($dataDetailOrders), '//CSAS/' .  $detailFileName, 'sftp');
+	// 				// }
+
+	// 				break;
+	// 		}
+	// 	}
+
+	// 	return 'Data untuk tanggal ' . $date . ' hingga jam ' . $currentTime;
+	// }
 
 	// public function sfOsaMaster()
 	// {

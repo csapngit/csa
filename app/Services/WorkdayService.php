@@ -44,6 +44,12 @@ class WorkdayService
 			'workday' => $workDay,
 			'timegone' => $timegone,
 			'rest_of_workdays' => $workDay - $timegone,
+
+			// 'date' => Carbon::yesterday()->format('d-F-Y H:i:s'),
+			// 'timegone_index' => 100,
+			// 'workday' => 24,
+			// 'timegone' => 24,
+			// 'rest_of_workdays' => 0,
 		];
 
 		return $dates;

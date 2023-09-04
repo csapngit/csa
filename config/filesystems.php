@@ -83,6 +83,13 @@ return [
 			// 'timeout' => 30,
 		],
 
+		'sfa' => [
+			'driver' => 'local',
+			'root' => storage_path('sfa'),
+			// 'url' => env('APP_URL').'/dds',
+			'visibility' => 'public',
+		],
+
 	],
 
 	/*

@@ -93,6 +93,8 @@ class DailySalesReportController extends Controller
 
 		Mail::to('pandu.sanjaya@csahome.com')
 			->send(new DsrCSAJ());
+		Mail::to('pandu.sanjaya@csahome.com')
+			->send(new DsrCSAS());
 
 		return back();
 	}
