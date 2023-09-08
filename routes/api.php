@@ -71,7 +71,7 @@ Route::prefix('csapng')
 		});
 
 		Route::apiResource('/preorder', PreOrderController::class, [
-			'only' => ['store', 'show']
+			'except' => ['index', 'update', 'destroy']
 		]);
 
 		// Route::get('/preorder/{ordernumber}', [PreOrderController::class, 'show']);
