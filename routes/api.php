@@ -70,7 +70,7 @@ Route::prefix('csapng')
 			return 'ok';
 		});
 
-		Route::apiResource('preorder', PreOrderController::class);
+		Route::apiResource('/preorder', PreOrderController::class);
 
 		Route::get('channels', MasterChannelController::class);
 
