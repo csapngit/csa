@@ -70,12 +70,12 @@ Route::prefix('csapng')
 			return 'ok';
 		});
 
-		Route::apiResource('/preorder', PreOrderController::class, [
-			'except' => ['index', 'update', 'destroy']
-		]);
+		// Route::apiResource('/preorder', PreOrderController::class, [
+		// 	'except' => ['index', 'update', 'destroy']
+		// ]);
 
-		// Route::get('/preorder/{ordernumber}', [PreOrderController::class, 'show']);
-		// Route::post('/preorder', [PreOrderController::class, 'store']);
+		Route::get('/preorder/{ordernumber}', [PreOrderController::class, 'show']);
+		Route::post('/preorder', [PreOrderController::class, 'store']);
 
 		Route::get('channels', MasterChannelController::class);
 
