@@ -16,7 +16,7 @@ use App\Http\Controllers\Api\MasterStoreTargetController;
 use App\Http\Controllers\Api\OrderDetailController;
 use App\Http\Controllers\Api\OverdueController;
 use App\Http\Controllers\Api\PeSurveyController;
-use App\Http\Controllers\api\PreOrderController;
+use App\Http\Controllers\Api\PreOrderController;
 use App\Http\Controllers\Api\ProductBundleController;
 use App\Http\Controllers\Api\ReasonController;
 use App\Http\Controllers\Rebate\ProgramController;
