@@ -196,9 +196,10 @@ Route::middleware(['auth'])->group(function () {
 Route::controller(TdsController::class)->prefix('tds')->group(function () {
 	// Route::get('orders/{date}', 'order');
 	// Route::get('ordertds', 'ordertds');
+	// Route::get('orderscheduler', 'orderScheduler');
 	Route::get('hitorder', 'hitorder');
 	Route::get('csvorder', 'csvorder');
-	// Route::get('orderscheduler', 'orderScheduler');
+	Route::get('csvmanual/{orderno}', 'csvmanual');
 	Route::get('branches', 'masterBranch');
 	Route::get('channels', 'masterChannel');
 	Route::get('holidays', 'holiday');
@@ -228,6 +229,8 @@ Route::controller(TdsController::class)->prefix('tds')->group(function () {
 	// Route::get('sf-osa-master', 'sfOsaMaster');
 	// Route::get('sf-sosd-master', 'sfSosdMaster');
 	// Route::get('store-target-go-green', 'storeGoGreen');
+
+	Route::post('preinvoice', 'preinvoice');
 });
 
 require __DIR__ . '/auth.php';

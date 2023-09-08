@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\MasterStoreTargetController;
 use App\Http\Controllers\Api\OrderDetailController;
 use App\Http\Controllers\Api\OverdueController;
 use App\Http\Controllers\Api\PeSurveyController;
+use App\Http\Controllers\api\PreOrderController;
 use App\Http\Controllers\Api\ProductBundleController;
 use App\Http\Controllers\Api\ReasonController;
 use App\Http\Controllers\Rebate\ProgramController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Api\SbdMercController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WeekMappingController;
 use App\Http\Controllers\Rebate\VoucherPublishController;
+use App\Http\Controllers\TDS\TdsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -67,6 +69,8 @@ Route::prefix('csapng')
 		Route::get('branches', function () {
 			return 'ok';
 		});
+
+		Route::apiResource('preorder', PreOrderController::class);
 
 		Route::get('channels', MasterChannelController::class);
 
