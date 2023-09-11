@@ -114,12 +114,14 @@ class PreOrderController extends Controller
 			if ($preorderHeader->IsCalculated != null) {
 				$preorderDetails = DB::connection('192.168.11.24')->table('tds_preorder_detail')->where('OrderNumber', $ordernumber)->get();
 
-				$preorderDatas = [
-					'status' => 200,
-					'status message' => 'Calculate Complete'
-				];
+				// $preorderDatas = [
+				// 	'status' => 200,
+				// 	'status message' => 'Calculate Complete'
+				// ];
 
-				$preorderDatas['results'] = [
+				$preorderDatas = [];
+
+				$preorderDatas = [
 					'distributorcode' => $preorderHeader->DistributorCode,
 					'branchcode' => $preorderHeader->BranchCode,
 					'salesrepcode' => $preorderHeader->SalesRepCode,
@@ -130,13 +132,13 @@ class PreOrderController extends Controller
 					'deliverydate' => $preorderHeader->DeliveryDate,
 					'totaldiscreg' => $preorderHeader->TotalDiscReg,
 					'totaldisclotsell' => $preorderHeader->TotalDiscLotsell,
-					'moq' => $preorderHeader->VoucherValue,
+					'moq' => $preorderHeader->VoucherValue ?? '',
 					'totalgross' => $preorderHeader->TotalGross,
 					'totalnetto' => $preorderHeader->TotalNetto
 				];
 
 				foreach ($preorderDetails as $preorderDetail) {
-					$preorderDatas['results']['orderitems'][] = [
+					$preorderDatas['orderitems'][] = [
 						'rownumber' => $preorderDetail->rownumber,
 						'productcode' => $preorderDetail->productcode,
 						'qty' => $preorderDetail->Qty,
@@ -153,7 +155,9 @@ class PreOrderController extends Controller
 				}
 
 				return response()->json([
-					$preorderDatas
+					'status' => 200,
+					'status message' => 'Calculate Complete',
+					'results' => $preorderDatas
 				]);
 			} else {
 				return response()->json([
@@ -161,6 +165,11 @@ class PreOrderController extends Controller
 					"status message" => "On Progress"
 				]);
 			}
+		} elseif (isEmpty($preorderHeader)) {
+			return response()->json([
+				"status" => 400,
+				"status message" => "OrderNumber doesn't exist"
+			]);
 		} else {
 			return response()->json([
 				"status" => 400,

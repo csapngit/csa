@@ -28,8 +28,8 @@ class DailySalesReportService extends WorkdayService
 				'daily_sales_reports.ar_invoice',
 			]);
 
-		$this->table->where('cid', 'CJA0008713')->where('so_salesperson_id', 'SR120')->update(['mapping' => 'E-COMM']);
-		$this->table->where('cid', 'CJA0008692')->where('so_salesperson_id', '190SR550')->update(['mapping' => 'E-COMM']);
+		// $this->table->where('cid', 'CJA0008713')->where('so_salesperson_id', 'SR120')->update(['mapping' => 'E-COMM']);
+		// $this->table->where('cid', 'CJA0008692')->where('so_salesperson_id', '190SR550')->update(['mapping' => 'E-COMM']);
 	}
 
 	/**
@@ -51,6 +51,19 @@ class DailySalesReportService extends WorkdayService
 				->whereNotIn('master_sales.mapping', ['act', 'wse', 'e-maping', 'sub 3in1'])
 				->get()
 				->groupBy('mapping');
+
+			// dd($channels['PRESELL PARETO']);
+
+			//Change some SR to E-COMM
+			foreach ($channels['PRESELL PARETO'] as $key => $channelsPareto) {
+				// dd($channelsPareto);
+				if (($channelsPareto->cid == 'CJA0008713' && $channelsPareto->so_salesperson_id == 'SR120') || ($channelsPareto->cid == 'CJA0008692' && $channelsPareto->so_salesperson_id == '190SR550')) {
+					$channelsPareto->mapping = 'E-COMM';
+					$channels['E-COMM'][] = $channelsPareto;
+					unset($channels['PRESELL PARETO'][$key]);
+					// dd($channels);
+				}
+			}
 
 			$channel_DSRs = [];
 
@@ -251,8 +264,19 @@ class DailySalesReportService extends WorkdayService
 
 		// dd($dailySalesReports['Cengkareng']['PRESELL PARETO']);
 
-		//If Pandeglang (CSAJ)
+		//If Pandeglang = CSAJ
 		if (isset($dailySalesReports['Pandeglang'])) {
+
+			// dd($dailySalesReports['Cengkareng']);
+			foreach ($dailySalesReports['Cengkareng']['PRESELL PARETO'] as $key => $dsrsPareto) {
+				// dd($dsrsPareto);
+				if (($dsrsPareto->cid == 'CJA0008713' && $dsrsPareto->so_salesperson_id == 'SR120') || ($dsrsPareto->cid == 'CJA0008692' && $dsrsPareto->so_salesperson_id == '190SR550')) {
+					$dsrsPareto->mapping = 'E-COMM';
+					$dailySalesReports['Cengkareng']['E-COMM'][] = $dsrsPareto;
+					unset($dailySalesReports['Cengkareng']['PRESELL PARETO'][$key]);
+					// dd($channels);
+				}
+			}
 
 			//Merge Pandeglang into Serang
 			foreach ($dailySalesReports['Pandeglang']->keys() as $keyPandeglang) {
