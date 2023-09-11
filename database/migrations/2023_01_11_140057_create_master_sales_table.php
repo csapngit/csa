@@ -15,6 +15,7 @@ class CreateMasterSalesTable extends Migration
 	{
 		Schema::create('master_sales', function (Blueprint $table) {
 			$table->id();
+			$table->string('regional')->nullable();
 			$table->string('sales_code')->nullable();
 			$table->string('sr_code')->nullable();
 			$table->string('name')->nullable();

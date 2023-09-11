@@ -20,12 +20,16 @@ class DailySalesReportService extends WorkdayService
 				'master_sales.regional',
 				'master_sales.branch_name',
 				'daily_sales_reports.so_salesperson_id',
+				'daily_sales_reports.cid',
 				'master_sales.mapping',
 				// 'target_dsrs.target_sales',
 				'daily_sales_reports.sales_order',
 				'daily_sales_reports.delivery_order',
 				'daily_sales_reports.ar_invoice',
 			]);
+
+		$this->table->where('cid', 'CJA0008713')->where('so_salesperson_id', 'SR120')->update(['mapping' => 'E-COMM']);
+		$this->table->where('cid', 'CJA0008692')->where('so_salesperson_id', '190SR550')->update(['mapping' => 'E-COMM']);
 	}
 
 	/**
@@ -48,8 +52,6 @@ class DailySalesReportService extends WorkdayService
 				->get()
 				->groupBy('mapping');
 
-			// dd($channels);
-
 			$channel_DSRs = [];
 
 			foreach ($target_dsrs as $key => $target_dsr) {
@@ -67,10 +69,7 @@ class DailySalesReportService extends WorkdayService
 				];
 			}
 
-			// dd($channel_DSRs);
-
 			foreach ($channels as $key => $channel) {
-
 				$so_open = $channel->sum('sales_order');
 				$delivery_order = $channel->sum('delivery_order');
 				$ar_invoice = $channel->sum('ar_invoice');
@@ -90,9 +89,8 @@ class DailySalesReportService extends WorkdayService
 				$channel_DSRs[strtoupper($key)]['sales_total'] = $sales_total;
 				$channel_DSRs[strtoupper($key)]['index_archive'] = $index_archive;
 				$channel_DSRs[strtoupper($key)]['gap'] = $gap;
+				// }
 			}
-
-			// dd($channel_DSRs);
 
 			$total_channel_so_open = array_sum(array_column($channel_DSRs, 'so_open'));
 			$total_channel_delivery_order = array_sum(array_column($channel_DSRs, 'delivery_order'));
@@ -251,10 +249,12 @@ class DailySalesReportService extends WorkdayService
 			->get()
 			->groupBy(['branch_name', 'mapping']);
 
-		// dd($dailySalesReports);
+		// dd($dailySalesReports['Cengkareng']['PRESELL PARETO']);
 
-		//Merge Pandeglang into Serang
+		//If Pandeglang (CSAJ)
 		if (isset($dailySalesReports['Pandeglang'])) {
+
+			//Merge Pandeglang into Serang
 			foreach ($dailySalesReports['Pandeglang']->keys() as $keyPandeglang) {
 
 				foreach ($dailySalesReports['Pandeglang'][$keyPandeglang] as $keyPandeglangData) {
@@ -371,6 +371,7 @@ class DailySalesReportService extends WorkdayService
 			$branch_data = [];
 
 			foreach ($target_dsrs as $branch => $target_dsr) {
+				// foreach($target_dsr)
 				$branch_data[strtoupper($branch)] = [
 					'so_open' => 0,
 					'delivery_order' => 0,

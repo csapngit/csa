@@ -230,7 +230,7 @@ Route::controller(TdsController::class)->prefix('tds')->group(function () {
 	// Route::get('sf-sosd-master', 'sfSosdMaster');
 	// Route::get('store-target-go-green', 'storeGoGreen');
 
-	Route::post('preinvoice', 'preinvoice');
+	// Route::post('preinvoice', 'preinvoice');
 });
 
 require __DIR__ . '/auth.php';

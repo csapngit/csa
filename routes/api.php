@@ -74,8 +74,8 @@ Route::prefix('csapng')
 		// 	'except' => ['index', 'update', 'destroy']
 		// ]);
 
-		Route::get('/preorder/{ordernumber}', [PreOrderController::class, 'show']);
 		Route::post('/preorder', [PreOrderController::class, 'store']);
+		Route::get('/preorder/{ordernumber}', [PreOrderController::class, 'show']);
 
 		Route::get('channels', MasterChannelController::class);
 

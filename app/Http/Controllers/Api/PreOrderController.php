@@ -56,6 +56,13 @@ class PreOrderController extends Controller
 			);
 		} else {
 
+			$checkOrderNumber = DB::connection('192.168.11.24')->table('tds_preorder_header')->where('OrderNumber', $preinvoiceDatas['ordernumber'])->first();
+
+			if ($checkOrderNumber) {
+				DB::connection('192.168.11.24')->table('tds_preorder_header')->where('OrderNumber', $preinvoiceDatas['ordernumber'])->delete();
+				DB::connection('192.168.11.24')->table('tds_preorder_detail')->where('OrderNumber', $preinvoiceDatas['ordernumber'])->delete();
+			}
+
 			$insertTime = Carbon::now()->format('Y-m-d H:i:s');
 
 			// dd($insertTime);
@@ -90,7 +97,7 @@ class PreOrderController extends Controller
 					return response()->json(
 						[
 							'status' => 200,
-							'status message' => 'On Progress'
+							'status message' => 'Order data terkirim'
 						]
 					);
 				}
@@ -103,50 +110,57 @@ class PreOrderController extends Controller
 
 		$preorderHeader = DB::connection('192.168.11.24')->table('tds_preorder_header')->where('OrderNumber', $ordernumber)->orderBy('IsCalculated', 'DESC')->first();
 
-		if ($preorderHeader->IsCalculated != null) {
-			$preorderDetails = DB::connection('192.168.11.24')->table('tds_preorder_detail')->where('OrderNumber', $ordernumber)->get();
+		if ($preorderHeader) {
+			if ($preorderHeader->IsCalculated != null) {
+				$preorderDetails = DB::connection('192.168.11.24')->table('tds_preorder_detail')->where('OrderNumber', $ordernumber)->get();
 
-			$preorderDatas = [
-				'status' => 200,
-				'status message' => 'Calculate Complete'
-			];
-
-			$preorderDatas['results'] = [
-				'distributorcode' => $preorderHeader->DistributorCode,
-				'branchcode' => $preorderHeader->BranchCode,
-				'salesrepcode' => $preorderHeader->SalesRepCode,
-				'retailercode' => $preorderHeader->RetailerCode,
-				'ordernumber' => $preorderHeader->OrderNumber,
-				'orderdate' => $preorderHeader->OrderDate,
-				'ordertime' => $preorderHeader->OrderTime,
-				'deliverydate' => $preorderHeader->DeliveryDate,
-				'totaldiscreg' => $preorderHeader->TotalDiscReg,
-				'totaldisclotsell' => $preorderHeader->TotalDiscLotsell,
-				'moq' => $preorderHeader->VoucherValue,
-				'totalgross' => $preorderHeader->TotalGross,
-				'totalnetto' => $preorderHeader->TotalNetto
-			];
-
-			foreach ($preorderDetails as $preorderDetail) {
-				$preorderDatas['results']['orderitems'][] = [
-					'rownumber' => $preorderDetail->rownumber,
-					'productcode' => $preorderDetail->productcode,
-					'qty' => $preorderDetail->Qty,
-					'orderprice' => $preorderDetail->orderprice,
-					'percentdisc' => $preorderDetail->percentdisc,
-					'valuedisc' => $preorderDetail->valuedisc,
-					'valuediscreg' => $preorderDetail->valuediscreg,
-					'valuedisclotsell' => $preorderDetail->valuedisclotsell,
-					'disclotsell' => $preorderDetail->valuediscvolume,
-					'totaldisc' => $preorderDetail->totaldisc,
-					'promotioncode' => $preorderDetail->promotioncode,
-					'countpromotion' => $preorderDetail->countpromotion,
+				$preorderDatas = [
+					'status' => 200,
+					'status message' => 'Calculate Complete'
 				];
-			}
 
-			return response()->json([
-				$preorderDatas
-			]);
+				$preorderDatas['results'] = [
+					'distributorcode' => $preorderHeader->DistributorCode,
+					'branchcode' => $preorderHeader->BranchCode,
+					'salesrepcode' => $preorderHeader->SalesRepCode,
+					'retailercode' => $preorderHeader->RetailerCode,
+					'ordernumber' => $preorderHeader->OrderNumber,
+					'orderdate' => $preorderHeader->OrderDate,
+					'ordertime' => $preorderHeader->OrderTime,
+					'deliverydate' => $preorderHeader->DeliveryDate,
+					'totaldiscreg' => $preorderHeader->TotalDiscReg,
+					'totaldisclotsell' => $preorderHeader->TotalDiscLotsell,
+					'moq' => $preorderHeader->VoucherValue,
+					'totalgross' => $preorderHeader->TotalGross,
+					'totalnetto' => $preorderHeader->TotalNetto
+				];
+
+				foreach ($preorderDetails as $preorderDetail) {
+					$preorderDatas['results']['orderitems'][] = [
+						'rownumber' => $preorderDetail->rownumber,
+						'productcode' => $preorderDetail->productcode,
+						'qty' => $preorderDetail->Qty,
+						'orderprice' => $preorderDetail->orderprice,
+						'percentdisc' => $preorderDetail->percentdisc,
+						'valuedisc' => $preorderDetail->valuedisc,
+						'valuediscreg' => $preorderDetail->valuediscreg,
+						'valuedisclotsell' => $preorderDetail->valuedisclotsell,
+						'disclotsell' => $preorderDetail->valuediscvolume,
+						'totaldisc' => $preorderDetail->totaldisc,
+						'promotioncode' => $preorderDetail->promotioncode,
+						'countpromotion' => $preorderDetail->countpromotion,
+					];
+				}
+
+				return response()->json([
+					$preorderDatas
+				]);
+			} else {
+				return response()->json([
+					"status" => 200,
+					"status message" => "On Progress"
+				]);
+			}
 		} else {
 			return response()->json([
 				"status" => 400,
