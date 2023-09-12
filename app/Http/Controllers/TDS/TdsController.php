@@ -110,39 +110,49 @@ class TdsController extends Controller
 
 	public function invoice()
 	{
-		$invoices = DB::connection('192.168.11.24')->table('tds_invoice')->get();
-
-		$invoices = $invoices->map(function ($invoice) {
-			return [
-				'DistributorCode' => $invoice->DistributorCode,
-				'Branchcode' => $invoice->BranchCode,
-				'SalesRepCode' => $invoice->SalesRepCode,
-				'InvoiceNo' => $invoice->InvoiceNo,
-				'InvoiceDate' => Carbon::parse($invoice->InvoiceDate)->format('Y-m-d'),
-				'Retailercode' => $invoice->RetailerCode,
-				'ItemCode' => $invoice->ProductCode,
-				'Qty' => $invoice->Qty,
-				'Value' => $invoice->Value,
-				'BillValue' => $invoice->BillValue,
-				'OrderRefNo' => $invoice->OrderRefNo,
-				'BasePrice' => $invoice->BasePrice,
-				'DiscValue' => $invoice->DiscValue,
-				'KodeLotsell' => $invoice->KodeLotsell1,
-				'KodeLotsellTambahan' => $invoice->KodeLotselltambahan,
-				'JumlahLotsell' => $invoice->JumlahLotsell,
-				'TotalVoucher' => $invoice->TotalVoucher,
-			];
-		});
-
-		$invoices = $invoices->chunk(5000)->toArray();
-
 		$invoiceData = [];
 
+		DB::connection('192.168.11.24')->table('tds_invoice')->orderBy('InvoiceNo')->chunk(5000, function ($invoices) {
+			// dd($invoices);
+			$invoices = $invoices->map(function ($invoice) {
+				return [
+					'DistributorCode' => $invoice->DistributorCode,
+					'Branchcode' => $invoice->BranchCode,
+					'SalesRepCode' => $invoice->SalesRepCode,
+					'InvoiceNo' => $invoice->InvoiceNo,
+					'InvoiceDate' => Carbon::parse($invoice->InvoiceDate)->format('Y-m-d'),
+					'Retailercode' => $invoice->RetailerCode,
+					'ItemCode' => $invoice->ProductCode,
+					'Qty' => $invoice->Qty,
+					'Value' => $invoice->Value,
+					'BillValue' => $invoice->BillValue,
+					'OrderRefNo' => $invoice->OrderRefNo,
+					'BasePrice' => $invoice->BasePrice,
+					'DiscValue' => $invoice->DiscValue,
+					'KodeLotsell' => $invoice->KodeLotsell1,
+					'KodeLotsellTambahan' => $invoice->KodeLotselltambahan,
+					'JumlahLotsell' => $invoice->JumlahLotsell,
+					'TotalVoucher' => $invoice->TotalVoucher,
+				];
+			});
+
+			$invoiceData[] = $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
+		});
+
+		return $invoiceData;
+
 		// dd($invoices);
-		// dd(json_encode($invoices, JSON_UNESCAPED_SLASHES));
-		foreach ($invoices as $invoice) {
-			$invoiceData[] = $this->post($invoice, '/invoice-data', TdsEnum::INVOICE);
-		}
+
+
+		// $invoices = $invoices->chunk(5000)->toArray();
+
+		// $invoiceData = [];
+
+		// // dd($invoices);
+		// // dd(json_encode($invoices, JSON_UNESCAPED_SLASHES));
+		// foreach ($invoices as $invoice) {
+		// 	$invoiceData[] = $this->post($invoice, '/invoice-data', TdsEnum::INVOICE);
+		// }
 
 		// return $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
 	}
