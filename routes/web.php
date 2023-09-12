@@ -16,6 +16,7 @@ use App\Http\Controllers\Rebate\ProgramTierController;
 use App\Http\Controllers\Rebate\VoucherPublishController;
 use App\Http\Controllers\Rebate\VoucherApproveController;
 use App\Http\Controllers\Rebate\VoucherPrintController;
+use App\Http\Controllers\Reports\ARDaysController;
 use App\Http\Controllers\Reports\DailySalesReportController;
 use App\Http\Controllers\Reports\SoMonitoringController;
 use App\Http\Controllers\Reports\TargetDsrController;
@@ -164,6 +165,12 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('send-trackingpayment-self', [TrackingPaymentController::class, 'mailself'])->name('trackingpayment.mailself');
 		Route::get('trackingpayment-mail-index', [TrackingPaymentController::class, 'mailIndex'])->name('trackingpayment.mail.index');
 
+		// ARDays
+		Route::get('ardays', [ARDaysController::class, 'index'])->name('ardays');
+		Route::get('send-ardays', [ARDaysController::class, 'mail'])->name('ardays.mail');
+		Route::get('send-ardays-self', [ARDaysController::class, 'mailself'])->name('ardays.mailself');
+		Route::get('ardays-mail-index', [ARDaysController::class, 'mailIndex'])->name('ardays.mail.index');
+
 
 		Route::resource('target-dsrs', TargetDsrController::class)
 			->except('show');
@@ -229,8 +236,6 @@ Route::controller(TdsController::class)->prefix('tds')->group(function () {
 	// Route::get('sf-osa-master', 'sfOsaMaster');
 	// Route::get('sf-sosd-master', 'sfSosdMaster');
 	// Route::get('store-target-go-green', 'storeGoGreen');
-
-	// Route::post('preinvoice', 'preinvoice');
 });
 
 require __DIR__ . '/auth.php';

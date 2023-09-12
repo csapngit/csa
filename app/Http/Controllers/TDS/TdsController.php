@@ -118,26 +118,33 @@ class TdsController extends Controller
 				'Branchcode' => $invoice->BranchCode,
 				'SalesRepCode' => $invoice->SalesRepCode,
 				'InvoiceNo' => $invoice->InvoiceNo,
-				'InvoiceDate' => $invoice->InvoiceDate,
+				'InvoiceDate' => Carbon::parse($invoice->InvoiceDate)->format('Y-m-d'),
 				'Retailercode' => $invoice->RetailerCode,
-				// 'ProductCode' => $invoice->ProductCode,
-				'ItemCode' => 'string',
+				'ItemCode' => $invoice->ProductCode,
 				'Qty' => $invoice->Qty,
 				'Value' => $invoice->Value,
 				'BillValue' => $invoice->BillValue,
 				'OrderRefNo' => $invoice->OrderRefNo,
 				'BasePrice' => $invoice->BasePrice,
 				'DiscValue' => $invoice->DiscValue,
-				'KodeLotsell' => (string) $invoice->KodeLotsell1,
-				'KodeLotsellTambahan' => (string) $invoice->KodeLotselltambahan,
+				'KodeLotsell' => $invoice->KodeLotsell1,
+				'KodeLotsellTambahan' => $invoice->KodeLotselltambahan,
 				'JumlahLotsell' => $invoice->JumlahLotsell,
 				'TotalVoucher' => $invoice->TotalVoucher,
 			];
 		});
 
-		// dd(json_encode($invoices, JSON_UNESCAPED_SLASHES));
+		$invoices = $invoices->chunk(5000)->toArray();
 
-		return $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
+		$invoiceData = [];
+
+		// dd($invoices);
+		// dd(json_encode($invoices, JSON_UNESCAPED_SLASHES));
+		foreach ($invoices as $invoice) {
+			$invoiceData[] = $this->post($invoice, '/invoice-data', TdsEnum::INVOICE);
+		}
+
+		// return $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
 	}
 
 	public function targetpeSurvey($target)
@@ -840,146 +847,106 @@ class TdsController extends Controller
 		return 'oka jadi csv mantap ';
 	}
 
-	// public function csvmanual($orderno)
-	// {
-	// 	$orderCsv = DB::connection('192.168.11.24')->table('tds_orderdata')->where('OrderNo', $orderno)->get();
-
-	// 	if ($orderCsv->isNotEmpty()) {
-
-	// 						//Ambil data branch dari table branch untuk tau regionnya
-	// 						$areacode = DB::connection('192.168.11.24')->table('tds_branch')->select('AreaCode')->where('BranchCode', $orderCsv->BranchCode)->first();
-
-	// 					dd($areacode);
-
-	// 		//Buat nama file
-	// 		$remarksFileName = 'OrderRemarks_' . $orderCsv->BranchCode . '_' . Carbon::now()->format('Ymd') . '_' . Carbon::now()->format('Hi') . '.csv';
-	// 		$detailFileName = 'OrderDetail_' . $orderCsv->BranchCode . '_' . Carbon::now()->format('Ymd') . '_' . Carbon::now()->format('Hi') . '.csv';
-
-	// 			//Buat header file
-	// 			$remarks = "DistributorCode;OrderNo;SalesRepCode;PONumber;Remarks;RetailerCode;GoldenStoreStatus" . "\n";
-	// 			$detail = "DistributorCode;BranchCode;SalesRepCode;RetailerCode;OrderNo;OrderDate;UploadDate;ChildSKUCode;OrderQty;OrderQty(cases);DeliveryDate;D1;D2;D3;NonIM;DiscountAmount;DiscountRate;DiscountedPrice;GoldenStoreStatus" . "\n";
-
-	// 			//Ambil data yang sesuai dengan branch
-	// 			$orderRemarks = $remarksDatas->where('BranchCode', $branch->BranchCode);
-	// 			$orderDetails = $orderDatas->where('BranchCode', $branch->BranchCode);
-
-	// 			//Isi remarks
-	// 			foreach ($orderRemarks as $order) {
-	// 				$remarks .= $order->DistributorCode . ';' .
-	// 					$order->OrderNo . ';' .
-	// 					$order->SalesRepCode . ';' .
-	// 					null . ';' .
-	// 					null . ';' .
-	// 					$order->RetailerCode . ';' .
-	// 					null . "\n";
-	// 			}
-
-	// 			unset($idDatas);
-	// 			$idDatas = [];
-
-	// 			//Isi detail
-	// 			foreach ($orderDetails as $order) {
-	// 				$detail .= $order->DistributorCode . ';' .
-	// 					$order->BranchCode . ';' .
-	// 					$order->SalesRepCode . ';' .
-	// 					$order->RetailerCode . ';' .
-	// 					$order->OrderNo . ';' .
-	// 					Carbon::parse($order->OrderDate)->format('m/d/Y') . ';' .
-	// 					null . ';' .
-	// 					$order->ProductCode . ';' .
-	// 					$order->OrderQtyPCS . ';' .
-	// 					0 . ';' .
-	// 					null . ';' .
-	// 					null . ';' .
-	// 					null . ';' .
-	// 					null . ';' .
-	// 					null . ';' .
-	// 					null . ';' .
-	// 					null . ';' .
-	// 					null . ';' .
-	// 					null . "\n";
-
-	// 				$idDatas[] = $order->id;
-	// 			}
-
-
-
-	// 			// $uploadremarks = Storage::disk('sfa')->put($remarksFileName, $remarks);
-	// 			// $uploaddetail = Storage::disk('sfa')->put($detailFileName, $detail);
-
-	// 			// if ($uploadremarks && $uploaddetail) {
-	// 			// 	DB::table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
-	// 			// }
-
-	// 			switch ($region->AreaCode) {
-	// 				case 'CSAJ':
-
-	// 					$uploadremarks  = Storage::disk('sftp')->put('//CSAJ/' . $remarksFileName, $remarks);
-
-	// 					$uploaddetail  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $detail);
-
-	// 					if ($uploadremarks && $uploaddetail) {
-	// 						DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
-	// 					}
-
-	// 					break;
-
-	// 				default:
-
-	// 					$uploadremarks  = Storage::disk('sftp')->put('//CSAS/' . $remarksFileName, $remarks);
-
-	// 					$uploaddetail  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $detail);
-
-	// 					if ($uploadremarks && $uploaddetail) {
-	// 						DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
-	// 					}
-
-	// 					break;
-	// 			}
-	// 		}
-
-	// 		return 'oka jadi csv mantap ';
-	// 	} else {
-	// 		return 'Uwaduh! Datanya ga ada di database, coba cari kode toko di web TDS dan cek status client hit!';
-	// 	}
-	// }
-
-	public function preinvoice(Request $request)
+	public function csvmanual($orderno)
 	{
-		$preinvoiceDatas = $request['results'];
+		$orderCsv = DB::connection('192.168.11.24')->table('tds_orderdata')->where('OrderNo', $orderno)->get();
 
-		$detailData = [];
+		if ($orderCsv->isNotEmpty()) {
 
-		foreach ($preinvoiceDatas as $preinvoiceData) {
-			$detaildata[] = [
-				'rownumber' => $preinvoiceData->rownumber,
-				'productcode' => $preinvoiceData->productcode,
-				'qty' => $preinvoiceData->qty,
-				'uom' => $preinvoiceData->uom
-			];
+			//Ambil data branch dari table branch untuk tau regionnya
+			$areacode = DB::connection('192.168.11.24')->table('tds_branch')->select('AreaCode')->where('BranchCode', $orderCsv[0]->BranchCode)->first();
+
+			//Buat nama file
+			$remarksFileName = 'OrderRemarks_' . $orderCsv[0]->BranchCode . '_' . Carbon::now()->format('Ymd') . '_' . Carbon::now()->format('Hi') . '.csv';
+			$detailFileName = 'OrderDetail_' . $orderCsv[0]->BranchCode . '_' . Carbon::now()->format('Ymd') . '_' . Carbon::now()->format('Hi') . '.csv';
+
+			//Buat header file
+			$remarks = "DistributorCode;OrderNo;SalesRepCode;PONumber;Remarks;RetailerCode;GoldenStoreStatus" . "\n";
+			$detail = "DistributorCode;BranchCode;SalesRepCode;RetailerCode;OrderNo;OrderDate;UploadDate;ChildSKUCode;OrderQty;OrderQty(cases);DeliveryDate;D1;D2;D3;NonIM;DiscountAmount;DiscountRate;DiscountedPrice;GoldenStoreStatus" . "\n";
+
+			//Ambil data yang sesuai dengan branch
+			// $orderRemarks = $remarksDatas->where('BranchCode', $branch->BranchCode);
+			// $orderDetails = $orderDatas->where('BranchCode', $branch->BranchCode);
+
+			//Isi remarks
+			foreach ($orderCsv as $order) {
+				$remarks .= $order->DistributorCode . ';' .
+					$order->OrderNo . ';' .
+					$order->SalesRepCode . ';' .
+					null . ';' .
+					null . ';' .
+					$order->RetailerCode . ';' .
+					null . "\n";
+			}
+
+			unset($idDatas);
+			$idDatas = [];
+
+			//Isi detail
+			foreach ($orderCsv as $order) {
+				$detail .= $order->DistributorCode . ';' .
+					$order->BranchCode . ';' .
+					$order->SalesRepCode . ';' .
+					$order->RetailerCode . ';' .
+					$order->OrderNo . ';' .
+					Carbon::parse($order->OrderDate)->format('m/d/Y') . ';' .
+					null . ';' .
+					$order->ProductCode . ';' .
+					$order->OrderQtyPCS . ';' .
+					0 . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . ';' .
+					null . "\n";
+
+				$idDatas[] = $order->id;
+			}
+
+
+
+			$uploadremarks = Storage::disk('sfa')->put($remarksFileName, $remarks);
+			$uploaddetail = Storage::disk('sfa')->put($detailFileName, $detail);
+
+			// if ($uploadremarks && $uploaddetail) {
+			// 	DB::table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
+			// }
+
+			// switch ($region->AreaCode) {
+			// 	case 'CSAJ':
+
+			// 		$uploadremarks  = Storage::disk('sftp')->put('//CSAJ/' . $remarksFileName, $remarks);
+
+			// 		$uploaddetail  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $detail);
+
+			// 		if ($uploadremarks && $uploaddetail) {
+			// 			DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
+			// 		}
+
+			// 		break;
+
+			// 	default:
+
+			// 		$uploadremarks  = Storage::disk('sftp')->put('//CSAS/' . $remarksFileName, $remarks);
+
+			// 		$uploaddetail  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $detail);
+
+			// 		if ($uploadremarks && $uploaddetail) {
+			// 			DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
+			// 		}
+
+			// 		break;
+			// }
+
+			return 'oka jadi csv mantap ';
+		} else {
+			return 'Uwaduh! Datanya ga ada di database, coba cari kode toko di web TDS dan cek status client hit!';
 		}
-
-
-		return $detailData;
-		// DB::connection('192.168.11.24')->table('tds_preinvoice_detail')->
-
-		$headerdata[] = [
-			'distributorcode' => $preinvoiceDatas->distributorcode
-		];
 	}
-
-	// public function postCalculate(Request $request)
-	// {
-
-	// 	$calculateDatas = $request['results'];
-
-	// 	foreach($calculateDatas as $calculateData){
-	// 		'OrderNumber' => $calculateDatas->ordernumber,
-
-	// 	}
-
-	// 	DB::connection('192.168.11.24')->table('tds_preorder_header')->insert($chunkdbData->toArray());
-	// }
 
 	// //Tidak Dipakai
 	// public function order($date)
