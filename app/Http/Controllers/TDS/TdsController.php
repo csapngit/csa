@@ -919,38 +919,38 @@ class TdsController extends Controller
 
 
 
-			$uploadremarks = Storage::disk('sfa')->put($remarksFileName, $remarks);
-			$uploaddetail = Storage::disk('sfa')->put($detailFileName, $detail);
+			// $uploadremarks = Storage::disk('sfa')->put($remarksFileName, $remarks);
+			// $uploaddetail = Storage::disk('sfa')->put($detailFileName, $detail);
 
 			// if ($uploadremarks && $uploaddetail) {
 			// 	DB::table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
 			// }
 
-			// switch ($region->AreaCode) {
-			// 	case 'CSAJ':
+			switch ($areacode) {
+				case 'CSAJ':
 
-			// 		$uploadremarks  = Storage::disk('sftp')->put('//CSAJ/' . $remarksFileName, $remarks);
+					$uploadremarks  = Storage::disk('sftp')->put('//CSAJ/' . $remarksFileName, $remarks);
 
-			// 		$uploaddetail  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $detail);
+					$uploaddetail  = Storage::disk('sftp')->put('//CSAJ/' . $detailFileName, $detail);
 
-			// 		if ($uploadremarks && $uploaddetail) {
-			// 			DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
-			// 		}
+					if ($uploadremarks && $uploaddetail) {
+						DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
+					}
 
-			// 		break;
+					break;
 
-			// 	default:
+				default:
 
-			// 		$uploadremarks  = Storage::disk('sftp')->put('//CSAS/' . $remarksFileName, $remarks);
+					$uploadremarks  = Storage::disk('sftp')->put('//CSAS/' . $remarksFileName, $remarks);
 
-			// 		$uploaddetail  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $detail);
+					$uploaddetail  = Storage::disk('sftp')->put('//CSAS/' . $detailFileName, $detail);
 
-			// 		if ($uploadremarks && $uploaddetail) {
-			// 			DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
-			// 		}
+					if ($uploadremarks && $uploaddetail) {
+						DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
+					}
 
-			// 		break;
-			// }
+					break;
+			}
 
 			return 'oka jadi csv mantap ';
 		} else {
@@ -1516,4 +1516,8 @@ class TdsController extends Controller
 	// 		}
 	// 	};
 
-	// 	DB::connection('192.168.11.24')->table('tds_orddeta
+	// 	DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
+
+	// 	return 'ok';
+	// }
+}
