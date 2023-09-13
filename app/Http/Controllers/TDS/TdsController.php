@@ -926,8 +926,8 @@ class TdsController extends Controller
 			// 	DB::table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
 			// }
 
-			switch ($areacode) {
-				case 'CSAJ':
+			switch ($areacode->AreaCode) {
+				case "CSAJ":
 
 					$uploadremarks  = Storage::disk('sftp')->put('//CSAJ/' . $remarksFileName, $remarks);
 
