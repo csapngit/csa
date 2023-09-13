@@ -1516,8 +1516,4 @@ class TdsController extends Controller
 	// 		}
 	// 	};
 
-	// 	DB::connection('192.168.11.24')->table('tds_orddetail')->insert($hentai);
-
-	// 	return 'ok';
-	// }
-}
+	// 	DB::connection('192.168.11.24')->table('tds_orddeta
