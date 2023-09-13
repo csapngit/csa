@@ -866,9 +866,21 @@ class TdsController extends Controller
 			//Ambil data branch dari table branch untuk tau regionnya
 			$areacode = DB::connection('192.168.11.24')->table('tds_branch')->select('AreaCode')->where('BranchCode', $orderCsv[0]->BranchCode)->first();
 
+			$currentDate = Carbon::now()->format('Y-m-d');
+
+			//Cek count terakhir untuk penamaan file
+			$getcount = DB::connection('192.168.11.24')->table('tds_csvcount')->where('csvdate', $currentDate)->orderByDesc('csvcount')->first();
+
+			if (isset($getcount)) {
+				$lastcount = $getcount->csvcount + 1;
+				$lastcount = str_pad($lastcount, 4, "0", STR_PAD_LEFT);
+			} else {
+				$lastcount = str_pad(0, 4, "0", STR_PAD_LEFT);
+			}
+
 			//Buat nama file
-			$remarksFileName = 'OrderRemarks_' . $orderCsv[0]->BranchCode . '_' . Carbon::now()->format('Ymd') . '_' . '0000' . '.csv';
-			$detailFileName = 'OrderDetail_' . $orderCsv[0]->BranchCode . '_' . Carbon::now()->format('Ymd') . '_' . '0000' . '.csv';
+			$remarksFileName = 'OrderRemarks_' . $orderCsv[0]->BranchCode . '_' . carbon::parse($currentDate)->format('Ymd') . '_' . $lastcount . '.csv';
+			$detailFileName = 'OrderDetail_' . $orderCsv[0]->BranchCode . '_' . carbon::parse($currentDate)->format('Ymd') . '_' . $lastcount . '.csv';
 
 			//Buat header file
 			$remarks = "DistributorCode;OrderNo;SalesRepCode;PONumber;Remarks;RetailerCode;GoldenStoreStatus" . "\n";
@@ -917,13 +929,17 @@ class TdsController extends Controller
 				$idDatas[] = $order->id;
 			}
 
-
-
 			// $uploadremarks = Storage::disk('sfa')->put($remarksFileName, $remarks);
 			// $uploaddetail = Storage::disk('sfa')->put($detailFileName, $detail);
 
 			// if ($uploadremarks && $uploaddetail) {
 			// 	DB::table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
+			// 	DB::connection('192.168.11.24')->table('tds_csvcount')->insert(
+			// 		[
+			// 			'csvdate' => carbon::parse($currentDate)->format('Y-m-d'),
+			// 			'csvcount' => $lastcount
+			// 		]
+			// 	);
 			// }
 
 			switch ($areacode->AreaCode) {
@@ -935,6 +951,12 @@ class TdsController extends Controller
 
 					if ($uploadremarks && $uploaddetail) {
 						DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
+						DB::connection('192.168.11.24')->table('tds_csvcount')->insert(
+							[
+								'csvdate' => carbon::parse($currentDate)->format('Y-m-d'),
+								'csvcount' => $lastcount
+							]
+						);
 					}
 
 					break;
@@ -947,6 +969,12 @@ class TdsController extends Controller
 
 					if ($uploadremarks && $uploaddetail) {
 						DB::connection('192.168.11.24')->table('tds_orderdata')->whereIn('id', $idDatas)->update(['CSV' => '1']);
+						DB::connection('192.168.11.24')->table('tds_csvcount')->insert(
+							[
+								'csvdate' => carbon::parse($currentDate)->format('Y-m-d'),
+								'csvcount' => $lastcount
+							]
+						);
 					}
 
 					break;

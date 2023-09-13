@@ -27,47 +27,47 @@ class ARDaysController extends Controller
 	}
 
 	// Send Email
-	public function mail()
-	{
-		// $allUser = $this->emailDestiny();
+	// public function mail()
+	// {
+	// 	$allUser = $this->emailDestiny();
 
-		// Mail::to($allUser)
-		// 	->send(new TrackingPayment());
+	// 	Mail::to($allUser)
+	// 		->send(new ARDays());
 
-		// return 'ok mantab';
-	}
+	// 	return 'ok uhuy';
+	// }
 
-	public function emailDestiny()
-	{
-		// $datas = DB::table('emails')
-		// 	->where('module', 'trackingpayment')
-		// 	->get('name')
-		// 	->toArray();
+	// public function emailDestiny()
+	// {
+	// 	$datas = DB::table('emails')
+	// 		->where('module', 'ardays')
+	// 		->get('name')
+	// 		->toArray();
 
-		// $arrayData = [];
+	// 	$arrayData = [];
 
-		// foreach ($datas as $data) {
-		// 	$arrayData[] = $data->name;
-		// };
+	// 	foreach ($datas as $data) {
+	// 		$arrayData[] = $data->name;
+	// 	};
 
-		// return $arrayData;
-	}
+	// 	return $arrayData;
+	// }
 
-	public function mailself()
-	{
-		// Mail::to('pandu.sanjaya@csahome.com')
-		// 	->send(new TrackingPayment());
+	// public function mailself()
+	// {
+	// 	Mail::to('pandu.sanjaya@csahome.com')
+	// 		->send(new ARDays());
 
-		// return 'ok mantab';
-	}
+	// 	return 'ok uhuy';
+	// }
 
-	// Lihat index mail yang akan dikirim
-	public function mailIndex()
-	{
-		// $dates = $this->paymentService->workday();
-		// // $date = now()->format('d-F-Y H:i:s');
-		// $trackingpayments = $this->paymentService->TrackingPayment();
+	// // Lihat index mail yang akan dikirim
+	// public function mailIndex()
+	// {
+	// 	// $dates = $this->paymentService->workday();
+	// 	// $date = now()->format('d-F-Y H:i:s');
+	// 	$ardays = $this->ardaysService->ARDays();
 
-		// return view('mails.trackingpayment', compact('trackingpayments', 'dates'));
-	}
+	// 	return view('mails.ardays', compact('ardays'));
+	// }
 }
