@@ -6,8 +6,8 @@
 
     <style>
         /* .ardays {
-                        width: 100%;
-                    } */
+                                                                                                                                                            width: 100%;
+                                                                                                                                                        } */
     </style>
 
 @endsection
@@ -26,9 +26,66 @@
             </div>
             <div class="card-body">
                 <div style="display: flex">
-                    {{-- @include('reports.tracking-payment.layouts.gt')
-                    @include('reports.tracking-payment.layouts.mt')
-                    @include('reports.tracking-payment.layouts.total') --}}
+                    <table class="table table-bordered">
+                        <thead style="text-align: center;">
+                            <tr>
+                                <th rowspan="2" style="vertical-align: middle;">Area</th>
+                                <th rowspan="2" style="vertical-align: middle;">Cabang</th>
+                                <th colspan="3">GT</th>
+                                <th colspan="3">MT</th>
+                                <th colspan="3">Total</th>
+                            </tr>
+                            <tr>
+                                <th>Target</th>
+                                <th>ARDay</th>
+                                <th>Percentage</th>
+                                <th>Target</th>
+                                <th>ARDay</th>
+                                <th>Percentage</th>
+                                <th>Target</th>
+                                <th>ARDay</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($ardays as $area => $arday)
+                                @php
+                                    $branch_total = count($arday);
+                                    // dd($area);
+                                @endphp
+
+                                <tr>
+                                    <td rowspan="{{ $branch_total + 1 }}"
+                                        style="text-align: center; vertical-align: middle;">
+                                        {{ $area }}</td>
+                                </tr>
+
+                                @foreach ($arday as $branch => $ardayData)
+                                    <tr>
+                                        <td>{{ $branch }}</td>
+                                        <td style="text-align: right">{{ $ardayData['GT']['target'] ?? '' }}</td>
+                                        <td style="text-align: right">
+                                            {{ isset($ardayData['GT']['ardays']) ? round($ardayData['GT']['ardays'], 2) : '' }}
+                                        </td>
+                                        <td style="text-align: right">
+                                            {{ isset($ardayData['GT']['percentage']) ? round($ardayData['GT']['percentage'], 2) . '%' : '' }}
+                                        </td>
+                                        <td style="text-align: right">{{ $ardayData['MT']['target'] ?? '' }}</td>
+                                        <td style="text-align: right">
+                                            {{ isset($ardayData['MT']['ardays']) ? round($ardayData['MT']['ardays'], 2) : '' }}
+                                        </td>
+                                        <td style="text-align: right">
+                                            {{ isset($ardayData['MT']['percentage']) ? round($ardayData['MT']['percentage'], 2) . '%' : '' }}
+                                        </td>
+                                        <td style="text-align: right">{{ round($ardayData['total']['target'], 2) }}</td>
+                                        <td style="text-align: right">{{ round($ardayData['total']['ardays'], 2) }}</td>
+                                        <td style="text-align: right">
+                                            {{ round($ardayData['total']['percentage'], 2) . '%' }}</td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

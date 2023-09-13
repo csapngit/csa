@@ -129,8 +129,8 @@ class TdsController extends Controller
 					'OrderRefNo' => $invoice->OrderRefNo,
 					'BasePrice' => $invoice->BasePrice,
 					'DiscValue' => $invoice->DiscValue,
-					'KodeLotsell' => $invoice->KodeLotsell1,
-					'KodeLotsellTambahan' => $invoice->KodeLotselltambahan,
+					'KodeLotsell' => $invoice->KodeLotsell1 ?? '',
+					'KodeLotsellTambahan' => $invoice->KodeLotselltambahan ?? '',
 					'JumlahLotsell' => $invoice->JumlahLotsell,
 					'TotalVoucher' => $invoice->TotalVoucher,
 				];
@@ -867,8 +867,8 @@ class TdsController extends Controller
 			$areacode = DB::connection('192.168.11.24')->table('tds_branch')->select('AreaCode')->where('BranchCode', $orderCsv[0]->BranchCode)->first();
 
 			//Buat nama file
-			$remarksFileName = 'OrderRemarks_' . $orderCsv[0]->BranchCode . '_' . Carbon::now()->format('Ymd') . '_' . Carbon::now()->format('Hi') . '.csv';
-			$detailFileName = 'OrderDetail_' . $orderCsv[0]->BranchCode . '_' . Carbon::now()->format('Ymd') . '_' . Carbon::now()->format('Hi') . '.csv';
+			$remarksFileName = 'OrderRemarks_' . $orderCsv[0]->BranchCode . '_' . Carbon::now()->format('Ymd') . '_' . '0000' . '.csv';
+			$detailFileName = 'OrderDetail_' . $orderCsv[0]->BranchCode . '_' . Carbon::now()->format('Ymd') . '_' . '0000' . '.csv';
 
 			//Buat header file
 			$remarks = "DistributorCode;OrderNo;SalesRepCode;PONumber;Remarks;RetailerCode;GoldenStoreStatus" . "\n";
