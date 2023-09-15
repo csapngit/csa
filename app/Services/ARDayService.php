@@ -5,16 +5,18 @@ namespace App\Services;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class ARDaysService extends WorkdayService
+class ARDayService extends WorkdayService
 {
 	public function ARDays()
 	{
 		$firstdayoftheyear = Carbon::parse(now()->format('Y-01-01'));
 		$currentday = Carbon::now();
-		$daypassed = $firstdayoftheyear->diffinDays($currentday);
+		$daypassed = $firstdayoftheyear->diffinDays($currentday) + 1;
 
 		$ardaysDataTargets = DB::table('target_ardays')->get()->groupBy(['area', 'branch', 'segment']);
 		$ardaysDataQuery = DB::table('ardays')->get()->groupBy(['area', 'branch', 'segment', 'jenis']);
+
+		// dd($ardaysDataQuery);
 
 		// Set all CSAJ MT to TSP and forget other MT
 		foreach ($ardaysDataQuery['CSAJ'] as $branch => $segments) {

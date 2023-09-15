@@ -50,6 +50,18 @@ class Kernel extends ConsoleKernel
 		$schedule->call(new TrackingPaymentMail)
 			->at('05:00');
 
+		//Scheduler Store Master
+		$schedule->call(new MasterStore)
+			->at('00:00');
+
+		//Scheduler Price Master
+		$schedule->call(new Price)
+			->at('00:10');
+
+		//Scheduler Product Master
+		$schedule->call(new Product)
+			->at('00:20');
+
 		//Scheduler Hit Order TDS V2
 		$schedule->call(new HitOrder)
 			->at('08:20')
@@ -282,14 +294,6 @@ class Kernel extends ConsoleKernel
 		// $schedule->call(new Overdue)
 		// 	->at('10:49');
 
-		// // todo: POST MASTER PRICE
-		// $schedule->call(new Price)
-		// 	->at('10:51');
-
-		// // todo: POST MASTER PRODUCT
-		// $schedule->call(new Product)
-		// 	->at('10:53');
-
 		// // todo: POST RETURN
 		// $schedule->call(new MasterReturn)
 		// 	->at('10:55');
@@ -297,10 +301,6 @@ class Kernel extends ConsoleKernel
 		// // todo: POST SELLER
 		// $schedule->call(new Seller)
 		// 	->at('10:57');
-
-		// // todo: POST STORE
-		// $schedule->call(new MasterStore)
-		// 	->at('10:59');
 
 		// // todo: POST VOUCHER
 		// $schedule->call(new Voucher)

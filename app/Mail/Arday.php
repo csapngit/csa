@@ -3,24 +3,24 @@
 namespace App\Mail;
 
 use App\Models\User;
-use App\Services\ARDaysService;
+use App\Services\ARDayService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ARDays extends Mailable
+class Arday extends Mailable
 {
 	use Queueable, SerializesModels;
 
-	protected ARDaysService $ardaysService;
+	protected ARDayService $ardaysService;
 
 	/**
 	 * Create a new message instance.
 	 */
 	public function __construct()
 	{
-		$this->ardaysService = new ARDaysService;
+		$this->ardaysService = new ARDayService;
 	}
 
 	/**
@@ -28,14 +28,16 @@ class ARDays extends Mailable
 	 */
 	public function build()
 	{
-		$subjectTitle = 'ARDays ' . now()->format('d/M/Y');
+		$subjectTitle = 'AR Days ' . now()->format('d/M/Y');
 
 		// $dates = $this->paymentService->workday();
-		// $date = now()->format('d-F-Y H:i:s');
+		$date = now()->format('d-F-Y H:i:s');
+		$daypassed = $this->ardaysService->daypassed();
 		$ardays = $this->ardaysService->ARDays();
 
-		return $this->view('mails.trackingpayment', [
-			// 'dates' => $dates,
+		return $this->view('mails.arday', [
+			'date' => $date,
+			'daypassed' => $daypassed,
 			'ardays' => $ardays
 		])
 			->subject($subjectTitle);

@@ -6,8 +6,8 @@
 
     <style>
         /* .ardays {
-                                                                                                                                                            width: 100%;
-                                                                                                                                                        } */
+                                                                                                                                                                width: 100%;
+                                                                                                                                                            } */
     </style>
 
 @endsection
@@ -37,13 +37,13 @@
                             </tr>
                             <tr>
                                 <th>Target</th>
-                                <th>ARDay</th>
+                                <th>AR Day</th>
                                 <th>Percentage</th>
                                 <th>Target</th>
-                                <th>ARDay</th>
+                                <th>AR Day</th>
                                 <th>Percentage</th>
                                 <th>Target</th>
-                                <th>ARDay</th>
+                                <th>AR Day</th>
                                 <th>Percentage</th>
                             </tr>
                         </thead>

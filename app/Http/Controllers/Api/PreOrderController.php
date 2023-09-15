@@ -132,7 +132,8 @@ class PreOrderController extends Controller
 					'deliverydate' => $preorderHeader->DeliveryDate,
 					'totaldiscreg' => $preorderHeader->TotalDiscReg,
 					'totaldisclotsell' => $preorderHeader->TotalDiscLotsell,
-					'moq' => $preorderHeader->VoucherValue ?? '',
+					'moq' => $preorderHeader->MoQ ?? '',
+					'moqvalue' => $preorderHeader->MoQValue ?? '',
 					'totalgross' => $preorderHeader->TotalGross,
 					'totalnetto' => $preorderHeader->TotalNetto
 				];
@@ -144,13 +145,14 @@ class PreOrderController extends Controller
 						'qty' => $preorderDetail->Qty,
 						'orderprice' => $preorderDetail->orderprice,
 						'percentdisc' => $preorderDetail->percentdisc,
-						'valuedisc' => $preorderDetail->valuedisc,
+						'discreg' => $preorderDetail->discreg,
 						'valuediscreg' => $preorderDetail->valuediscreg,
+						'disclotsell' => $preorderDetail->disclotsell,
 						'valuedisclotsell' => $preorderDetail->valuedisclotsell,
-						'disclotsell' => $preorderDetail->valuediscvolume,
 						'totaldisc' => $preorderDetail->totaldisc,
 						'promotioncode' => $preorderDetail->promotioncode,
 						'countpromotion' => $preorderDetail->countpromotion,
+						'isbonus' => $preorderDetail->isbonus,
 					];
 				}
 

@@ -67,13 +67,18 @@ class AppMenuSeeder extends Seeder
 			// Target Report
 			['title' => 'Target Report',		'page' => null,															'icon' => 1,	'bullet' => 1,	'root' => 1,	'newtab' => 0,	'header' => 0,		'order' => 34, 	'group_code' => NULL,														'created_at' => \Carbon\Carbon::now()],
 			['title' => 'DSR',							'page' => 'report/target-dsrs',							'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 34,		'order' => 1, 	'group_code' => GroupMenuEnum::TARGET,					'created_at' => \Carbon\Carbon::now()],
-			['title' => 'Tracking Payment',	'page' => '#',															'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 34,		'order' => 2, 	'group_code' => GroupMenuEnum::TARGET,					'created_at' => \Carbon\Carbon::now()],
+			['title' => 'Tracking Payment',	'page' => 'report/target-trackingpayments',	'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 34,		'order' => 2, 	'group_code' => GroupMenuEnum::TARGET,					'created_at' => \Carbon\Carbon::now()],
 
 			// Tds
 			['title' => 'TDS',							'page' => null,															'icon' => 1,	'bullet' => 1,	'root' => 1,	'newtab' => 0,	'header' => 0,		'order' => 37, 	'group_code' => NULL,														'created_at' => \Carbon\Carbon::now()],
 			['title' => 'API',							'page' => 'tds/index',											'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 37,		'order' => 1, 	'group_code' => GroupMenuEnum::TDS,							'created_at' => \Carbon\Carbon::now()],
 			['title' => 'Incentive',				'page' => 'tds/index-incentive',						'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 37,		'order' => 2, 	'group_code' => GroupMenuEnum::TDS,							'created_at' => \Carbon\Carbon::now()],
 			['title' => 'Promo Price',			'page' => 'tds/index-promoPrice',						'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 37,		'order' => 3, 	'group_code' => GroupMenuEnum::TDS,							'created_at' => \Carbon\Carbon::now()],
+
+			// ++
+			['title' => 'ARDays',	'page' => 'report/ardays',														'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 28,		'order' => 4, 	'group_code' => GroupMenuEnum::REPORTS,					'created_at' => \Carbon\Carbon::now()],
+			['title' => 'ARDays',	'page' => 'report/target-ardays',											'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 34,		'order' => 3, 	'group_code' => GroupMenuEnum::TARGET,					'created_at' => \Carbon\Carbon::now()],
+
 		]);
 	}
 }

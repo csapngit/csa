@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class WorkdayService
 {
-	protected $timegone_index;
-	protected $workDay;
+	protected $timegone_index, $daypassed;
+	// protected $workDay;
 
 	public function workday()
 	{
@@ -53,5 +53,14 @@ class WorkdayService
 		];
 
 		return $dates;
+	}
+
+	public function daypassed()
+	{
+		$firstdayoftheyear = Carbon::parse(now()->format('Y-01-01'));
+		$currentday = Carbon::now();
+		$this->daypassed = $firstdayoftheyear->diffinDays($currentday) + 1;
+
+		return $this->daypassed;
 	}
 }

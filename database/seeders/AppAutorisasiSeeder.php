@@ -44,6 +44,8 @@ class AppAutorisasiSeeder extends Seeder
 			['user_id' => 1, 'menu_id' => 38, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],
 			['user_id' => 1, 'menu_id' => 39, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],
 			['user_id' => 1, 'menu_id' => 40, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],
+			['user_id' => 1, 'menu_id' => 41, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],
+			['user_id' => 1, 'menu_id' => 42, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],
 
 			// Pandu
 			['user_id' => 9, 'menu_id' => 3, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],
@@ -74,6 +76,8 @@ class AppAutorisasiSeeder extends Seeder
 			['user_id' => 9, 'menu_id' => 38, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],
 			['user_id' => 9, 'menu_id' => 39, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],
 			['user_id' => 9, 'menu_id' => 40, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],
+			['user_id' => 9, 'menu_id' => 41, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],
+			['user_id' => 9, 'menu_id' => 42, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],
 
 			// Pak Iman
 			['user_id' => 4, 'menu_id' => 3, 'input_by' => 1, 'created_at' => \Carbon\Carbon::now()],

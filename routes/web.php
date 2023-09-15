@@ -16,11 +16,13 @@ use App\Http\Controllers\Rebate\ProgramTierController;
 use App\Http\Controllers\Rebate\VoucherPublishController;
 use App\Http\Controllers\Rebate\VoucherApproveController;
 use App\Http\Controllers\Rebate\VoucherPrintController;
-use App\Http\Controllers\Reports\ARDaysController;
+use App\Http\Controllers\Reports\ARDayController;
 use App\Http\Controllers\Reports\DailySalesReportController;
 use App\Http\Controllers\Reports\SoMonitoringController;
 use App\Http\Controllers\Reports\TargetDsrController;
 use App\Http\Controllers\Reports\TrackingPaymentController;
+use App\Http\Controllers\Reports\TargetTrackingPaymentController;
+use App\Http\Controllers\Reports\TargetArdayController;
 use App\Http\Controllers\TDS\IncentiveController;
 use App\Http\Controllers\TDS\PromotionPriceController;
 use App\Http\Controllers\TDS\TdsController;
@@ -166,14 +168,15 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('trackingpayment-mail-index', [TrackingPaymentController::class, 'mailIndex'])->name('trackingpayment.mail.index');
 
 		// ARDays
-		Route::get('ardays', [ARDaysController::class, 'index'])->name('ardays');
-		Route::get('send-ardays', [ARDaysController::class, 'mail'])->name('ardays.mail');
-		Route::get('send-ardays-self', [ARDaysController::class, 'mailself'])->name('ardays.mailself');
-		Route::get('ardays-mail-index', [ARDaysController::class, 'mailIndex'])->name('ardays.mail.index');
+		Route::get('arday', [ARDayController::class, 'index'])->name('arday');
+		Route::get('send-arday', [ARDayController::class, 'mail'])->name('arday.mail');
+		Route::get('send-arday-self', [ARDayController::class, 'mailself'])->name('arday.mailself');
+		Route::get('arday-mail-index', [ARDayController::class, 'mailIndex'])->name('arday.mail.index');
 
-
-		Route::resource('target-dsrs', TargetDsrController::class)
-			->except('show');
+		//Target
+		Route::resource('target-dsrs', TargetDsrController::class)->except('show');
+		Route::resource('target-trackingpayments', TargetTrackingPaymentController::class)->except('show');
+		Route::resource('target-ardays', TargetArdayController::class)->except('show');
 	});
 
 	//todo: Dynamic Select
