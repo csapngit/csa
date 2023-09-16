@@ -145,14 +145,14 @@ class PreOrderController extends Controller
 						'qty' => $preorderDetail->Qty,
 						'orderprice' => $preorderDetail->orderprice,
 						'percentdisc' => $preorderDetail->percentdisc,
-						'discreg' => $preorderDetail->discreg,
+						'valuedisc' => $preorderDetail->discreg,
 						'valuediscreg' => $preorderDetail->valuediscreg,
-						'disclotsell' => $preorderDetail->disclotsell,
-						'valuedisclotsell' => $preorderDetail->valuedisclotsell,
+						'valuedisclotsell' => $preorderDetail->disclotsell,
+						'disclotsell' => $preorderDetail->valuedisclotsell,
 						'totaldisc' => $preorderDetail->totaldisc,
 						'promotioncode' => $preorderDetail->promotioncode,
 						'countpromotion' => $preorderDetail->countpromotion,
-						'isbonus' => $preorderDetail->isbonus,
+						'bonus' => $preorderDetail->isbonus,
 					];
 				}
 
