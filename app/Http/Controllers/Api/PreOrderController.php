@@ -132,8 +132,8 @@ class PreOrderController extends Controller
 					'deliverydate' => $preorderHeader->DeliveryDate,
 					'totaldiscreg' => $preorderHeader->TotalDiscReg,
 					'totaldisclotsell' => $preorderHeader->TotalDiscLotsell,
-					'moq' => $preorderHeader->MoQ ?? '',
-					'moqvalue' => $preorderHeader->MoQValue ?? '',
+					'moq' => $preorderHeader->MoQ ?? 0,
+					'moqvalue' => $preorderHeader->MoQValue ?? 0,
 					'totalgross' => $preorderHeader->TotalGross,
 					'totalnetto' => $preorderHeader->TotalNetto
 				];
