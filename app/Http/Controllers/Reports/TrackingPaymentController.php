@@ -21,9 +21,10 @@ class TrackingPaymentController extends Controller
 
 	public function index()
 	{
+		$dates = $this->paymentService->workday();
 		$trackingpayments = $this->paymentService->TrackingPayment();
 
-		return view('reports.tracking-payment.index', compact('trackingpayments'));
+		return view('reports.tracking-payment.index', compact('trackingpayments', 'dates'));
 	}
 
 	// Send Email

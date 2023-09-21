@@ -108,7 +108,26 @@ class PreOrderController extends Controller
 	public function show($ordernumber)
 	{
 
-		$preorderHeader = DB::connection('192.168.11.24')->table('tds_preorder_header')->where('OrderNumber', $ordernumber)->orderBy('IsCalculated', 'DESC')->first();
+		$preorderHeader = DB::connection('192.168.11.24')->table('tds_preorder_header')
+			->select(
+				'DistributorCode',
+				'BranchCode',
+				'SalesRepCode',
+				'RetailerCode',
+				'OrderNumber',
+				'TotalDiscReg',
+				'TotalDiscLotsell',
+				'MoQ',
+				'MoQValue',
+				'TotalGross',
+				'TotalNetto',
+				'IsCalculated'
+			)
+			->addSelect(DB::raw('convert(char(10), OrderDate, 23) as OrderDate'))
+			->addSelect(DB::raw('convert(char(8), OrderTime, 8) as OrderTime'))
+			->addSelect(DB::raw('convert(char(10), DeliveryDate, 23) as DeliveryDate'))
+			->where('OrderNumber', $ordernumber)
+			->orderBy('IsCalculated', 'DESC')->first();
 
 		if ($preorderHeader) {
 			if ($preorderHeader->IsCalculated != null) {
@@ -132,8 +151,8 @@ class PreOrderController extends Controller
 					'deliverydate' => $preorderHeader->DeliveryDate,
 					'totaldiscreg' => $preorderHeader->TotalDiscReg,
 					'totaldisclotsell' => $preorderHeader->TotalDiscLotsell,
-					'moq' => $preorderHeader->MoQ ?? 0,
-					'moqvalue' => $preorderHeader->MoQValue ?? 0,
+					'moq' => $preorderHeader->MoQ,
+					'moqvalue' => $preorderHeader->MoQValue,
 					'totalgross' => $preorderHeader->TotalGross,
 					'totalnetto' => $preorderHeader->TotalNetto
 				];
