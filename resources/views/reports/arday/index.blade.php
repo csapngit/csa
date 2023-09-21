@@ -6,8 +6,8 @@
 
     <style>
         /* .ardays {
-                                                                                                                                                                width: 100%;
-                                                                                                                                                            } */
+                                                                                                                                                                                                                                    width: 100%;
+                                                                                                                                                                                                                                } */
     </style>
 
 @endsection
@@ -61,28 +61,54 @@
                                 </tr>
 
                                 @foreach ($arday as $branch => $ardayData)
-                                    <tr>
-                                        <td>{{ $branch }}</td>
-                                        <td style="text-align: right">{{ $ardayData['GT']['target'] ?? '' }}</td>
-                                        <td style="text-align: right">
-                                            {{ isset($ardayData['GT']['ardays']) ? round($ardayData['GT']['ardays'], 2) : '' }}
-                                        </td>
-                                        <td style="text-align: right">
-                                            {{ isset($ardayData['GT']['percentage']) ? round($ardayData['GT']['percentage'], 2) . '%' : '' }}
-                                        </td>
-                                        <td style="text-align: right">{{ $ardayData['MT']['target'] ?? '' }}</td>
-                                        <td style="text-align: right">
-                                            {{ isset($ardayData['MT']['ardays']) ? round($ardayData['MT']['ardays'], 2) : '' }}
-                                        </td>
-                                        <td style="text-align: right">
-                                            {{ isset($ardayData['MT']['percentage']) ? round($ardayData['MT']['percentage'], 2) . '%' : '' }}
-                                        </td>
-                                        <td style="text-align: right">{{ round($ardayData['total']['target'], 2) }}</td>
-                                        <td style="text-align: right">{{ round($ardayData['total']['ardays'], 2) }}</td>
-                                        <td style="text-align: right">
-                                            {{ round($ardayData['total']['percentage'], 2) . '%' }}</td>
-                                    </tr>
+                                    @if ($branch != 'AVERAGE')
+                                        <tr>
+                                            <td>{{ $branch }}</td>
+                                            <td style="text-align: right">{{ $ardayData['GT']['target'] ?? '' }}</td>
+                                            <td style="text-align: right">
+                                                {{ isset($ardayData['GT']['ardays']) ? round($ardayData['GT']['ardays'], 2) : '' }}
+                                            </td>
+                                            <td style="text-align: right">
+                                                {{ isset($ardayData['GT']['percentage']) ? round($ardayData['GT']['percentage'], 2) . '%' : '' }}
+                                            </td>
+                                            <td style="text-align: right">{{ $ardayData['MT']['target'] ?? '' }}</td>
+                                            <td style="text-align: right">
+                                                {{ isset($ardayData['MT']['ardays']) ? round($ardayData['MT']['ardays'], 2) : '' }}
+                                            </td>
+                                            <td style="text-align: right">
+                                                {{ isset($ardayData['MT']['percentage']) ? round($ardayData['MT']['percentage'], 2) . '%' : '' }}
+                                            </td>
+                                            <td style="text-align: right">{{ round($ardayData['total']['target'], 2) }}</td>
+                                            <td style="text-align: right">{{ round($ardayData['total']['ardays'], 2) }}
+                                            </td>
+                                            <td style="text-align: right">
+                                                {{ round($ardayData['total']['percentage'], 2) . '%' }}</td>
+                                        </tr>
+                                    @endif
                                 @endforeach
+                                <tr>
+                                    <td>AVERAGE</td>
+                                    <td style="text-align: right">{{ round($arday['AVERAGE']['GT']['target'], 2) }}
+                                    </td>
+                                    <td style="text-align: right">{{ round($arday['AVERAGE']['GT']['ardays'], 2) }}
+                                    </td>
+                                    <td style="text-align: right">
+                                        {{ round($arday['AVERAGE']['GT']['percentage'], 2) . '%' }}
+                                    </td>
+                                    <td style="text-align: right">{{ round($arday['AVERAGE']['MT']['target'], 2) }}
+                                    </td>
+                                    <td style="text-align: right">{{ round($arday['AVERAGE']['MT']['ardays'], 2) }}
+                                    </td>
+                                    <td style="text-align: right">
+                                        {{ round($arday['AVERAGE']['MT']['percentage'], 2) . '%' }}
+                                    </td>
+                                    <td style="text-align: right">{{ round($arday['AVERAGE']['total']['target'], 2) }}
+                                    </td>
+                                    <td style="text-align: right">{{ round($arday['AVERAGE']['total']['ardays'], 2) }}
+                                    </td>
+                                    <td style="text-align: right">
+                                        {{ round($arday['AVERAGE']['total']['percentage'], 2) . '%' }}</td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>

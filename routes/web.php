@@ -207,9 +207,10 @@ Route::controller(TdsController::class)->prefix('tds')->group(function () {
 	// Route::get('orders/{date}', 'order');
 	// Route::get('ordertds', 'ordertds');
 	// Route::get('orderscheduler', 'orderScheduler');
-	Route::get('hitorder', 'hitorder');
-	Route::get('csvorder', 'csvorder');
+	Route::get('hitorder', 'hitorder')->name('tds.hitorder');
+	Route::get('csvorder', 'csvorder')->name('tds.csvorder');
 	Route::get('csvmanual/{orderno}', 'csvmanual');
+	Route::post('csvmanual', 'postcsvmanual')->name('tds.csvmanual');
 	Route::get('branches', 'masterBranch');
 	Route::get('channels', 'masterChannel');
 	Route::get('holidays', 'holiday');
