@@ -114,7 +114,7 @@ class TdsController extends Controller
 	{
 		$invoiceData = [];
 
-		DB::connection('192.168.11.24')->table('tds_invoice')->orderBy('InvoiceNo')->chunk(5000, function ($invoices) {
+		$a = DB::connection('192.168.11.24')->table('tds_invoice')->orderBy('InvoiceNo')->chunk(5000, function ($invoices) {
 			// dd($invoices);
 			$invoices = $invoices->map(function ($invoice) {
 				return [
@@ -139,25 +139,11 @@ class TdsController extends Controller
 			});
 
 			// $invoiceData[] = $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
-			$invoiceData[] = $invoices;
 		});
-		dd(json_encode($invoiceData, JSON_UNESCAPED_SLASHES));
+
+		dd(json_encode($a, JSON_UNESCAPED_SLASHES));
+
 		return $invoiceData;
-
-		// dd($invoices);
-
-
-		// $invoices = $invoices->chunk(5000)->toArray();
-
-		// $invoiceData = [];
-
-		// // dd($invoices);
-		// // dd(json_encode($invoices, JSON_UNESCAPED_SLASHES));
-		// foreach ($invoices as $invoice) {
-		// 	$invoiceData[] = $this->post($invoice, '/invoice-data', TdsEnum::INVOICE);
-		// }
-
-		// return $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
 	}
 
 	public function targetpeSurvey($target)
