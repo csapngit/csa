@@ -78,7 +78,7 @@ class AppMenuSeeder extends Seeder
 			// ++
 			['title' => 'ARDays',	'page' => 'report/ardays',														'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 28,		'order' => 4, 	'group_code' => GroupMenuEnum::REPORTS,					'created_at' => \Carbon\Carbon::now()],
 			['title' => 'ARDays',	'page' => 'report/target-ardays',											'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 34,		'order' => 3, 	'group_code' => GroupMenuEnum::TARGET,					'created_at' => \Carbon\Carbon::now()],
-
+			['title' => 'Report Mailer',	'page' => 'report/report-mailer',							'icon' => 1,	'bullet' => 1,	'root' => 0,	'newtab' => 0,	'header' => 28,		'order' => 5, 	'group_code' => GroupMenuEnum::REPORTS,					'created_at' => \Carbon\Carbon::now()],
 		]);
 	}
 }
