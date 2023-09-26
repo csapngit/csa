@@ -113,34 +113,48 @@ class TdsController extends Controller
 	public function invoice()
 	{
 		$invoiceData = [];
+		$invoiceAll = collect();
 
-		DB::connection('192.168.11.24')->table('tds_invoice')->orderBy('InvoiceNo')->chunk(5000, function ($invoices) {
-			$invoices = $invoices->map(function ($invoice) {
-				return [
-					'DistributorCode' => $invoice->DistributorCode,
-					'Branchcode' => $invoice->BranchCode,
-					'SalesRepCode' => $invoice->SalesRepCode,
-					'InvoiceNo' => $invoice->InvoiceNo,
-					'InvoiceDate' => Carbon::parse($invoice->InvoiceDate)->format('Y-m-d'),
-					'Retailercode' => $invoice->RetailerCode,
-					'ItemCode' => $invoice->ProductCode,
-					'Qty' => $invoice->Qty,
-					'Value' => $invoice->Value,
-					'BillValue' => $invoice->BillValue,
-					'OrderRefNo' => $invoice->OrderRefNo,
-					'BasePrice' => $invoice->BasePrice,
-					'DiscValue' => $invoice->DiscValue,
-					'KodeLotsell' => $invoice->KodeLotsell1 ?? '',
-					'KodeLotsellTambahan' => $invoice->KodeLotselltambahan ?? '',
-					'JumlahLotsell' => $invoice->JumlahLotsell,
-					'TotalVoucher' => $invoice->TotalVoucher,
-				];
+		DB::connection('192.168.11.24')
+			->table('tds_invoice')->orderBy('InvoiceNo')
+			// ->table('tds_price')->orderBy('SKUCode')
+			->chunk(5000, function ($invoices) use ($invoiceAll) {
+				$invoices = $invoices->map(function ($invoice) {
+					return [
+						'DistributorCode' => $invoice->DistributorCode,
+						'Branchcode' => $invoice->BranchCode,
+						'SalesRepCode' => $invoice->SalesRepCode,
+						'InvoiceNo' => $invoice->InvoiceNo,
+						'InvoiceDate' => Carbon::parse($invoice->InvoiceDate)->format('Y-m-d'),
+						'Retailercode' => $invoice->RetailerCode,
+						'ItemCode' => $invoice->ProductCode,
+						'Qty' => $invoice->Qty,
+						'Value' => $invoice->Value,
+						'BillValue' => $invoice->BillValue,
+						'OrderRefNo' => $invoice->OrderRefNo,
+						'BasePrice' => $invoice->BasePrice,
+						'DiscValue' => $invoice->DiscValue,
+						'KodeLotsell' => $invoice->KodeLotsell1 ?? '',
+						'KodeLotsellTambahan' => $invoice->KodeLotselltambahan ?? '',
+						'JumlahLotsell' => $invoice->JumlahLotsell,
+						'TotalVoucher' => $invoice->TotalVoucher,
+						// 'DistributorCode' => $price->DistributorCode,
+						// 'LocalChannelCode' => '"',
+						// 'AreaCode' => '"',
+						// 'AreaName' => '"',
+						// 'SKUCode' => $price->SKUCode,
+						// 'GrossPrice' => $price->GrossPrice,
+						// 'NetPriceForCashPurchase' => $price->NetPriceforcashpurchase,
+						// 'NetPriceForCreditPurchase' => $price->NetPriceforcreditpurchase,
+						// 'KodePricing' => $price->KodePricing,
+					];
+				});
+
+				// $invoiceData[] = $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
+				$invoiceData[] = $invoices;
+				$invoiceAll->push($invoices);
 			});
-
-			// $invoiceData[] = $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
-			$invoiceData[] = $invoices;
-		});
-		dd($invoiceData);
+		dd(json_encode($invoiceAll, JSON_UNESCAPED_SLASHES));
 		return $invoiceData;
 	}
 
