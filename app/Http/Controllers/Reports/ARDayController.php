@@ -22,9 +22,11 @@ class ARDayController extends Controller
 	public function index()
 	{
 		$ardays = $this->ardaysService->ARdays();
+		$date = now()->format('d-F-Y H:i:s');
+		$daypassed = $this->ardaysService->daypassed();
 
 		// return $ardays;
-		return view('reports.arday.index', compact('ardays'));
+		return view('reports.arday.index', compact('ardays', 'date', 'daypassed'));
 	}
 
 	// Send Email
@@ -32,10 +34,10 @@ class ARDayController extends Controller
 	{
 		$allUser = $this->emailDestiny();
 
-		Mail::to($allUser)
+		$send = Mail::to($allUser)
 			->send(new Arday());
 
-		return 'ok uhuy';
+		return 'ardays woke';
 	}
 
 	public function emailDestiny()
@@ -56,10 +58,10 @@ class ARDayController extends Controller
 
 	public function mailself()
 	{
-		Mail::to('pandu.sanjaya@csahome.com')
+		$send = Mail::to('pandu.sanjaya@csahome.com')
 			->send(new Arday());
 
-		return 'ok uhuy';
+		return 'ardays woke';
 	}
 
 	// Lihat index mail yang akan dikirim

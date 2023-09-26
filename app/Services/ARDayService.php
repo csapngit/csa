@@ -75,10 +75,13 @@ class ARDayService extends WorkdayService
 
 		$ardaysData = [];
 		// dd($ardaysDataQuery);
-		// $ardaysData['CSAJ']['AVERAGE']['GT']['target'] = 0;
-		// $ardaysData['CSAJ']['AVERAGE']['MT']['target'] = 0;
-		// $ardaysData['CSAS']['AVERAGE']['GT']['target'] = 0;
-		// $ardaysData['CSAS']['AVERAGE']['MT']['target'] = 0;
+
+		// $ardaysData['AVERAGE TOTAL']['GT']['target'] = 0;
+		// $ardaysData['AVERAGE TOTAL']['GT']['ardays'] = 0;
+		// $ardaysData['AVERAGE TOTAL']['MT']['target'] = 0;
+		// $ardaysData['AVERAGE TOTAL']['MT']['ardays'] = 0;
+		// $ardaysData['AVERAGE TOTAL']['TOTAL']['ardays'] = 0;
+
 
 		foreach ($ardaysDataQuery as $region => $branchs) {
 			$ardaysData[$region]['AVERAGE']['GT']['target'] = 0;
@@ -155,6 +158,17 @@ class ARDayService extends WorkdayService
 			$ardaysData[$region]['AVERAGE']['total']['ardays'] = ($ardaysData[$region]['AVERAGE']['GT']['ardays'] + $ardaysData[$region]['AVERAGE']['MT']['ardays']) / 2;
 			$ardaysData[$region]['AVERAGE']['total']['percentage'] = $ardaysData[$region]['AVERAGE']['total']['target'] / $ardaysData[$region]['AVERAGE']['total']['ardays'] * 100;
 		}
+
+		$ardaysData['AVERAGE TOTAL']['GT']['target'] = ($ardaysData['CSAJ']['AVERAGE']['GT']['target'] + $ardaysData['CSAS']['AVERAGE']['GT']['target']) / 2;
+		$ardaysData['AVERAGE TOTAL']['GT']['ardays'] = ($ardaysData['CSAJ']['AVERAGE']['GT']['ardays'] + $ardaysData['CSAS']['AVERAGE']['GT']['ardays']) / 2;
+		$ardaysData['AVERAGE TOTAL']['GT']['percentage'] = $ardaysData['AVERAGE TOTAL']['GT']['target'] / $ardaysData['AVERAGE TOTAL']['GT']['ardays'] * 100;
+		$ardaysData['AVERAGE TOTAL']['MT']['target'] = ($ardaysData['CSAJ']['AVERAGE']['MT']['target'] + $ardaysData['CSAS']['AVERAGE']['MT']['target']) / 2;
+		$ardaysData['AVERAGE TOTAL']['MT']['ardays'] = ($ardaysData['CSAJ']['AVERAGE']['MT']['ardays'] + $ardaysData['CSAS']['AVERAGE']['MT']['ardays']) / 2;
+		$ardaysData['AVERAGE TOTAL']['MT']['percentage'] = $ardaysData['AVERAGE TOTAL']['MT']['target'] / $ardaysData['AVERAGE TOTAL']['MT']['ardays'] * 100;
+		$ardaysData['AVERAGE TOTAL']['total']['target'] = ($ardaysData['AVERAGE TOTAL']['GT']['target'] + $ardaysData['AVERAGE TOTAL']['MT']['target']) / 2;
+		$ardaysData['AVERAGE TOTAL']['total']['ardays'] = ($ardaysData['AVERAGE TOTAL']['GT']['ardays'] + $ardaysData['AVERAGE TOTAL']['MT']['ardays']) / 2;
+		$ardaysData['AVERAGE TOTAL']['total']['percentage'] = $ardaysData['AVERAGE TOTAL']['total']['target'] / $ardaysData['AVERAGE TOTAL']['total']['ardays'] * 100;
+
 		// dd($count);
 		// dd($ardaysData);
 		return $ardaysData;

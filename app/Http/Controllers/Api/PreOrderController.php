@@ -86,7 +86,7 @@ class PreOrderController extends Controller
 					'RetailerCode' => $preinvoiceDatas['retailercode'],
 					'OrderNumber' => $preinvoiceDatas['ordernumber'],
 					'OrderDate' => $preinvoiceDatas['orderdate'],
-					'OrderTime' => $preinvoiceDatas['ordertime'],
+					'OrderTime' => Carbon::parse(now())->format('H:i:s'),
 					'DeliveryDate' => $preinvoiceDatas['deliverydate'],
 					// 'InsertTime' => $insertTime
 				];

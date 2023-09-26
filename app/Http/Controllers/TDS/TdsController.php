@@ -138,9 +138,10 @@ class TdsController extends Controller
 				];
 			});
 
-			$invoiceData[] = $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
+			// $invoiceData[] = $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
+			$invoiceData[] = $invoices;
 		});
-
+		dd(json_encode($invoiceData, JSON_UNESCAPED_SLASHES));
 		return $invoiceData;
 
 		// dd($invoices);

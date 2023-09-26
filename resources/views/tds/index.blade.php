@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="card-body pt-0">
-                <a href="{{ route('tds.hitorder') }}" class="btn btn-primary">Hit Data Order</a>
+                <a href="{{ route('tds.hitorder') }}" class="btn btn-primary" target="_blank">Hit Data Order</a>
             </div>
         </div>
         <div class="col-5 card">
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="card-body pt-0">
-                <a href="{{ route('tds.csvorder') }}" class="btn btn-success">Make CSV</a>
+                <a href="{{ route('tds.csvorder') }}" class="btn btn-success" target="_blank">Make CSV</a>
             </div>
         </div>
     </div>

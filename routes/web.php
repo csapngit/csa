@@ -23,6 +23,7 @@ use App\Http\Controllers\Reports\TargetDsrController;
 use App\Http\Controllers\Reports\TrackingPaymentController;
 use App\Http\Controllers\Reports\TargetTrackingPaymentController;
 use App\Http\Controllers\Reports\TargetArdayController;
+use App\Http\Controllers\Reports\ReportMailerController;
 use App\Http\Controllers\TDS\IncentiveController;
 use App\Http\Controllers\TDS\PromotionPriceController;
 use App\Http\Controllers\TDS\TdsController;
@@ -172,6 +173,9 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('send-arday', [ARDayController::class, 'mail'])->name('arday.mail');
 		Route::get('send-arday-self', [ARDayController::class, 'mailself'])->name('arday.mailself');
 		Route::get('arday-mail-index', [ARDayController::class, 'mailIndex'])->name('arday.mail.index');
+
+		// Mailer
+		Route::get('report-mailer', [ReportMailerController::class, 'index'])->name('report.mailer');
 
 		//Target
 		Route::resource('target-dsrs', TargetDsrController::class)->except('show');

@@ -62,13 +62,13 @@ class DailySalesReportController extends Controller
 
 		$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
 
-		Mail::to($csajUser)
+		$sendcsaj = Mail::to($csajUser)
 			->send(new DsrCSAJ());
 
-		Mail::to($csasUser)
+		$sendcsas = Mail::to($csasUser)
 			->send(new DsrCSAS());
 
-		return back();
+		return 'Ok dsr uhuyy';
 	}
 
 	public function emailDestiny(string $area)
@@ -91,12 +91,12 @@ class DailySalesReportController extends Controller
 	public function mailself()
 	{
 
-		Mail::to('pandu.sanjaya@csahome.com')
+		$sendcsaj = Mail::to('pandu.sanjaya@csahome.com')
 			->send(new DsrCSAJ());
-		Mail::to('pandu.sanjaya@csahome.com')
+		$sendcsas = Mail::to('pandu.sanjaya@csahome.com')
 			->send(new DsrCSAS());
 
-		return back();
+		return 'Ok dsr uhuyy';
 	}
 
 	// Lihat index mail yang akan dikirim
