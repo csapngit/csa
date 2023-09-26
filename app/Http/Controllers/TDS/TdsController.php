@@ -112,38 +112,59 @@ class TdsController extends Controller
 
 	public function invoice()
 	{
-		$invoiceData = [];
-
-		$a = DB::connection('192.168.11.24')->table('tds_invoice')->orderBy('InvoiceNo')->chunk(5000, function ($invoices) {
-			// dd($invoices);
-			$invoices = $invoices->map(function ($invoice) {
-				return [
-					'DistributorCode' => $invoice->DistributorCode,
-					'Branchcode' => $invoice->BranchCode,
-					'SalesRepCode' => $invoice->SalesRepCode,
-					'InvoiceNo' => $invoice->InvoiceNo,
-					'InvoiceDate' => Carbon::parse($invoice->InvoiceDate)->format('Y-m-d'),
-					'Retailercode' => $invoice->RetailerCode,
-					'ItemCode' => $invoice->ProductCode,
-					'Qty' => $invoice->Qty,
-					'Value' => $invoice->Value,
-					'BillValue' => $invoice->BillValue,
-					'OrderRefNo' => $invoice->OrderRefNo,
-					'BasePrice' => $invoice->BasePrice,
-					'DiscValue' => $invoice->DiscValue,
-					'KodeLotsell' => $invoice->KodeLotsell1 ?? '',
-					'KodeLotsellTambahan' => $invoice->KodeLotselltambahan ?? '',
-					'JumlahLotsell' => $invoice->JumlahLotsell,
-					'TotalVoucher' => $invoice->TotalVoucher,
-				];
-			});
-
-			// $invoiceData[] = $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
+		$a = DB::connection('192.168.11.24')->table('tds_invoice')->orderBy('InvoiceNo')->get();
+		$a = $a->map(function ($invoice) {
+			return [
+				'DistributorCode' => $invoice->DistributorCode,
+				'Branchcode' => $invoice->BranchCode,
+				'SalesRepCode' => $invoice->SalesRepCode,
+				'InvoiceNo' => $invoice->InvoiceNo,
+				'InvoiceDate' => Carbon::parse($invoice->InvoiceDate)->format('Y-m-d'),
+				'Retailercode' => $invoice->RetailerCode,
+				'ItemCode' => $invoice->ProductCode,
+				'Qty' => $invoice->Qty,
+				'Value' => $invoice->Value,
+				'BillValue' => $invoice->BillValue,
+				'OrderRefNo' => $invoice->OrderRefNo,
+				'BasePrice' => $invoice->BasePrice,
+				'DiscValue' => $invoice->DiscValue,
+				'KodeLotsell' => $invoice->KodeLotsell1 ?? '',
+				'KodeLotsellTambahan' => $invoice->KodeLotselltambahan ?? '',
+				'JumlahLotsell' => $invoice->JumlahLotsell,
+				'TotalVoucher' => $invoice->TotalVoucher,
+			];
 		});
-
 		dd(json_encode($a, JSON_UNESCAPED_SLASHES));
 
-		return $invoiceData;
+		// $invoiceData = [];
+
+		// DB::connection('192.168.11.24')->table('tds_invoice')->orderBy('InvoiceNo')->chunk(5000, function ($invoices) {
+		// 	$invoices = $invoices->map(function ($invoice) {
+		// 		return [
+		// 			'DistributorCode' => $invoice->DistributorCode,
+		// 			'Branchcode' => $invoice->BranchCode,
+		// 			'SalesRepCode' => $invoice->SalesRepCode,
+		// 			'InvoiceNo' => $invoice->InvoiceNo,
+		// 			'InvoiceDate' => Carbon::parse($invoice->InvoiceDate)->format('Y-m-d'),
+		// 			'Retailercode' => $invoice->RetailerCode,
+		// 			'ItemCode' => $invoice->ProductCode,
+		// 			'Qty' => $invoice->Qty,
+		// 			'Value' => $invoice->Value,
+		// 			'BillValue' => $invoice->BillValue,
+		// 			'OrderRefNo' => $invoice->OrderRefNo,
+		// 			'BasePrice' => $invoice->BasePrice,
+		// 			'DiscValue' => $invoice->DiscValue,
+		// 			'KodeLotsell' => $invoice->KodeLotsell1 ?? '',
+		// 			'KodeLotsellTambahan' => $invoice->KodeLotselltambahan ?? '',
+		// 			'JumlahLotsell' => $invoice->JumlahLotsell,
+		// 			'TotalVoucher' => $invoice->TotalVoucher,
+		// 		];
+		// 	});
+
+		// 	$invoiceData[] = $this->post($invoices, '/invoice-data', TdsEnum::INVOICE);
+		// });
+
+		// return $invoiceData;
 	}
 
 	public function targetpeSurvey($target)
@@ -1678,4 +1699,3 @@ class TdsController extends Controller
 	// 	return 'ok';
 	// }
 }
-                                                                                                                                                                     
