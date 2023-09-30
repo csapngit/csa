@@ -43,7 +43,7 @@ class ARDayController extends Controller
 	public function emailDestiny()
 	{
 		$datas = DB::table('emails')
-			->where('module', 'ardays')
+			->where('module', 'arday')
 			->get('name')
 			->toArray();
 

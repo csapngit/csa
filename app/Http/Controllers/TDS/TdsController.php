@@ -525,6 +525,7 @@ class TdsController extends Controller
 				'ItemName' => $sbdMerch->ItemName,
 				'Criteria' => $sbdMerch->Criteria,
 				'VisibilityType' => $sbdMerch->VisibilityType,
+				'RetailerCode' => $sbdMerch->RetailerCode ?? ''
 			];
 		});
 
@@ -998,6 +999,8 @@ class TdsController extends Controller
 		}
 	}
 
+
+	// Tidak terpakai
 	public function csvmanuali($orderno)
 	{
 		$orderCsv = DB::connection('192.168.11.24')->table('tds_orderdata')->where('OrderNo', $orderno)->get();

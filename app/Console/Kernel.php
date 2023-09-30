@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Commands\DailySalesReportMail;
 use App\Commands\TrackingPaymentMail;
+use App\Commands\ARDayMail;
 use App\Commands\TDS\Incentive;
 use App\Commands\TDS\Invoice;
 use App\Commands\TDS\MasterReturn;
@@ -48,7 +49,11 @@ class Kernel extends ConsoleKernel
 
 		//Scheduler TrackingPayment
 		$schedule->call(new TrackingPaymentMail)
-			->at('05:00');
+			->at('05:02');
+
+		//Scheduler AR Days
+		$schedule->call(new ARDayMail)
+			->at('05:04');
 
 		//Scheduler Store Master
 		$schedule->call(new MasterStore)
@@ -61,6 +66,8 @@ class Kernel extends ConsoleKernel
 		//Scheduler Product Master
 		$schedule->call(new Product)
 			->at('00:20');
+
+
 
 		//Scheduler Hit Order TDS V2
 		$schedule->call(new HitOrder)
