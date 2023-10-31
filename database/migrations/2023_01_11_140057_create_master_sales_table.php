@@ -21,7 +21,6 @@ class CreateMasterSalesTable extends Migration
 			$table->string('name')->nullable();
 			$table->string('type')->nullable();
 			$table->string('mapping')->nullable(); //Newly added
-			$table->string('regional')->nullable();
 			$table->string('branch_code')->nullable();
 			$table->string('branch_name')->nullable();
 			$table->string('gender')->nullable();
