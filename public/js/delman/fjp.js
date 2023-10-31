@@ -31,15 +31,6 @@ var Form = function () {
 
             columns: [
                 {
-                    field: 'id',
-                    title: '#',
-                    sortable: false,
-                    width: 20,
-                    selector: {
-                        class: ''
-                    },
-                    textAlign: 'center'
-                }, {
                     field: 'card_name',
                     title: 'Nama Toko',
                 }, {
