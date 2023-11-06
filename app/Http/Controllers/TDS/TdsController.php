@@ -706,9 +706,7 @@ class TdsController extends Controller
 	{
 
 		$date = Carbon::now()->format('Y-m-d');
-
 		$token = env('TOKEN_TDS');
-
 		$arrayDataOrder = [];
 
 		//Hit API
@@ -718,16 +716,18 @@ class TdsController extends Controller
 			'date' => $date,
 		]);
 
+		// $tmp =  json_decode($response);
+		// return $tmp;
+
 		$currentTime = Carbon::now()->format('H:i:s');
-
 		$arrayDataOrder = $response['data']['data'];
-
 		$dbDatas = [];
 
 		$dateHour = Carbon::now()->format('Y-m-d H:i:s');
 
+
 		foreach ($arrayDataOrder as $dataorder) {
-			foreach ($dataorder['Detail'] as $detail) {
+			foreach ($dataorder['detail'] as $detail) {
 				$dbDatas[] = [
 					'DistributorCode' => $dataorder['DistributorCode'],
 					'BranchCode' => $dataorder['BranchCode'],
@@ -735,8 +735,9 @@ class TdsController extends Controller
 					'RetailerCode' => $dataorder['RetailerCode'],
 					'OrderNo' => $dataorder['OrderNo'],
 					'OrderDate' => $dateHour,
-					// 'LinkFoto'	=> $dataorder['link'],
-					'ProductCode' => $detail['ChildSKUCode'],
+					'LinkFoto2'	=> $dataorder['link'],
+					'ProductCode' => $detail['productcode'],
+					// 'ProductCode' => $detail['ChildSKUCode'],
 					'OrderQtyPCS' => $detail['OrderQtyPcs'],
 					'OrderQtyCS' => 0,
 				];
@@ -751,7 +752,7 @@ class TdsController extends Controller
 			DB::connection('192.168.11.24')->table('tds_orderdata')->insert($chunkdbData->toArray());
 		}
 
-		return 'Hit sampai walawalabingbing ' . $currentTime;
+		return 'Hit sampai oi oi oi oi ' . $currentTime;
 	}
 
 	public function csvorder()

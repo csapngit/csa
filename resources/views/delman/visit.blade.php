@@ -71,6 +71,7 @@
                             'disabled',
                         ]) !!}
                     </div>
+                    <a href="{{ $linkFoto }}" target="_blank">Link Foto</a>
                     <div class="form-group">
                         {!! Form::label('address', 'Alamat Toko', ['class' => 'form-label']) !!}
                         {!! Form::text('address', $route->address, ['class' => 'form-control', 'disabled']) !!}
