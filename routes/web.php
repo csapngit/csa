@@ -10,6 +10,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\Itcsa\AssetCategoryController;
 use App\Http\Controllers\Itcsa\AssetController;
 use App\Http\Controllers\Itcsa\AssetServiceController;
+use App\Http\Controllers\Logistic\DelmanController;
 use App\Http\Controllers\Rebate\ProgramController;
 use App\Http\Controllers\Rebate\ProgramImageController;
 use App\Http\Controllers\Rebate\ProgramTierController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Reports\ReportMailerController;
 use App\Http\Controllers\TDS\IncentiveController;
 use App\Http\Controllers\TDS\PromotionPriceController;
 use App\Http\Controllers\TDS\TdsController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,6 +46,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+
 Route::get('/', function () {
 	return redirect()->route('login');
 });
@@ -55,6 +58,21 @@ Route::middleware(['auth'])->group(function () {
 
 		return view('pages.dashboard');
 	})->name('dashboard');
+
+	Route::prefix('logistic')->group(function () {
+		Route::prefix('delman')->group(function () {
+			Route::resource('/routes', DelmanController::class, [
+				'names' => [
+					'index' => 'delman-routes',
+					'create' => 'delman-routes.create',
+					'store' => 'delman-routes',
+					'edit' => 'delman-routes.edit',
+					'show' => 'delman-routes.show'
+				],
+				'except' => ['destroy']
+			]);
+		});
+	});
 
 	Route::get('/quick-search', [PagesController::class, 'quickSearch'])->name('quick-search');
 

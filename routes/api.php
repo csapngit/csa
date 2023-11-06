@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\ReturnController;
 use App\Http\Controllers\Api\SbdController;
 use App\Http\Controllers\Api\SbdMercController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\V2\DelmanController;
 use App\Http\Controllers\Api\WeekMappingController;
 use App\Http\Controllers\Rebate\VoucherPublishController;
 use App\Http\Controllers\TDS\TdsController;
@@ -46,6 +47,15 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
 	return $request->user();
 });
+
+Route::prefix('v2')->group(function () {
+	Route::prefix('logistic')->group(function () {
+		Route::prefix('delman')->group(function () {
+			Route::get('/routes/{delman}', [DelmanController::class, 'fjp']);
+		});
+	});
+});
+
 
 Route::get('/get/programs', [ProgramController::class, 'getPrograms']);
 

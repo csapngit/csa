@@ -651,6 +651,13 @@ class TdsController extends Controller
 		// return $this->post($stores, '/store-master', TdsEnum::MASTER_STORE);
 	}
 
+	public function sfOsaMaster()
+	{
+		$sfOsaMasters = DB::connection('192.168.11.24')->table('tds_osa')->get();
+
+		return $this->post($sfOsaMasters, '/sf-osa-master', TdsEnum::SF_OSA_MASTER);
+	}
+
 	public function overdue()
 	{
 		$overdues = DB::connection('192.168.11.24')
@@ -731,6 +738,7 @@ class TdsController extends Controller
 					'ProductCode' => $detail['ChildSKUCode'],
 					'OrderQtyPCS' => $detail['OrderQtyPcs'],
 					'OrderQtyCS' => 0,
+					'LinkFoto'	=> $dataorder['LinkFoto'],
 				];
 			}
 		};
@@ -1629,7 +1637,7 @@ class TdsController extends Controller
 
 	// public function sfOsaMaster()
 	// {
-	// 	$sfOsaMasters = DB::connection('192.168.11.24')->table('tds_')->get();
+	// 	$sfOsaMasters = DB::connection('192.168.11.24')->table('tds_osa')->get();
 
 	// 	return $this->post($sfOsaMasters, '/sf-osa-master', TdsEnum::VOUCHER);
 	// }

@@ -206,30 +206,30 @@ class Kernel extends ConsoleKernel
 			->days([1, 2, 3, 4, 5, 6]);
 
 
-		// //BELUM READY
-		// // todo: POST INCENTIVE
-		// $schedule->call(new Incentive)
-		// 	->at('10:45');
+		//BELUM READY
+		// todo: POST INCENTIVE
+		$schedule->call(new Incentive)
+			->at('10:45');
 
-		// // todo: POST INVOICE
-		// $schedule->call(new Invoice)
-		// 	->at('10:47');
+		// todo: POST INVOICE
+		$schedule->call(new Invoice)
+			->at('10:47');
 
-		// // todo: POST OVERDUE
-		// $schedule->call(new Overdue)
-		// 	->at('10:49');
+		// todo: POST OVERDUE
+		$schedule->call(new Overdue)
+			->at('10:49');
 
-		// // todo: POST RETURN
-		// $schedule->call(new MasterReturn)
-		// 	->at('10:55');
+		// todo: POST RETURN
+		$schedule->call(new MasterReturn)
+			->at('10:55');
 
-		// // todo: POST SELLER
-		// $schedule->call(new Seller)
-		// 	->at('10:57');
+		// todo: POST SELLER
+		$schedule->call(new Seller)
+			->at('10:57');
 
-		// // todo: POST VOUCHER
-		// $schedule->call(new Voucher)
-		// 	->at('11:01');
+		// todo: POST VOUCHER
+		$schedule->call(new Voucher)
+			->at('11:01');
 	}
 
 	/**

@@ -45,6 +45,7 @@ class HitOrder
 					'ProductCode' => $detail['ChildSKUCode'],
 					'OrderQtyPCS' => $detail['OrderQtyPcs'],
 					'OrderQtyCS' => 0,
+					'LinkFoto'	=> $detail['LinkFoto'],
 				];
 			}
 		};

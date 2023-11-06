@@ -1,6 +1,7 @@
 /node_modules
 /storage/*.key
 /vendor
+/app/Console/*.php
 .env
 .env.backup
 .phpunit.result.cache

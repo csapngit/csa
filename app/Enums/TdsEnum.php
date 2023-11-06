@@ -30,5 +30,5 @@ class TdsEnum
 	const STORE_TARGET = 'STORE TARGET';
 	const STORE_PROGRAM = 'STORE PROGRAM';
 	const VOUCHER = 'VOUCHER';
-	// const SF_OSA_MASTER = ''
+	const SF_OSA_MASTER = 'SF OSA MASTER';
 }

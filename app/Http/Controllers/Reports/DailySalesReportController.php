@@ -91,9 +91,9 @@ class DailySalesReportController extends Controller
 	public function mailself()
 	{
 
-		$sendcsaj = Mail::to('pandu.sanjaya@csahome.com')
+		$sendcsaj = Mail::to('rio.hermawan@csahome.com')
 			->send(new DsrCSAJ());
-		$sendcsas = Mail::to('pandu.sanjaya@csahome.com')
+		$sendcsas = Mail::to('rio.hermawan@csahome.com')
 			->send(new DsrCSAS());
 
 		return 'Ok dsr uhuyy';
