@@ -42,10 +42,10 @@ class HitOrder
 					'RetailerCode' => $dataorder['RetailerCode'],
 					'OrderNo' => $dataorder['OrderNo'],
 					'OrderDate' => $dateHour,
-					'ProductCode' => $detail['ChildSKUCode'],
+					'ProductCode' => $detail['productcode'],
 					'OrderQtyPCS' => $detail['OrderQtyPcs'],
 					'OrderQtyCS' => 0,
-					// 'LinkFoto'	=> $dataorder['link'],
+					'LinkFoto2'	=> $dataorder['link'],
 				];
 			}
 		};
