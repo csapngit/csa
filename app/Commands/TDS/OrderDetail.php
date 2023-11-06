@@ -56,7 +56,7 @@ class OrderDetail
 					'RetailerCode' => $dataorder['RetailerCode'],
 					'OrderNo' => $dataorder['OrderNo'],
 					'OrderDate' => $dateHour,
-					'LinkFoto'	=> $dataorder['link'],
+					// 'LinkFoto'	=> $dataorder['link'],
 					'ProductCode' => $detail['ChildSKUCode'],
 					'OrderQtyPCS' => $detail['OrderQtyPcs'],
 					'OrderQtyCS' => 0,

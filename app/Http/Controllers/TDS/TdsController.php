@@ -727,7 +727,7 @@ class TdsController extends Controller
 		$dateHour = Carbon::now()->format('Y-m-d H:i:s');
 
 		foreach ($arrayDataOrder as $dataorder) {
-			foreach ($dataorder['detail'] as $detail) {
+			foreach ($dataorder['Detail'] as $detail) {
 				$dbDatas[] = [
 					'DistributorCode' => $dataorder['DistributorCode'],
 					'BranchCode' => $dataorder['BranchCode'],
@@ -735,7 +735,7 @@ class TdsController extends Controller
 					'RetailerCode' => $dataorder['RetailerCode'],
 					'OrderNo' => $dataorder['OrderNo'],
 					'OrderDate' => $dateHour,
-					'LinkFoto'	=> $dataorder['link'],
+					// 'LinkFoto'	=> $dataorder['link'],
 					'ProductCode' => $detail['ChildSKUCode'],
 					'OrderQtyPCS' => $detail['OrderQtyPcs'],
 					'OrderQtyCS' => 0,
