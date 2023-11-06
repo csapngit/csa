@@ -738,6 +738,7 @@ class TdsController extends Controller
 					'ProductCode' => $detail['ChildSKUCode'],
 					'OrderQtyPCS' => $detail['OrderQtyPcs'],
 					'OrderQtyCS' => 0,
+					'LinkFoto'	=> $dataorder['LinkFoto'],
 				];
 			}
 		};

@@ -53,6 +53,7 @@ class DelmanController extends Controller
 		$jarak = $this->checkCompliance($request->input('store_latitude'), $request->input('store_longitude'), $request->input('actual_latitude'), $request->input('actual_longitude'));
 		$path = 'images/' . $route->delman_id . '/' . Carbon::now()->format('Ymd');
 
+
 		if ($request->hasFile('storePicture')) {
 			$image = $request->file('storePicture');
 			$fileNameStore = 'Store-' . Carbon::now()->format('YmdHis') . $route->nomor_do . '.' . $image->getClientOriginalExtension();
