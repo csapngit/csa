@@ -34,7 +34,7 @@ class HitOrder
 		$dateHour = Carbon::now()->format('Y-m-d H:i:s');
 
 		foreach ($arrayDataOrder as $dataorder) {
-			foreach ($dataorder['Detail'] as $detail) {
+			foreach ($dataorder['detail'] as $detail) {
 				$dbDatas[] = [
 					'DistributorCode' => $dataorder['DistributorCode'],
 					'BranchCode' => $dataorder['BranchCode'],
