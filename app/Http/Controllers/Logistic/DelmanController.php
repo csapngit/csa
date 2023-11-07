@@ -42,9 +42,14 @@ class DelmanController extends Controller
 		$route = DelmanRoutes::find($route);
 		$reason = MasterStatus::where('module', 'delman')->get();
 
-		$linkFoto = DB::connection('192.168.11.24')->table('tds_orderdata')->where('OrderNo', $route->nomor_so)->first();
-		// return $linkFoto->LinkFoto2;
-		return view('delman.visit', compact('route', 'reason'))->with('linkFoto', $linkFoto->LinkFoto2);
+		$tmp = DB::connection('192.168.11.24')->table('tds_orderdata')->where('OrderNo', $route->nomor_so)->first();
+		// return $linkFoto;
+		$linkFoto = '';
+		if ($tmp) {
+			$linkFoto = $tmp->LinkFoto2;
+		}
+		// return $linkFoto;
+		return view('delman.visit', compact('route', 'reason'))->with('linkFoto', $linkFoto);
 	}
 
 	function store(Request $request)
