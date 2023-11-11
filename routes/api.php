@@ -52,6 +52,8 @@ Route::prefix('v2')->group(function () {
 	Route::prefix('logistic')->group(function () {
 		Route::prefix('delman')->group(function () {
 			Route::get('/routes/{delman}', [DelmanController::class, 'fjp']);
+			Route::get('/checkin/{delman}', [DelmanController::class, 'checkIn']);
+			Route::get('/checkout/{delman}', [DelmanController::class, 'checkOut']);
 		});
 	});
 });
