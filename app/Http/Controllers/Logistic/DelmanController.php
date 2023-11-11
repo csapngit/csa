@@ -5,14 +5,18 @@ namespace App\Http\Controllers\Logistic;
 use App\Http\Controllers\Controller;
 use App\Models\DelmanRouteDetail;
 use App\Models\DelmanRoutes;
+use App\Models\DelmanVisit;
 use App\Models\MasterStatus;
 use App\Models\SAPBusinessPartner;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use \Intervention\Image\Facades\Image;
+use PhpParser\Node\Stmt\Return_;
+use Psy\Readline\Hoa\ConsoleOutput;
 
 class DelmanController extends Controller
 {
@@ -31,6 +35,7 @@ class DelmanController extends Controller
 		$delman = Auth::user()->delman;
 		$page_title = 'FJP Delman';
 		$page_description = '';
+
 		return view('delman.index', compact('page_title', 'page_description'))->with(
 			'delman',
 			$delman
@@ -48,8 +53,24 @@ class DelmanController extends Controller
 		if ($tmp) {
 			$linkFoto = $tmp->LinkFoto2;
 		}
+
+		$visit = new DelmanVisit();
+		$delman = Auth::user()->delman;
+		$tanggal = date('Y-m-d');
+		$page_title = 'FJP Delman';
+		$page_description = '';
+
+		$cek_visit = DelmanVisit::where(['delman_id' => $delman, 'tanggal' => $tanggal])->get()->first();
+		if (is_null($cek_visit)) {
+			return view('delman.index', compact('page_title', 'page_description'))->with(
+				'delman',
+				$delman
+			);
+		} else {
+			return view('delman.visit', compact('route', 'reason'))->with('linkFoto', $linkFoto);
+		}
 		// return $linkFoto;
-		return view('delman.visit', compact('route', 'reason'))->with('linkFoto', $linkFoto);
+
 	}
 
 	function store(Request $request)

@@ -5,10 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Api extends Model
+class DelmanVisit extends Model
 {
+	protected $table = 'delman_visit';
 	use HasFactory;
-
-	protected $connection = '192.168.11.24';
-	// protected $connection = '192.168.100.25';
 }

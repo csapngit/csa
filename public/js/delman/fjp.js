@@ -52,10 +52,53 @@ var Form = function () {
         });
     };
 
+		var checkIn = function() {
+			var btn = document.getElementById('btnCheckIn');
+			var delman = document.getElementById("delman").value;
+
+			btn.addEventListener("click", function() {
+					$.ajax({
+							url : '/api/v2/logistic/delman/checkin/' + delman,
+							type: 'GET',
+							success: function(data){
+								// console.log(data)
+								if(data =="sukses"){
+									$.notify("Checkin Sukses");
+								}else{
+									$.notify("Anda Sudah Checkin", "danger");
+								}
+								}
+					});
+			});
+		};
+
+		var checkOut = function() {
+			var btn = document.getElementById('btnCheckOut');
+			var delman = document.getElementById("delman").value;
+
+			btn.addEventListener("click", function() {
+					$.ajax({
+							url : '/api/v2/logistic/delman/checkout/' + delman,
+							type: 'GET',
+							success: function(data){
+								// console.log(data);
+								if(data =="sukses"){
+									$.notify("Checkout Sukses");
+								}else if(data=="error"){
+									$.notify("Anda Belum Checkin", "danger");
+								}else{
+									$.notify("Anda Sudah Checkout");
+								}
+							}
+					});
+			});
+		}
 
     return {
         init: function () {
             datagrid();
+						checkIn();
+						checkOut();
         }
     };
 }();

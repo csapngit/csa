@@ -357,8 +357,14 @@ class TdsController extends Controller
 	public function promotion()
 	{
 		$promotions = DB::connection('192.168.11.24')->table('tds_promotion')->get();
+		$promotions = $promotions->chunk(5000);
+		$promotionsData = [];
+		foreach ($promotions as $promotion) {
+			$promotionsData[] = $this->post($promotion, '/promotion', TdsEnum::PROMOTION);
+		}
 
-		return $this->post($promotions, '/promotion', TdsEnum::PROMOTION);
+		return $promotion;
+		// return $this->post($promotions, '/promotion', TdsEnum::PROMOTION);
 	}
 
 	public function promotionPrice()
@@ -865,7 +871,7 @@ class TdsController extends Controller
 			}
 		}
 
-		return 'oka jadi csv mantap ';
+		return 'okay jadi csv mantap ';
 	}
 
 	public function postcsvmanual(Request $request)
