@@ -81,13 +81,13 @@ var Form = function () {
 							url : '/api/v2/logistic/delman/checkout/' + delman,
 							type: 'GET',
 							success: function(data){
-								// console.log(data);
+								console.log(data);
 								if(data =="sukses"){
 									$.notify("Checkout Sukses");
-								}else if(data=="error"){
-									$.notify("Anda Belum Checkin", "danger");
+								// }else if(data == "warning"){
+								// 	$.notify("Anda Sudah Checkout");
 								}else{
-									$.notify("Anda Sudah Checkout");
+									$.notify("Anda belum Checkin");
 								}
 							}
 					});

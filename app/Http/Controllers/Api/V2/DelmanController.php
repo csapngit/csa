@@ -58,14 +58,14 @@ class DelmanController extends Controller
 		$update->time_out = $time_out;
 		// $cek_timeout= $update->where(['time_out'=>$time_out,'tanggal'=>'tanggal'])->get()->first();
 		$cek_double = $update->where(['tanggal' => $tanggal, 'delman_id' => $delman])->count();
-		if ($cek_double > 0 && $time_out == NULL) {
+		if ($cek_double > 0) {
 			$update->where(['tanggal' => $tanggal, 'delman_id' => $delman])
 				->update([
 					'time_out' => Carbon::now($request->time_out)->format('H:i:s')
 				]);
 			return 'sukses';
-		} else if ($cek_double > 0 && $time_out != Null) {
-			return 'warning';
+			// } else if ($time_out != Null) {
+			// 	return 'warning';
 		} else {
 			return 'error';
 		}
