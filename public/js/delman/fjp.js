@@ -81,7 +81,7 @@ var Form = function () {
 							url : '/api/v2/logistic/delman/checkout/' + delman,
 							type: 'GET',
 							success: function(data){
-								console.log(data);
+								// console.log(data);
 								if(data =="sukses"){
 									$.notify("Checkout Sukses");
 								// }else if(data == "warning"){
