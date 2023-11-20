@@ -15,8 +15,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use \Intervention\Image\Facades\Image;
+use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Return_;
+use PHPUnit\Framework\Constraint\IsNull;
 use Psy\Readline\Hoa\ConsoleOutput;
+
+use function PHPUnit\Framework\isNull;
 
 class DelmanController extends Controller
 {
@@ -48,11 +52,23 @@ class DelmanController extends Controller
 		$reason = MasterStatus::where('module', 'delman')->get();
 
 		$tmp = DB::connection('192.168.11.24')->table('tds_orderdata')->where('OrderNo', $route->nomor_so)->first();
-		// return $linkFoto;
+		return $tmp;
 		$linkFoto = '';
 		if ($tmp) {
 			$linkFoto = $tmp->LinkFoto2;
 		}
+
+		// $foto = DelmanRoutes::where('card_code', $route->card_code)->first();
+		// // return $foto;
+		// $linkFoto2 = DB::connection('192.168.11.24')->table('tds_orderdata')->where('OrderNo', $route->nomor_so)->get('LinkFoto2');
+		// $tmp = DB::connection('192.168.11.24')->table('tds_orderdata')->where('OrderNo', $route->nomor_so)->first();
+		// // return $tmp;
+		// $linkFoto = '';
+		// if (IsNull($linkFoto2)) {
+		// 	$linkFoto = $foto->store_picture;
+		// } else {
+		// 	$linkFoto = $tmp->LinkFoto2;
+		// }
 
 		$visit = new DelmanVisit();
 		$delman = Auth::user()->delman;
