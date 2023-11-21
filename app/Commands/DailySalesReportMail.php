@@ -25,36 +25,36 @@ class DailySalesReportMail
 		$bestCSAS = $soCSAS + $doCSAS + $arCSAS;
 
 
-		// 	if ($checkCSAS->isNotEmpty() && $checkCSAJ->isNotEmpty() && $bestCSAJ != 0 && $bestCSAS != 0) {
-		// 		$csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
+		if ($checkCSAS->isNotEmpty() && $checkCSAJ->isNotEmpty() && $bestCSAJ != 0 && $bestCSAS != 0) {
+			$csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
 
-		// 		$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
+			$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
 
-		// 		Mail::to($csajUser)
-		// 			->send(new DsrCSAJ());
+			Mail::to($csajUser)
+				->send(new DsrCSAJ());
 
-		// 		Mail::to($csasUser)
-		// 			->send(new DsrCSAS());
-		// 	}
-		// }
-
-		// if ($checkCSAS->isNotEmpty() && $checkCSAJ->isNotEmpty() && $bestCSAJ != 0 && $bestCSAS != 0) {
-		$csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
-
-		$csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
-
-		Mail::to($csajUser)
-			->send(new DsrCSAJ());
-
-		Mail::to($csasUser)
-			->send(new DsrCSAS());
-		// }
-		// $sendcsaj = Mail::to($csajUser)
-		// 	->send(new DsrCSAJ());
-
-		// $sendcsas = Mail::to($csasUser)
-		// 	->send(new DsrCSAS());
+			Mail::to($csasUser)
+				->send(new DsrCSAS());
+		}
 	}
+
+	// if ($checkCSAS->isNotEmpty() && $checkCSAJ->isNotEmpty() && $bestCSAJ != 0 && $bestCSAS != 0) {
+	// $csajUser = $this->emailDestiny(AreaEnum::CSAJ_TEXT);
+
+	// $csasUser = $this->emailDestiny(AreaEnum::CSAS_TEXT);
+
+	// // Mail::to($csajUser)
+	// // 	->send(new DsrCSAJ());
+
+	// // Mail::to($csasUser)
+	// // 	->send(new DsrCSAS());
+	// // }
+	// $sendcsaj = Mail::to($csajUser)
+	// 	->send(new DsrCSAJ());
+
+	// $sendcsas = Mail::to($csasUser)
+	// 	->send(new DsrCSAS());
+
 
 	public function emailDestiny(string $area)
 	{
