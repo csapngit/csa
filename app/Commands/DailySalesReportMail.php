@@ -49,6 +49,11 @@ class DailySalesReportMail
 		Mail::to($csasUser)
 			->send(new DsrCSAS());
 		// }
+		// $sendcsaj = Mail::to($csajUser)
+		// 	->send(new DsrCSAJ());
+
+		// $sendcsas = Mail::to($csasUser)
+		// 	->send(new DsrCSAS());
 	}
 
 	public function emailDestiny(string $area)
