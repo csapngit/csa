@@ -45,7 +45,7 @@ class Kernel extends ConsoleKernel
 	{
 		//Scheduler DSR
 		$schedule->call(new DailySalesReportMail)
-			->at('05:00');
+			->dailyAt('05:00');
 
 		//Scheduler TrackingPayment
 		$schedule->call(new TrackingPaymentMail)
@@ -230,7 +230,21 @@ class Kernel extends ConsoleKernel
 		// 	// todo: POST VOUCHER
 		// 	$schedule->call(new Voucher)
 		// 		->at('11:01');
+
+		// Scheduler Hit Order TDS V3
+		$schedule->call(new HitOrder)
+			->everyTenMinutes()
+			->between('8:20', '18:50')
+			->days([1, 2, 3, 4, 5, 6]);
+
+		//Scheduler CSV Order TDS V3
+		$schedule->call(new CSVOrder)
+			->everyFifteenMinutes()
+			->between('8:20', '18:50')
+			->days([1, 2, 3, 4, 5, 6]);
 	}
+
+
 
 	/**
 	 * Register the commands for the application.
