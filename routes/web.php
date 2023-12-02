@@ -47,17 +47,20 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {`
 //     return view('welcome');
 // });
-Route::controller(HitOrderController::class)->prefix('order')->group(function () {
-	Route::get('hitorder', 'hitorder')->name('order.hitorder');
-	Route::get('csvorder', 'csvorder')->name('order.csvorder');
-	// Route::get('csvmanual/{orderno}', 'csvmanual');
-	// Route::post('csvmanual', 'postcsvmanual')->name('order.csvmanual');
-});
 
-Route::name('sendmail.')->prefix('sendmail')->group(function () {
-	Route::get('dsr', [DailySalesReportController::class, 'mail'])->name('dsr.mail');
-	Route::get('trackingpayment', [TrackingPaymentController::class, 'mail'])->name('trackingpayment.mail');
-});
+// Tidak Terpakai
+// Route::controller(HitOrderController::class)->prefix('order')->group(function () {
+// 	Route::get('hitorder', 'hitorder')->name('order.hitorder');
+// 	Route::get('csvorder', 'csvorder')->name('order.csvorder');
+// 	// Route::get('csvmanual/{orderno}', 'csvmanual');
+// 	// Route::post('csvmanual', 'postcsvmanual')->name('order.csvmanual');
+// });
+
+// Tidak Terpakai
+// Route::name('sendmail.')->prefix('sendmail')->group(function () {
+// 	Route::get('dsr', [DailySalesReportController::class, 'mail'])->name('dsr.mail');
+// 	Route::get('trackingpayment', [TrackingPaymentController::class, 'mail'])->name('trackingpayment.mail');
+// });
 
 Route::get('/', function () {
 	return redirect()->route('login');
