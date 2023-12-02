@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class DelmanVisit extends Model
 {
-	protected $table = 'delman_visit';
+	// protected $table = 'delman_visit';
 	use HasFactory;
 }

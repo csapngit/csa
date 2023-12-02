@@ -7,9 +7,6 @@ use App\Models\DelmanVisit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use SebastianBergmann\Type\NullType;
-
-use function PHPUnit\Framework\isNull;
 
 class DelmanController extends Controller
 {
