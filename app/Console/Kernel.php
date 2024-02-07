@@ -138,72 +138,72 @@ mmen<?php
 				// 		->days([1, 2, 3, 4, 5, 6]);
 
 				//Scheduler CSV Order TDS V2
-				$schedule->call(new CSVOrder)
-					->at('09:10')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('09:40')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('10:10')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('10:40')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('11:10')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('11:40')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('12:10')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('12:40')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('13:10')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('13:40')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('14:10')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('14:40')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('15:10')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('15:40')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('16:10')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('16:40')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('17:10')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('17:40')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('18:10')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('18:40')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('19:10')
-					->days([1, 2, 3, 4, 5, 6]);
-				$schedule->call(new CSVOrder)
-					->at('19:40')
-					->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('09:10')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('09:40')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('10:10')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('10:40')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('11:10')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('11:40')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('12:10')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('12:40')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('13:10')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('13:40')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('14:10')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('14:40')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('15:10')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('15:40')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('16:10')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('16:40')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('17:10')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('17:40')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('18:10')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('18:40')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('19:10')
+				// 	->days([1, 2, 3, 4, 5, 6]);
+				// $schedule->call(new CSVOrder)
+				// 	->at('19:40')
+				// 	->days([1, 2, 3, 4, 5, 6]);
 
 
 				// 	//BELUM READY
@@ -232,17 +232,17 @@ mmen<?php
 				// 		->at('11:01');
 
 				// Scheduler Hit Order TDS V3
-				$schedule->call(new HitOrder)
-					->days([1, 2, 3, 4, 5, 6])
-					->everyTenMinutes()
-					->between('9:00', '19:00');
+				// 	$schedule->call(new HitOrder)
+				// 		->days([1, 2, 3, 4, 5, 6])
+				// 		->everyTenMinutes()
+				// 		->between('9:00', '19:00');
 
 
-				//Scheduler CSV Order TDS V3
-				$schedule->call(new CSVOrder)
-					->days([1, 2, 3, 4, 5, 6])
-					->everyFifteenMinutes()
-					->between('9:00', '19:15');
+				// 	//Scheduler CSV Order TDS V3
+				// 	$schedule->call(new CSVOrder)
+				// 		->days([1, 2, 3, 4, 5, 6])
+				// 		->everyFifteenMinutes()
+				// 		->between('9:00', '19:15');
 			}
 
 
