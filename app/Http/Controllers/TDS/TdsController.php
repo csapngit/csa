@@ -201,6 +201,7 @@ class TdsController extends Controller
 				'TargetGoldCat' => (float)$peSurvey->TargetGoldCat,
 				'LinkRef' => (float)$peSurvey->LinkRef,
 				'VendorQuestionCode' => $peSurvey->VendorQuestionCode,
+				'TierCustomer' => $peSurvey->TierCustomer,
 			];
 		});
 

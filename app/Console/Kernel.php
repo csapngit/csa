@@ -1,73 +1,73 @@
-<?php
+mmen<?php
 
-namespace App\Console;
+		namespace App\Console;
 
-use App\Commands\DailySalesReportMail;
-use App\Commands\TrackingPaymentMail;
-use App\Commands\ARDayMail;
-use App\Commands\TDS\Incentive;
-use App\Commands\TDS\Invoice;
-use App\Commands\TDS\MasterReturn;
-use App\Commands\TDS\MasterStore;
-use App\Commands\TDS\Overdue;
-use App\Commands\TDS\Price;
-use App\Commands\TDS\Product;
-use App\Commands\TDS\Seller;
-use App\Commands\TDS\Voucher;
-use App\Commands\TDS\OrderDetail;
-use App\Commands\TDS\HitOrder;
-use App\Commands\TDS\CSVOrder;
-use App\Mail\TrackingPayment;
-use Exception;
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+		use App\Commands\DailySalesReportMail;
+		use App\Commands\TrackingPaymentMail;
+		use App\Commands\ARDayMail;
+		use App\Commands\TDS\Incentive;
+		use App\Commands\TDS\Invoice;
+		use App\Commands\TDS\MasterReturn;
+		use App\Commands\TDS\MasterStore;
+		use App\Commands\TDS\Overdue;
+		use App\Commands\TDS\Price;
+		use App\Commands\TDS\Product;
+		use App\Commands\TDS\Seller;
+		use App\Commands\TDS\Voucher;
+		use App\Commands\TDS\OrderDetail;
+		use App\Commands\TDS\HitOrder;
+		use App\Commands\TDS\CSVOrder;
+		use App\Mail\TrackingPayment;
+		use Exception;
+		use Illuminate\Console\Scheduling\Schedule;
+		use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+		use Illuminate\Support\Facades\DB;
+		use Carbon\Carbon;
 
-class Kernel extends ConsoleKernel
-{
-	/**
-	 * The Artisan commands provided by your application.
-	 *
-	 * @var array
-	 */
-	protected $commands = [
-		//
-	];
+		class Kernel extends ConsoleKernel
+		{
+			/**
+			 * The Artisan commands provided by your application.
+			 *
+			 * @var array
+			 */
+			protected $commands = [
+				//
+			];
 
-	/**
-	 * Define the application's command schedule.
-	 *
-	 * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-	 * @return void
-	 */
-	protected function schedule(Schedule $schedule)
-	{
-		//Scheduler DSR
-		$schedule->call(new DailySalesReportMail)
-			->dailyAt('05:00');
+			/**
+			 * Define the application's command schedule.
+			 *
+			 * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+			 * @return void
+			 */
+			protected function schedule(Schedule $schedule)
+			{
+				//Scheduler DSR
+				$schedule->call(new DailySalesReportMail)
+					->dailyAt('05:00');
 
-		//Scheduler TrackingPayment
-		$schedule->call(new TrackingPaymentMail)
-			->at('05:02');
+				//Scheduler TrackingPayment
+				$schedule->call(new TrackingPaymentMail)
+					->at('05:02');
 
-		//Scheduler AR Days
-		$schedule->call(new ARDayMail)
-			->at('05:04');
+				//Scheduler AR Days
+				$schedule->call(new ARDayMail)
+					->at('05:04');
 
-		//Scheduler Store Master
-		$schedule->call(new MasterStore)
-			->at('00:00');
+				//Scheduler Store Master
+				$schedule->call(new MasterStore)
+					->at('00:00');
 
-		//Scheduler Price Master
-		$schedule->call(new Price)
-			->at('00:10');
+				//Scheduler Price Master
+				$schedule->call(new Price)
+					->at('00:10');
 
-		//Scheduler Product Master
-		$schedule->call(new Product)
-			->at('00:20');
+				//Scheduler Product Master
+				$schedule->call(new Product)
+					->at('00:20');
 
-
+				/*
 
 		// Scheduler Hit Order TDS V2
 		$schedule->call(new HitOrder)
@@ -243,19 +243,20 @@ class Kernel extends ConsoleKernel
 		// 		->days([1, 2, 3, 4, 5, 6])
 		// 		->everyFifteenMinutes()
 		// 		->between('9:00', '19:15');
-	}
+		*/
+			}
 
 
 
-	/**
-	 * Register the commands for the application.
-	 *
-	 * @return void
-	 */
-	protected function commands()
-	{
-		$this->load(__DIR__ . '/Commands');
+			/**
+			 * Register the commands for the application.
+			 *
+			 * @return void
+			 */
+			protected function commands()
+			{
+				$this->load(__DIR__ . '/Commands');
 
-		require base_path('routes/console.php');
-	}
-}
+				require base_path('routes/console.php');
+			}
+		}
