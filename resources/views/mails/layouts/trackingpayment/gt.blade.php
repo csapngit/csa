@@ -20,17 +20,17 @@
             <th colspan="3"
                 style="width:23%; background-color: #ACACAC; text-align: center; background-color:lawngreen; border: 1px solid black;">
                 Average
-                Payment per Day</th>
+                Collection per Day</th>
         </tr>
         <tr>
-            <th style="width:10%; background-color:plum; border: 1px solid black;">Target Payment</th>
-            <th style="width:10%; background-color:plum; border: 1px solid black;">Realisasi Payment</th>
+            <th style="width:10%; background-color:plum; border: 1px solid black;">Target Collection</th>
+            <th style="width:10%; background-color:plum; border: 1px solid black;">Realisasi Collection</th>
             <th style="width:3%; background-color:plum; border: 1px solid black;">Percentage</th>
-            <th style="width:10%; background-color:cornsilk; border: 1px solid black;">Target Payment</th>
-            <th style="width:10%; background-color:cornsilk; border: 1px solid black;">Realisasi Payment</th>
+            <th style="width:10%; background-color:cornsilk; border: 1px solid black;">Target Collection</th>
+            <th style="width:10%; background-color:cornsilk; border: 1px solid black;">Realisasi Collection</th>
             <th style="width:3%; background-color:cornsilk; border: 1px solid black;">Percentage</th>
-            <th style="width:10%; background-color:moccasin; border: 1px solid black;">Target Payment</th>
-            <th style="width:10%; background-color:moccasin; border: 1px solid black;">Realisasi Payment</th>
+            <th style="width:10%; background-color:moccasin; border: 1px solid black;">Target Collection</th>
+            <th style="width:10%; background-color:moccasin; border: 1px solid black;">Realisasi Collection</th>
             <th style="width:3%; background-color:moccasin; border: 1px solid black;">Percentage</th>
             <th style="width:7%; background-color:lawngreen; border: 1px solid black;">GT</th>
             <th style="width:7%; background-color:lawngreen; border: 1px solid black;">MT</th>

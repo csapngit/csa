@@ -6,8 +6,8 @@
             <th colspan="3" style="background-color: #ACACAC; text-align:center; border:1px solid black;">Total</th>
         </tr>
         <tr>
-            <th style="border:1px solid black;">Target Payment</th>
-            <th style="border:1px solid black;">Realisasi Payment</th>
+            <th style="border:1px solid black;">Target Collection</th>
+            <th style="border:1px solid black;">Realisasi Collection</th>
             <th style="border:1px solid black;">Percentage</th>
         </tr>
     </thead>
