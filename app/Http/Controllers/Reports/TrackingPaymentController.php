@@ -56,7 +56,7 @@ class TrackingPaymentController extends Controller
 
 	public function mailself()
 	{
-		$send = Mail::to('rio.hermawan@csahome.com')
+		$send = Mail::to('arruya.hiyarani@csahome.com')
 			->send(new TrackingPayment());
 
 		return 'ok tracking payment mantabb';
