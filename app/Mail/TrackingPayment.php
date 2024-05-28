@@ -28,7 +28,7 @@ class TrackingPayment extends Mailable
 	 */
 	public function build()
 	{
-		$subjectTitle = 'Tracking Payment ' . now()->format('d/M/Y');
+		$subjectTitle = 'Tracking Collection ' . now()->format('d/M/Y');
 
 		$dates = $this->paymentService->workday();
 		// $date = now()->format('d-F-Y H:i:s');
